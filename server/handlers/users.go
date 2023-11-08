@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/DelaRicch/klock-ecommerce/server/database"
 	"github.com/DelaRicch/klock-ecommerce/server/lib"
@@ -62,11 +63,21 @@ func Register(ctx *fiber.Ctx) error {
 		})
 	}
 
+	// Set token to the users' cookies for future requests
+	ctx.Cookie(&fiber.Cookie{
+		Name:        "access_token",
+		Value:       fmt.Sprintf("Bearer %v", token),
+		Expires:     time.Now().Add(time.Minute * 30),
+		Secure:      true,
+		HTTPOnly:    true,
+		SessionOnly: true,
+	})
+
 	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"success": true,
-		"exp":     exp,
-		"message": fmt.Sprintf("Successfylly registered %v", user.Name),
-		"token":   token,
+		"success":      true,
+		"exp":          exp,
+		"message":      fmt.Sprintf("Successfylly registered %v", user.Name),
+		"access_token": token,
 	})
 }
 
@@ -107,14 +118,22 @@ func Login(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.JSON(fiber.Map{
-		"success": true,
-		"exp":     exp,
-		"message": fmt.Sprintf("Welcome %v", user.Name),
-		"token":   token,
+	// Set token to the users' cookies for future requests
+	ctx.Cookie(&fiber.Cookie{
+		Name:        "access_token",
+		Value:       fmt.Sprintf("Bearer %v", token),
+		Expires:     time.Now().Add(time.Minute * 30),
+		Secure:      true,
+		HTTPOnly:    true,
+		SessionOnly: true,
 	})
 
-
+	return ctx.JSON(fiber.Map{
+		"success":      true,
+		"exp":          exp,
+		"message":      fmt.Sprintf("Welcome %v", user.Name),
+		"access_token": token,
+	})
 
 }
 
