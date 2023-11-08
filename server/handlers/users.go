@@ -18,6 +18,7 @@ func Register(ctx *fiber.Ctx) error {
 	if err := ctx.BodyParser(user); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
+			"success": false,
 		})
 	}
 
@@ -27,6 +28,7 @@ func Register(ctx *fiber.Ctx) error {
 	if result.RowsAffected > 0 {
 		return ctx.Status(fiber.StatusConflict).JSON(fiber.Map{
 			"message": "Email already exists",
+			"success": false,
 		})
 	}
 
@@ -35,24 +37,85 @@ func Register(ctx *fiber.Ctx) error {
 		user.Role = "USER"
 	}
 
-	
-    // Hash the password using Argon2
-    hashedPassword, err := lib.HashPassword(user.Password)
-    if err != nil {
-        return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-            "message": "Error hashing the password",
-        })
-    }
-    user.Password = hashedPassword
+	// Hash the password using Argon2
+	hashedPassword, err := lib.HashPassword(user.Password)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Error hashing the password",
+			"success": false,
+		})
+	}
+	user.Password = hashedPassword
 
 	// Generate User ID
 	user.UserID = lib.GenerateUserID()
 
-// Create the User
+	// Create the User
 	database.DB.Create(&user)
+
+	// Generate JWT
+	token, exp, err := lib.CreateJwtToken(user)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to generate JWT",
+			"success": false,
+		})
+	}
+
 	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"success": true,
+		"exp":     exp,
 		"message": fmt.Sprintf("Successfylly registered %v", user.Name),
+		"token":   token,
 	})
+}
+
+func Login(ctx *fiber.Ctx) error {
+	loginRequest := new(struct {
+		Email    string `json:"Email"`
+		Password string `json:"Password"`
+	})
+
+	if err := ctx.BodyParser(loginRequest); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request",
+		})
+	}
+
+	// Retrieve the user with the given email
+	var user models.User
+	result := database.DB.Where("email = ?", loginRequest.Email).First(&user)
+	if result.RowsAffected == 0 {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Invalid email or password",
+		})
+	}
+
+	// Verify the password using Argon2id
+	if !lib.VerifyPassword(user.Password, loginRequest.Password) {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Invalid email or password",
+		})
+	}
+
+	// Generate JWt
+	token, exp, err := lib.CreateJwtToken(&user)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to generate JWT",
+			"success": false,
+		})
+	}
+
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"exp":     exp,
+		"message": fmt.Sprintf("Welcome %v", user.Name),
+		"token":   token,
+	})
+
+
+
 }
 
 func ListUsers(ctx *fiber.Ctx) error {
@@ -62,7 +125,7 @@ func ListUsers(ctx *fiber.Ctx) error {
 }
 
 func DeleteAllUsers(ctx *fiber.Ctx) error {
-	if err := database.DB.Exec("DELETE FROM users WHERE role = 'USER' ").Error; err != nil {
+	if err := database.DB.Exec("DELETE FROM users WHERE role = 'ADMIN' ").Error; err != nil {
 		return err
 	}
 

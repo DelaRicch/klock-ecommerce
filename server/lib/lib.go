@@ -1,39 +1,72 @@
 package lib
 
 import (
-	"crypto/rand"
-	"encoding/base64"
-	"math/big"
+	"fmt"
+	"math/rand"
+	"time"
 
-	"golang.org/x/crypto/argon2"
+	"github.com/DelaRicch/klock-ecommerce/server/models"
+	"github.com/alexedwards/argon2id"
+	"github.com/golang-jwt/jwt/v5"
 )
+
+func GenerateRandomNumbers(length int) string {
+	const charset = "0123456789"
+	result := make([]byte, length)
+	for i := range result {
+		result[i] = charset[rand.Intn(len(charset))]
+	}
+	return string(result)
+}
+
+func GenerateRandomAlphabets(length int) string {
+	const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	result := make([]byte, length)
+	for i := range result {
+		result[i] = charset[rand.Intn(len(charset))]
+	}
+	return string(result)
+}
 
 // Generate Unique User IDs
 func GenerateUserID() string {
-	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	var seededRand = rand.Reader
-	var length = 15
-
-	randomBytes := make([]byte, length)
-	for i := range randomBytes {
-		max := big.NewInt(int64(len(charset)))
-		index, err := rand.Int(seededRand, max)
-		if err != nil {
-			panic(err)
-		}
-		randomBytes[i] = charset[index.Int64()]
-	}
-	return string(randomBytes)
+	randomPart1 := GenerateRandomNumbers(5)
+	randomPart2 := GenerateRandomAlphabets(5)
+	userID := fmt.Sprintf("KLOCK-USER-%s-%s", randomPart1, randomPart2)
+	return userID
 }
 
-// Hash the user's password using Argon2
+// Hash the user's password using Argon2id
 func HashPassword(password string) (string, error) {
-    salt := make([]byte, 16)
-    if _, err := rand.Read(salt); err != nil {
-        return "", err
-    }
-    hash := argon2.IDKey([]byte(password), salt, 1, 64*1024, 4, 32)
+	hashedPassword, err := argon2id.CreateHash(password, argon2id.DefaultParams)
+	if err != nil {
+		return "", err
+	}
+	return hashedPassword, nil
+}
 
-    // Encode the salt and hash as base64 and store it
-    return base64.StdEncoding.EncodeToString(salt) + "$" + base64.StdEncoding.EncodeToString(hash), nil
+// Verify the user's password using Argon2id
+func VerifyPassword(hashedPassword, password string) bool {
+	match, err := argon2id.ComparePasswordAndHash(password, hashedPassword)
+	if err != nil {
+		return false
+	}
+	return match
+}
+
+func CreateJwtToken(user *models.User) (string, int64, error) {
+	exp := time.Now().Add(time.Minute * 30).Unix()
+	claims := jwt.MapClaims{
+		"exp":    exp,
+		"userId": user.UserID,
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	tkn, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		return "", 0, err
+	}
+
+	return tkn, exp, nil
+
 }
