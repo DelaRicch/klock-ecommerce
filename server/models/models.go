@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type UserSignUp struct {
+type User struct {
 	gorm.Model
 	
 	Name string `json:"Name" gorm:"text;not null;default:null"`

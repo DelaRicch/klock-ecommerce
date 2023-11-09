@@ -16,7 +16,7 @@ func Home(ctx *fiber.Ctx) error {
 }
 
 func Register(ctx *fiber.Ctx) error {
-	user := new(models.UserSignUp)
+	user := new(models.User)
 	if err := ctx.BodyParser(user); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
@@ -25,7 +25,7 @@ func Register(ctx *fiber.Ctx) error {
 	}
 
 	// Check for the uniqueness of the email
-	var existingUser models.UserSignUp
+	var existingUser models.User
 	result := database.DB.Where("email = ?", user.Email).First(&existingUser)
 	if result.RowsAffected > 0 {
 		return ctx.Status(fiber.StatusConflict).JSON(fiber.Map{
@@ -93,7 +93,7 @@ func Login(ctx *fiber.Ctx) error {
 	}
 
 	// Retrieve the user with the given email
-	var user models.UserSignUp
+	var user models.User
 	result := database.DB.Where("email = ?", loginRequest.Email).First(&user)
 	if result.RowsAffected == 0 {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -138,7 +138,7 @@ func Login(ctx *fiber.Ctx) error {
 }
 
 // Request new token using refresh token
-func RefreshToken(ctx *fiber.Ctx) error {
+func RequestNewToken(ctx *fiber.Ctx) error {
 	// var tokenString string
 	refreshToken := ctx.Get("RefreshToken")
 
@@ -170,7 +170,7 @@ func RefreshToken(ctx *fiber.Ctx) error {
 
 	}
 
-	var user models.UserSignUp
+	var user models.User
 	database.DB.Where("user_id = ?", claims["userId"]).First(&user)
 
 	if user.UserID == "" {
@@ -210,14 +210,14 @@ func RefreshToken(ctx *fiber.Ctx) error {
 }
 
 func ListUsers(ctx *fiber.Ctx) error {
-	users := []models.UserSignUp{}
+	users := []models.User{}
 	database.DB.Find(&users)
 	return ctx.Status(fiber.StatusOK).JSON(users)
 }
 
 func DeleteAllUsers(ctx *fiber.Ctx) error {
 	// Perform the deletion
-	if err := database.DB.Exec("DELETE FROM user_sign_ups WHERE role = 'ADMIN'").Error; err != nil {
+	if err := database.DB.Exec("DELETE FROM user WHERE role = 'ADMIN'").Error; err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
 		})
