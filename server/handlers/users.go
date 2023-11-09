@@ -95,10 +95,11 @@ func Login(ctx *fiber.Ctx) error {
 	}
 
 	// extend access token duration if remember me is true
+	var tokenExpiry time.Time
 if loginRequest.RememberMe == "true" {
-    tokenExpiry := time.Now().Add(time.Hour * 24 * 30).Unix()
+    tokenExpiry = time.Now().Add(time.Hour * 24 * 30)
 } else {
-    tokenExpiry := time.Now().Add(time.Hour * 1).Unix()
+    tokenExpiry = time.Now().Add(time.Hour * 1)
 }
 
 	
@@ -120,7 +121,7 @@ if loginRequest.RememberMe == "true" {
 	}
 
 	// Generate JWt
-	refreshTkn, token, exp, err := lib.CreateJwtToken(&user)
+	refreshTkn, token, _, err := lib.CreateJwtToken(&user)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": errorRfTokenMsg,
@@ -140,7 +141,7 @@ if loginRequest.RememberMe == "true" {
 
 	return ctx.JSON(fiber.Map{
 		"success":       true,
-		"exp":           exp,
+		"exp":           tokenExpiry.Unix(),
 		"message":       fmt.Sprintf("Welcome %v", user.Name),
 		"access_token":  token,
 		"refresh_token": refreshTkn,
