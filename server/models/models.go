@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type User struct {
+type UserSignUp struct {
 	gorm.Model
 	
 	Name string `json:"Name" gorm:"text;not null;default:null"`
@@ -10,4 +10,9 @@ type User struct {
 	Password string `json:"Password" gorm:"text;not null;default:null"`
 	UserID string `json:"UserId" gorm:"text;not null;default:null"`
 	Role string `json:"Role" gorm:"text;not null;default:null"`
+}
+
+type UserLogin struct {
+	Email    string `json:"Email"`
+	Password string `json:"Password"`
 }

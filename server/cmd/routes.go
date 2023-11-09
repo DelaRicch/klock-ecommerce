@@ -8,11 +8,11 @@ import (
 
 func setupRoutes(app *fiber.App) {
 
-	// app.Get("/", handlers.Home)
 	app.Get("/users", handlers.ListUsers)
 	app.Post("/register", handlers.Register)
 	app.Post("/login", handlers.Login)
 	app.Delete("/delete-users", handlers.DeleteAllUsers)
+	app.Get("/refresh", handlers.RefreshToken)
 
 	// Protected Routes
 	ProtectedRoutes := app.Group("/")

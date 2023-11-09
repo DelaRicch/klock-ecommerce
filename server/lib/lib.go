@@ -54,19 +54,29 @@ func VerifyPassword(hashedPassword, password string) bool {
 	return match
 }
 
-func CreateJwtToken(user *models.User) (string, int64, error) {
+func CreateJwtToken(user *models.UserSignUp) (string, string, int64, error) {
 	exp := time.Now().Add(time.Minute * 30).Unix()
+	rfExp := time.Now().Add(time.Hour * 72).Unix()
 	claims := jwt.MapClaims{
 		"exp":    exp,
 		"userId": user.UserID,
+		"isAdmin": user.Role == "ADMIN",
 	}
+
+	rfClaims := jwt.MapClaims{
+		"exp":    rfExp,
+		"userId": user.UserID,
+	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
+	rfToken := jwt.NewWithClaims(jwt.SigningMethodHS256, rfClaims)
+	
 	tkn, err := token.SignedString([]byte("secret"))
-	if err != nil {
-		return "", 0, err
+	refreshTkn, rfErr := rfToken.SignedString([]byte("rf_secret"))
+	if err != nil || rfErr != nil {
+		return "", "", 0, err
 	}
-
-	return tkn, exp, nil
-
+	
+	return refreshTkn, tkn, exp, nil
+	
 }
