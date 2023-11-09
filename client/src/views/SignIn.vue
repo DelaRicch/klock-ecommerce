@@ -1,91 +1,3 @@
-<script setup lang="ts">
-import InputField from "../components/InputField.vue";
-import LabelLogo from "../assets/LabelLogo.vue";
-import {computed, onBeforeUnmount, onMounted, reactive, ref, watch} from "vue";
-import SignUpLoginTitle from "../components/SignUpLoginTitle.vue";
-import CheckboxComp from "../components/CheckboxComp.vue";
-import ButtonComponent from "../components/ButtonComponent.vue";
-import SocialAuthButton from "../components/SocialAuthButton.vue";
-import {signUpFormFields} from "../types/types";
-import {emailRegex, passwordRegex} from "../schema/ValidationSchema.ts";
-
-
-
-const isDesktop = ref(false);
-const textColor = ref("#1D2939");
-const innerColor = ref("black");
-const outerColor = ref("white");
-
-// Function to update colors based on screen size
-const updateColors = () => {
-  if (window.innerWidth < 768) {
-    isDesktop.value = false;
-    // Set mobile colors
-    textColor.value = 'white';
-    innerColor.value = 'white';
-    outerColor.value = '#1D2939';
-  } else {
-    isDesktop.value = true;
-    // Set desktop colors
-    textColor.value = '#1D2939';
-    innerColor.value = 'black';
-    outerColor.value = 'white';
-  }
-};
-
-const formData: signUpFormFields = reactive({
-  email: {
-    value: '',
-    error: '',
-  },
-  password: {
-    value: '',
-    error: '',
-  },
-  remember: {
-    value: 'false',
-    error: '',
-  },
-});
-
-
-const handleSubmit = async () => {
-
-};
-
-onMounted(() => {
-  updateColors();
-  window.addEventListener('resize', updateColors);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateColors);
-});
-
-
-const isValidForm = computed(() => {
-  return Object.values(formData).every((field) => (field.value !== '' && field.value !== 'false')
-      &&
-      !field.error)
-});
-
-
-const handleValidateInput = (value: string, field: string) => {
-  if (field === 'remember' && value.toString() !== 'true') {
-    formData[field].error = 'This field is required';
-  } else if (field !== 'remember' && !value.trim()) {
-    formData[field].error = 'This field is required';
-  } else if (field === 'email' && !emailRegex.test(value)) {
-    formData[field].error = 'Invalid email format';
-  } else {
-    formData[field].error = '';
-  }
-
-  formData[field].value = value.toString();
-};
-
-</script>
-
 <template>
   <section :class="isDesktop && 'flex items-center justify-center h-screen'">
     <div v-if="!isDesktop"
@@ -170,3 +82,95 @@ const handleValidateInput = (value: string, field: string) => {
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+import InputField from "../components/InputField.vue";
+import LabelLogo from "../assets/LabelLogo.vue";
+import {computed, onBeforeUnmount, onMounted, reactive, ref} from "vue";
+import SignUpLoginTitle from "../components/SignUpLoginTitle.vue";
+import CheckboxComp from "../components/CheckboxComp.vue";
+import ButtonComponent from "../components/ButtonComponent.vue";
+import SocialAuthButton from "../components/SocialAuthButton.vue";
+import {signUpFormFields} from "@/types";
+import {emailRegex} from "../schema/ValidationSchema.ts";
+import {loginUser} from "../api/user.ts";
+
+
+const isDesktop = ref(false);
+const textColor = ref("#1D2939");
+const innerColor = ref("black");
+const outerColor = ref("white");
+
+// Function to update colors based on screen size
+const updateColors = () => {
+  if (window.innerWidth < 768) {
+    isDesktop.value = false;
+    // Set mobile colors
+    textColor.value = 'white';
+    innerColor.value = 'white';
+    outerColor.value = '#1D2939';
+  } else {
+    isDesktop.value = true;
+    // Set desktop colors
+    textColor.value = '#1D2939';
+    innerColor.value = 'black';
+    outerColor.value = 'white';
+  }
+};
+
+const formData: signUpFormFields = reactive({
+  email: {
+    value: '',
+    error: '',
+  },
+  password: {
+    value: '',
+    error: '',
+  },
+  remember: {
+    value: 'false',
+    error: '',
+  },
+});
+
+
+const handleSubmit = async () => {
+  const formDataValues: Record<string, string> = {};
+  for (const field in formData) {
+    formDataValues[field] = (formData[field] as { value: string }).value;
+  }
+
+  loginUser(formDataValues)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+onMounted(() => {
+  updateColors();
+  window.addEventListener('resize', updateColors);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateColors);
+});
+
+const isValidForm = computed(() => {
+  return Object.values(formData).every((field) => (field.value !== '') && !field.error)
+});
+
+
+const handleValidateInput = (value: string, field: string) => {
+ if (field === 'email' && !emailRegex.test(value)) {
+    formData[field].error = 'Invalid email format';
+  } else {
+    formData[field].error = '';
+  }
+
+  formData[field].value = value.toString();
+};
+
+</script>

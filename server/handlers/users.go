@@ -11,6 +11,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+const errorRfTokenMsg string = "Error generating refresh token"
+
 func Home(ctx *fiber.Ctx) error {
 	return ctx.SendString("This is Klock E-commerce web app")
 }
@@ -59,7 +61,7 @@ func Register(ctx *fiber.Ctx) error {
 	refreshTkn, token, exp, err := lib.CreateJwtToken(user)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Failed to generate JWT",
+			"message": errorRfTokenMsg,
 			"success": false,
 		})
 	}
@@ -68,7 +70,7 @@ func Register(ctx *fiber.Ctx) error {
 	ctx.Cookie(&fiber.Cookie{
 		Name:        "access_token",
 		Value:       token,
-		Expires:     time.Now().Add(time.Minute * 30),
+		Expires:     time.Now().Add(time.Hour * 1),
 		Secure:      true,
 		HTTPOnly:    true,
 		SessionOnly: true,
@@ -84,7 +86,7 @@ func Register(ctx *fiber.Ctx) error {
 }
 
 func Login(ctx *fiber.Ctx) error {
-	loginRequest := new(models.UserLogin)
+	loginRequest := new(models.User)
 
 	if err := ctx.BodyParser(loginRequest); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -92,8 +94,17 @@ func Login(ctx *fiber.Ctx) error {
 		})
 	}
 
+	// extend access token duration if remember me is true
+if loginRequest.RememberMe == "true" {
+    tokenExpiry := time.Now().Add(time.Hour * 24 * 30).Unix()
+} else {
+    tokenExpiry := time.Now().Add(time.Hour * 1).Unix()
+}
+
+	
 	// Retrieve the user with the given email
 	var user models.User
+	fmt.Println(loginRequest, "Login Request")
 	result := database.DB.Where("email = ?", loginRequest.Email).First(&user)
 	if result.RowsAffected == 0 {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -112,7 +123,7 @@ func Login(ctx *fiber.Ctx) error {
 	refreshTkn, token, exp, err := lib.CreateJwtToken(&user)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Failed to generate JWT",
+			"message": errorRfTokenMsg,
 			"success": false,
 		})
 	}
@@ -121,7 +132,7 @@ func Login(ctx *fiber.Ctx) error {
 	ctx.Cookie(&fiber.Cookie{
 		Name:        "access_token",
 		Value:       token,
-		Expires:     time.Now().Add(time.Minute * 30),
+		Expires:     tokenExpiry,
 		Secure:      true,
 		HTTPOnly:    true,
 		SessionOnly: true,
@@ -193,7 +204,7 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 	ctx.Cookie(&fiber.Cookie{
 		Name:        "access_token",
 		Value:       token,
-		Expires:     time.Now().Add(time.Minute * 30),
+		Expires:     time.Now().Add(time.Hour * 1),
 		Secure:      true,
 		HTTPOnly:    true,
 		SessionOnly: true,
@@ -206,7 +217,6 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 		"refresh_token": refreshTkn,
 	})
 
-
 }
 
 func ListUsers(ctx *fiber.Ctx) error {
@@ -217,7 +227,7 @@ func ListUsers(ctx *fiber.Ctx) error {
 
 func DeleteAllUsers(ctx *fiber.Ctx) error {
 	// Perform the deletion
-	if err := database.DB.Exec("DELETE FROM user WHERE role = 'ADMIN'").Error; err != nil {
+	if err := database.DB.Exec("DELETE FROM users WHERE role = 'ADMIN'").Error; err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
 		})
