@@ -209,6 +209,7 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 		Secure:      true,
 		HTTPOnly:    true,
 		SessionOnly: true,
+		
 	})
 
 	return ctx.JSON(fiber.Map{

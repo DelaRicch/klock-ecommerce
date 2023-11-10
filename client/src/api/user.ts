@@ -8,15 +8,18 @@ const userApi = axios.create({
 
 export const registerUser = async (data:Record<string, string>) => {
    try {
-       return await userApi.post('/register', data)
+
+       const res = await userApi.post('/register', data)
+       return res.data
    } catch (err: any) {
-       return err.response.data.message
+       return err.response.data
    }
 }
 export const loginUser = async (data:Record<string, string>) => {
    try {
-       return await userApi.post('/login', data)
+       const res = await userApi.post('/login', data)
+       return res.data
    } catch (err: any) {
-       return err.response.data.message
+       return err.response.data
    }
 }

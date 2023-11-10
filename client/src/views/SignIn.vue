@@ -81,6 +81,8 @@
       </div>
     </div>
   </section>
+  <Snackbar :show-snackbar="showSnackbar" :success="success" :title="success ? 'success' : 'error' "
+             :message="apiResponse" />
 </template>
 
 <script setup lang="ts">
@@ -91,9 +93,19 @@ import SignUpLoginTitle from "../components/SignUpLoginTitle.vue";
 import CheckboxComp from "../components/CheckboxComp.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import SocialAuthButton from "../components/SocialAuthButton.vue";
-import {signUpFormFields} from "@/types";
+import {accessTokenType, signUpFormFields} from "@/types";
 import {emailRegex} from "../schema/ValidationSchema.ts";
 import {loginUser} from "../api/user.ts";
+import {useUserStore} from "../store/store.ts";
+import Snackbar from "../components/Snackbar.vue";
+import {handleSetSnackbarState} from "../lib/helperFunctions.ts";
+
+const userStore = useUserStore();
+
+// Snackbar
+const success = ref(false);
+const showSnackbar = ref(false);
+const apiResponse = ref('');
 
 
 const isDesktop = ref(false);
@@ -142,9 +154,24 @@ const handleSubmit = async () => {
 
   loginUser(formDataValues)
     .then((res) => {
+      handleSetSnackbarState(showSnackbar, 6000);
+      const accessToken: accessTokenType = {
+        value: res?.access_token,
+        expiry: res?.exp,
+      };
+      const refreshToken = res?.refresh_token;
+      apiResponse.value = res?.message;
+      success.value = !!res?.success;
       console.log(res);
+
+      userStore.setAccessToken(accessToken);
+      userStore.setRefreshToken(refreshToken);
     })
     .catch((err) => {
+      handleSetSnackbarState(showSnackbar, 6000);
+
+      apiResponse.value = err?.message;
+      success.value = false;
       console.log(err);
     });
 };

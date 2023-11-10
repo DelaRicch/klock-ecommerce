@@ -4,3 +4,7 @@ export interface signUpFormFields {
         error: string;
     };
 }
+export interface accessTokenType {
+    value: string;
+    expiry: number;
+}
