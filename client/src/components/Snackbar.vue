@@ -3,7 +3,7 @@
     <div
         v-if="showSnackbar"
         :class="success ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'"
-        class="cursor-pointer absolute w-[22rem] h-[5rem] rounded-md border top-2 right-2 flex items-center gap-4 px-3 py-1.5 z-[100]">
+        class="cursor-pointer absolute min-w-[22rem] h-[5rem] rounded-md border top-2 right-2 flex items-center gap-4 pl-3 pr-4 py-1.5 z-[100]">
       <Checkmark :success="success" />
       <div class="flex flex-col">
         <span class="text-[#1D2939] text-lg font-semibold uppercase">{{ title }}</span>

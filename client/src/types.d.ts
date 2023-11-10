@@ -8,3 +8,10 @@ export interface accessTokenType {
     value: string;
     expiry: number;
 }
+
+export interface socialAuthType {
+    name: string;
+    email: string;
+    photo: string;
+    socialId: string;
+}

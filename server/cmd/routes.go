@@ -11,6 +11,7 @@ func setupRoutes(app *fiber.App) {
 	app.Get("/users", handlers.ListUsers)
 	app.Post("/register", handlers.Register)
 	app.Post("/login", handlers.Login)
+	app.Post("/social-login", handlers.SocialLogin)
 	app.Delete("/delete-users", handlers.DeleteAllUsers)
 	app.Get("/refresh", handlers.RequestNewToken)
 

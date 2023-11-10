@@ -70,8 +70,8 @@
 
         <div class="flex items-center gap-[1.8rem] justify-center">
           <SocialAuthButton authType="Facebook" />
+          <SocialAuthButton authType="X" />
           <SocialAuthButton authType="Google" />
-          <SocialAuthButton authType="Apple" />
         </div>
         <div class="flex items-center gap-1 justify-center">
           <p class="text-[0.8rem] text-black/70">Don't have an account?</p>
@@ -81,37 +81,37 @@
       </div>
     </div>
   </section>
-  <Snackbar :show-snackbar="showSnackbar" :success="success" :title="success ? 'success' : 'error' "
+  <Snackbar
+      :show-snackbar="showSnackbar"
+      :success="success"
+      :title="success ? 'success' : 'error' "
              :message="apiResponse" />
 </template>
 
 <script setup lang="ts">
 import InputField from "../components/InputField.vue";
 import LabelLogo from "../assets/LabelLogo.vue";
-import {computed, onBeforeUnmount, onMounted, reactive, ref} from "vue";
+import {computed, onBeforeUnmount, onMounted, reactive} from "vue";
 import SignUpLoginTitle from "../components/SignUpLoginTitle.vue";
 import CheckboxComp from "../components/CheckboxComp.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import SocialAuthButton from "../components/SocialAuthButton.vue";
-import {accessTokenType, signUpFormFields} from "@/types";
+import { signUpFormFields} from "@/types";
 import {emailRegex} from "../schema/ValidationSchema.ts";
 import {loginUser} from "../api/user.ts";
-import {useUserStore} from "../store/store.ts";
 import Snackbar from "../components/Snackbar.vue";
-import {handleSetSnackbarState} from "../lib/helperFunctions.ts";
-
-const userStore = useUserStore();
-
-// Snackbar
-const success = ref(false);
-const showSnackbar = ref(false);
-const apiResponse = ref('');
-
-
-const isDesktop = ref(false);
-const textColor = ref("#1D2939");
-const innerColor = ref("black");
-const outerColor = ref("white");
+import {
+  errorApiRequest,
+  successApiRequest
+} from "../lib/helperFunctions.ts";
+import {
+  apiResponse,
+  innerColor,
+  isDesktop,
+  outerColor,
+  showSnackbar, success,
+  textColor
+} from "../store/resuableState.ts";
 
 // Function to update colors based on screen size
 const updateColors = () => {
@@ -145,7 +145,6 @@ const formData: signUpFormFields = reactive({
   },
 });
 
-
 const handleSubmit = async () => {
   const formDataValues: Record<string, string> = {};
   for (const field in formData) {
@@ -154,25 +153,10 @@ const handleSubmit = async () => {
 
   loginUser(formDataValues)
     .then((res) => {
-      handleSetSnackbarState(showSnackbar, 6000);
-      const accessToken: accessTokenType = {
-        value: res?.access_token,
-        expiry: res?.exp,
-      };
-      const refreshToken = res?.refresh_token;
-      apiResponse.value = res?.message;
-      success.value = !!res?.success;
-      console.log(res);
-
-      userStore.setAccessToken(accessToken);
-      userStore.setRefreshToken(refreshToken);
+     successApiRequest(res);
     })
     .catch((err) => {
-      handleSetSnackbarState(showSnackbar, 6000);
-
-      apiResponse.value = err?.message;
-      success.value = false;
-      console.log(err);
+    errorApiRequest(err);
     });
 };
 

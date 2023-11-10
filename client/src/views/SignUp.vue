@@ -86,8 +86,8 @@
 
         <div class="flex items-center gap-[1.8rem] justify-center">
           <SocialAuthButton authType="Facebook" />
+          <SocialAuthButton authType="X" />
           <SocialAuthButton authType="Google" />
-          <SocialAuthButton authType="Apple" />
         </div>
         <div class="flex items-center gap-1 justify-center">
           <p class="text-[0.8rem] text-[#1D2939]">Already have an account?</p>
@@ -97,25 +97,42 @@
       </div>
     </div>
   </section>
+  <Snackbar
+      :show-snackbar="showSnackbar"
+      :success="success"
+      :title="success ? 'success' : 'error' "
+            :message="apiResponse" />
 </template>
 
 
 <script setup lang="ts">
 import InputField from "../components/InputField.vue";
 import LabelLogo from "../assets/LabelLogo.vue";
-import {computed, onBeforeUnmount, onMounted, reactive, ref} from "vue";
+import {computed, onBeforeUnmount, onMounted, reactive} from "vue";
 import SignUpLoginTitle from "../components/SignUpLoginTitle.vue";
 import CheckboxComp from "../components/CheckboxComp.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import SocialAuthButton from "../components/SocialAuthButton.vue";
-import {signUpFormFields} from "@/types";
+import { signUpFormFields} from "@/types";
 import {emailRegex, passwordRegex} from "../schema/ValidationSchema.ts";
 import {registerUser} from "../api/user.ts";
 
-const isDesktop = ref(false);
-const textColor = ref("#1D2939");
-const innerColor = ref("black");
-const outerColor = ref("white");
+import {
+  errorApiRequest,
+  successApiRequest
+} from "../lib/helperFunctions.ts";
+import Snackbar from "../components/Snackbar.vue";
+import {useUserStore} from "../store/store.ts";
+import {
+  apiResponse,
+  innerColor,
+  isDesktop,
+  outerColor,
+  showSnackbar, success,
+  textColor
+} from "../store/resuableState.ts";
+
+const userStore = useUserStore();
 
 // Function to update colors based on screen size
 const updateColors = () => {
@@ -165,10 +182,11 @@ const handleSubmit = async () => {
 
 registerUser(formDataValues)
     .then((res) => {
-      console.log(res);
+     successApiRequest(res);
+
     })
     .catch((err) => {
-      console.log(err);
+      errorApiRequest(err);
     });
 
 };

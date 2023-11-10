@@ -55,7 +55,13 @@ func Register(ctx *fiber.Ctx) error {
 	user.UserID = lib.GenerateUserID()
 
 	// Create the User
-	database.DB.Create(&user)
+	result = database.DB.Create(&user)
+	if result.Error != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error":   "Internal server error",
+			"success": false,
+		})
+	}
 
 	// Generate JWT
 	refreshTkn, token, exp, err := lib.CreateJwtToken(user)
@@ -79,7 +85,7 @@ func Register(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"success":       true,
 		"exp":           exp,
-		"message":       fmt.Sprintf("Successfylly registered %v", user.Name),
+		"message":       fmt.Sprintf("Successfully registered %v", user.Name),
 		"access_token":  token,
 		"refresh_token": refreshTkn,
 	})
@@ -149,6 +155,112 @@ if loginRequest.RememberMe == "true" {
 
 }
 
+// Social login 
+func SocialLogin(ctx *fiber.Ctx) error {
+	user := new(models.User)
+	if err := ctx.BodyParser(user); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+			"success": false,
+		})
+	}
+
+	fmt.Println(user, "Social Login Request")
+
+	// Check for the uniqueness of the email
+	email := user.Email
+	var existingUser models.User
+	result := database.DB.Where("email = ?", email).First(&existingUser)
+	if result.RowsAffected > 0 {
+		if existingUser.Password != "" {
+			return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"message": "Social login not allowed for this account",
+				"success": false,
+			})		
+		}
+
+		if existingUser.SocialId != user.SocialId {
+			return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"message": "Unauthorized social login",
+				"success": false,
+			})
+		}
+
+		// Generate JWT
+	refreshTkn, token, exp, err := lib.CreateJwtToken(user)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": errorRfTokenMsg,
+			"success": false,
+		})
+	}
+
+	// Set token to the users' cookies for future requests
+	ctx.Cookie(&fiber.Cookie{
+		Name:        "access_token",
+		Value:       token,
+		Expires:     time.Now().Add(time.Hour * 1),
+		Secure:      true,
+		HTTPOnly:    true,
+		SessionOnly: true,
+	})
+
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"success":       true,
+		"exp":           exp,
+		"message":       fmt.Sprintf("Welcome %v", user.Name),
+		"access_token":  token,
+		"refresh_token": refreshTkn,
+	})
+
+	}
+
+	// Create a new user if the user doesn't exist
+	user.UserID = lib.GenerateUserID()
+
+
+	// Set the default role to "USER" if not specified
+	if user.Role == "" {
+		user.Role = "USER"
+	}
+
+	// Add the user to the DB
+	result = database.DB.Create(&user)
+	if result.Error != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error":   "Internal server error",
+			"success": false,
+		})
+	}
+
+		// Generate JWT
+		refreshTkn, token, exp, err := lib.CreateJwtToken(user)
+		if err != nil {
+			return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"message": errorRfTokenMsg,
+				"success": false,
+			})
+		}
+	
+		// Set token to the users' cookies for future requests
+		ctx.Cookie(&fiber.Cookie{
+			Name:        "access_token",
+			Value:       token,
+			Expires:     time.Now().Add(time.Hour * 1),
+			Secure:      true,
+			HTTPOnly:    true,
+			SessionOnly: true,
+		})
+	
+		return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
+			"success":       true,
+			"exp":           exp,
+			"message":       fmt.Sprintf("Successfully registered %v", user.Name),
+			"access_token":  token,
+			"refresh_token": refreshTkn,
+		})
+}
+
 // Request new token using refresh token
 func RequestNewToken(ctx *fiber.Ctx) error {
 	// var tokenString string
@@ -209,7 +321,7 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 		Secure:      true,
 		HTTPOnly:    true,
 		SessionOnly: true,
-		
+
 	})
 
 	return ctx.JSON(fiber.Map{
@@ -229,7 +341,7 @@ func ListUsers(ctx *fiber.Ctx) error {
 
 func DeleteAllUsers(ctx *fiber.Ctx) error {
 	// Perform the deletion
-	if err := database.DB.Exec("DELETE FROM users WHERE role = 'ADMIN'").Error; err != nil {
+	if err := database.DB.Exec("DELETE FROM users WHERE role = 'USER'").Error; err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
 		})
@@ -239,3 +351,4 @@ func DeleteAllUsers(ctx *fiber.Ctx) error {
 		"message": "All users deleted",
 	})
 }
+

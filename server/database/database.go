@@ -11,7 +11,6 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-
 var DB *gorm.DB
 
 func ConnectDb() {
@@ -22,9 +21,7 @@ func ConnectDb() {
 		os.Getenv("DB_NAME"),
 	)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
-	})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		log.Fatalf("Failed to connect to database \n %v", err)
@@ -33,8 +30,20 @@ func ConnectDb() {
 	log.Println("Connected")
 	db.Logger = logger.Default.LogMode(logger.Info)
 
-	log.Println("Running Migrations")
-	db.AutoMigrate(&models.User{})
+	if os.Getenv("APP_ENV") == "development" {
+		if err := db.AutoMigrate(&models.User{}); err != nil {
+			log.Fatalf("Failed to migrate database: %v", err)
+		}
+	}
 
 	DB = db
+}
+
+
+func CloseDb() {
+    sqlDB, err := DB.DB()
+    if err != nil {
+        log.Fatalf("Failed to get DB instance: %v", err)
+    }
+    sqlDB.Close()
 }
