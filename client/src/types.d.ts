@@ -14,4 +14,5 @@ export interface socialAuthType {
     email: string;
     photo: string;
     socialId: string;
+    provider: string;
 }

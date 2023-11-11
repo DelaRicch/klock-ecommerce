@@ -86,7 +86,6 @@
 
         <div class="flex items-center gap-[1.8rem] justify-center">
           <SocialAuthButton authType="Facebook" />
-          <SocialAuthButton authType="X" />
           <SocialAuthButton authType="Google" />
         </div>
         <div class="flex items-center gap-1 justify-center">

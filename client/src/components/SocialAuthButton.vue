@@ -16,7 +16,8 @@
 
 <script setup lang="ts">
   import SocialIcons from "../assets/SocialIcons.vue";
- import {GoogleAuthProvider, getAuth, signInWithPopup} from "firebase/auth";
+ import {GoogleAuthProvider, FacebookAuthProvider, getAuth, signInWithPopup} from
+       "firebase/auth";
   import { socialAuthType} from "@/types";
   import { socialLogin} from "../api/user.ts";
   import {
@@ -32,7 +33,7 @@
       type: String,
       required: true,
       validator: (value: string) => {
-        return ['Facebook', 'Google', 'X'].includes(value);
+        return ['Facebook', 'Google'].includes(value);
       },
     },
   })
@@ -40,10 +41,29 @@
   const signInWithSocialAuth = () => {
     // Implement authentication logic based on the provided authType
     if (props.authType === 'Facebook') {
-      // Facebook authentication logic
-    }  else if (props.authType === 'X') {
-      // Apple authentication logic
-    } else if (props.authType === 'Google') {
+      const provider = new FacebookAuthProvider();
+      signInWithPopup(getAuth(), provider).then((response) => {
+        console.log(response)
+        const user: socialAuthType = {
+          email: response.user.providerData[0].email,
+          name: response.user.displayName,
+          photo: response.user.photoURL,
+          socialId: response.user.uid,
+          provider: response.providerId,
+        }
+        socialLogin(user)
+            .then((res) => {
+              successApiRequest(res);
+            })
+            .catch((err) => {
+              errorApiRequest(err)
+            });
+
+      }).catch(err => {
+        console.error(err);
+      });
+    }
+    else if (props.authType === 'Google') {
       const provider = new GoogleAuthProvider();
       signInWithPopup(getAuth(), provider).then((response) => {
         const user: socialAuthType = {
@@ -51,8 +71,8 @@
           name: response.user.displayName,
           photo: response.user.photoURL,
           socialId: response.user.uid,
+          provider: response.providerId,
         }
-        console.log(user)
         socialLogin(user)
             .then((res) => {
               successApiRequest(res);

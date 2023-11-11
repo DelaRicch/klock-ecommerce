@@ -102,13 +102,12 @@ func Login(ctx *fiber.Ctx) error {
 
 	// extend access token duration if remember me is true
 	var tokenExpiry time.Time
-if loginRequest.RememberMe == "true" {
-    tokenExpiry = time.Now().Add(time.Hour * 24 * 30)
-} else {
-    tokenExpiry = time.Now().Add(time.Hour * 1)
-}
+	if loginRequest.RememberMe == "true" {
+		tokenExpiry = time.Now().Add(time.Hour * 24 * 30)
+	} else {
+		tokenExpiry = time.Now().Add(time.Hour * 1)
+	}
 
-	
 	// Retrieve the user with the given email
 	var user models.User
 	fmt.Println(loginRequest, "Login Request")
@@ -155,7 +154,7 @@ if loginRequest.RememberMe == "true" {
 
 }
 
-// Social login 
+// Social login
 func SocialLogin(ctx *fiber.Ctx) error {
 	user := new(models.User)
 	if err := ctx.BodyParser(user); err != nil {
@@ -171,12 +170,12 @@ func SocialLogin(ctx *fiber.Ctx) error {
 	email := user.Email
 	var existingUser models.User
 	result := database.DB.Where("email = ?", email).First(&existingUser)
-	if result.RowsAffected > 0 {
+	if result.RowsAffected > 0 {	
 		if existingUser.Password != "" {
 			return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 				"message": "Social login not allowed for this account",
 				"success": false,
-			})		
+			})
 		}
 
 		if existingUser.SocialId != user.SocialId {
@@ -187,6 +186,52 @@ func SocialLogin(ctx *fiber.Ctx) error {
 		}
 
 		// Generate JWT
+		refreshTkn, token, exp, err := lib.CreateJwtToken(user)
+		if err != nil {
+			return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"message": errorRfTokenMsg,
+				"success": false,
+			})
+		}
+
+		// Set token to the users' cookies for future requests
+		ctx.Cookie(&fiber.Cookie{
+			Name:        "access_token",
+			Value:       token,
+			Expires:     time.Now().Add(time.Hour * 1),
+			Secure:      true,
+			HTTPOnly:    true,
+			SessionOnly: true,
+		})
+
+		return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
+			"success":       true,
+			"exp":           exp,
+			"message":       fmt.Sprintf("Welcome %v", user.Name),
+			"access_token":  token,
+			"refresh_token": refreshTkn,
+		})
+
+	}
+
+	// Create a new user if the user doesn't exist
+	user.UserID = lib.GenerateUserID()
+
+	// Set the default role to "USER" if not specified
+	if user.Role == "" {
+		user.Role = "USER"
+	}
+
+	// Add the user to the DB
+	result = database.DB.Create(&user)
+	if result.Error != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error":   "Internal server error",
+			"success": false,
+		})
+	}
+
+	// Generate JWT
 	refreshTkn, token, exp, err := lib.CreateJwtToken(user)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -208,57 +253,10 @@ func SocialLogin(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"success":       true,
 		"exp":           exp,
-		"message":       fmt.Sprintf("Welcome %v", user.Name),
+		"message":       fmt.Sprintf("Successfully registered %v", user.Name),
 		"access_token":  token,
 		"refresh_token": refreshTkn,
 	})
-
-	}
-
-	// Create a new user if the user doesn't exist
-	user.UserID = lib.GenerateUserID()
-
-
-	// Set the default role to "USER" if not specified
-	if user.Role == "" {
-		user.Role = "USER"
-	}
-
-	// Add the user to the DB
-	result = database.DB.Create(&user)
-	if result.Error != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error":   "Internal server error",
-			"success": false,
-		})
-	}
-
-		// Generate JWT
-		refreshTkn, token, exp, err := lib.CreateJwtToken(user)
-		if err != nil {
-			return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"message": errorRfTokenMsg,
-				"success": false,
-			})
-		}
-	
-		// Set token to the users' cookies for future requests
-		ctx.Cookie(&fiber.Cookie{
-			Name:        "access_token",
-			Value:       token,
-			Expires:     time.Now().Add(time.Hour * 1),
-			Secure:      true,
-			HTTPOnly:    true,
-			SessionOnly: true,
-		})
-	
-		return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
-			"success":       true,
-			"exp":           exp,
-			"message":       fmt.Sprintf("Successfully registered %v", user.Name),
-			"access_token":  token,
-			"refresh_token": refreshTkn,
-		})
 }
 
 // Request new token using refresh token
@@ -308,7 +306,7 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 	refreshTkn, token, exp, err := lib.CreateJwtToken(&user)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Failed to generate JWT",
+			"message": "Failed to generate access token",
 			"success": false,
 		})
 	}
@@ -321,7 +319,6 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 		Secure:      true,
 		HTTPOnly:    true,
 		SessionOnly: true,
-
 	})
 
 	return ctx.JSON(fiber.Map{
@@ -351,4 +348,3 @@ func DeleteAllUsers(ctx *fiber.Ctx) error {
 		"message": "All users deleted",
 	})
 }
-

@@ -39,7 +39,6 @@ func ConnectDb() {
 	DB = db
 }
 
-
 func CloseDb() {
     sqlDB, err := DB.DB()
     if err != nil {

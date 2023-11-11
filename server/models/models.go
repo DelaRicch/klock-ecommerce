@@ -14,4 +14,5 @@ type User struct {
 	Photo string `json:"photo" gorm:"text;default:null"`
 	Phone string `json:"phone" gorm:"text;default:null"`
 	SocialId string `json:"socialId" gorm:"text;default:null"`
+	Provider string `json:"provider" gorm:"text;default:null"`
 }
