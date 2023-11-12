@@ -5,6 +5,7 @@ import router from './router'
 import {createPinia, PiniaVuePlugin} from "pinia";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import Vue3Lottie from "vue3-lottie";
 
 const pinia = createPinia()
 const app = createApp(App)
@@ -37,5 +38,6 @@ const firebaseConfig = {
 
  app.use(router)
      .use(pinia)
+     .use(Vue3Lottie)
 .use(PiniaVuePlugin)
      .mount('#app')

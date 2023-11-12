@@ -1,5 +1,18 @@
+<template>
+  <button
+      @click="handleClick"
+      :style="{background: backgroundColor, color: color}" :disabled="isDisabled"
+          :class="uppercase &&
+'uppercase'" :type="type"
+          class="w-full px-6 font-semibold h-[45px] rounded-lg flex items-center justify-center outline-offset-4 focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC] disabled:cursor-not-allowed disabled:opacity-70">{{label
+    }}</button>
+</template>
+
 <script setup lang="ts">
-  defineProps({
+
+const emit = defineEmits(["update:modelValue"]);
+
+  const props = defineProps({
     type: {
       type: String,
       default: "button",
@@ -23,14 +36,16 @@ required: true,
     color: {
       type: String,
       required: true
-    }
+    },
+    modelValue: {
+      type: Boolean,
+    },
   });
-</script>
 
-<template>
-<button :style="{background: backgroundColor, color: color}" :disabled="isDisabled"
-        :class="uppercase &&
-'uppercase'" :type="type"
-        class="w-full font-semibold h-[45px] rounded-lg flex items-center justify-center outline-offset-4 focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC] disabled:cursor-not-allowed disabled:opacity-70">{{label
-  }}</button>
-</template>
+const handleClick = () => {
+    const updatedState = !props.modelValue;
+    if (props.type === "button") {
+    emit("update:modelValue", updatedState);
+    }
+  }
+</script>

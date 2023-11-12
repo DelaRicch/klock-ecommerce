@@ -200,7 +200,6 @@ func SocialLogin(ctx *fiber.Ctx) error {
 			Value:       token,
 			Expires:     time.Now().Add(time.Hour * 1),
 			Secure:      true,
-			HTTPOnly:    true,
 			SessionOnly: true,
 		})
 
@@ -246,7 +245,6 @@ func SocialLogin(ctx *fiber.Ctx) error {
 		Value:       token,
 		Expires:     time.Now().Add(time.Hour * 1),
 		Secure:      true,
-		HTTPOnly:    true,
 		SessionOnly: true,
 	})
 
@@ -303,7 +301,7 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 	}
 
 	// Generate JWt
-	refreshTkn, token, exp, err := lib.CreateJwtToken(&user)
+	_, token, exp, err := lib.CreateJwtToken(&user)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Failed to generate access token",
@@ -317,7 +315,6 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 		Value:       token,
 		Expires:     time.Now().Add(time.Hour * 1),
 		Secure:      true,
-		HTTPOnly:    true,
 		SessionOnly: true,
 	})
 
@@ -325,7 +322,6 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 		"success":       true,
 		"exp":           exp,
 		"access_token":  token,
-		"refresh_token": refreshTkn,
 	})
 
 }
@@ -338,7 +334,7 @@ func ListUsers(ctx *fiber.Ctx) error {
 
 func DeleteAllUsers(ctx *fiber.Ctx) error {
 	// Perform the deletion
-	if err := database.DB.Exec("DELETE FROM users WHERE role = 'USER'").Error; err != nil {
+	if err := database.DB.Exec("DELETE FROM users WHERE role = 'ADMIN'").Error; err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
 		})

@@ -101,6 +101,7 @@
       :success="success"
       :title="success ? 'success' : 'error' "
             :message="apiResponse" />
+
 </template>
 
 
@@ -121,7 +122,6 @@ import {
   successApiRequest
 } from "../lib/helperFunctions.ts";
 import Snackbar from "../components/Snackbar.vue";
-import {useUserStore} from "../store/store.ts";
 import {
   apiResponse,
   innerColor,
@@ -130,8 +130,6 @@ import {
   showSnackbar, success,
   textColor
 } from "../store/resuableState.ts";
-
-const userStore = useUserStore();
 
 // Function to update colors based on screen size
 const updateColors = () => {
