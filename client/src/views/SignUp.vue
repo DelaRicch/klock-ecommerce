@@ -96,14 +96,7 @@
       </div>
     </div>
   </section>
-  <Snackbar
-      :show-snackbar="showSnackbar"
-      :success="success"
-      :title="success ? 'success' : 'error' "
-            :message="apiResponse" />
-
 </template>
-
 
 <script setup lang="ts">
 import InputField from "../components/InputField.vue";
@@ -121,15 +114,13 @@ import {
   errorApiRequest,
   successApiRequest
 } from "../lib/helperFunctions.ts";
-import Snackbar from "../components/Snackbar.vue";
 import {
-  apiResponse,
   innerColor,
   isDesktop,
   outerColor,
-  showSnackbar, success,
   textColor
 } from "../store/resuableState.ts";
+import {useRouter} from "vue-router";
 
 // Function to update colors based on screen size
 const updateColors = () => {
@@ -180,7 +171,6 @@ const handleSubmit = async () => {
 registerUser(formDataValues)
     .then((res) => {
      successApiRequest(res);
-
     })
     .catch((err) => {
       errorApiRequest(err);

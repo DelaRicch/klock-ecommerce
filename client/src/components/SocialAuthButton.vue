@@ -5,13 +5,6 @@
       class="outline-offset-2 focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC] p-[0.63rem] border border-[#D0D5DD] hover:bg-white transition duration-200 ease-linear">
     <SocialIcons :type="authType" />
   </button>
-  <Teleport to="body">
-    <Snackbar
-        :show-snackbar="showSnackbar"
-        :success="success"
-        :title="success ? 'success' : 'error' "
-        :message="apiResponse" />
-  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -24,9 +17,9 @@
     errorApiRequest,
     successApiRequest
   } from "../lib/helperFunctions.ts";
-  import Snackbar from "../components/Snackbar.vue";
-  import {apiResponse, showSnackbar, success} from "../store/resuableState.ts";
+  import {useRouter} from "vue-router";
 
+  const router = useRouter();
 
   const props = defineProps({
     authType: {
@@ -42,18 +35,20 @@
     // Implement authentication logic based on the provided authType
     if (props.authType === 'Facebook') {
       const provider = new FacebookAuthProvider();
+      provider.addScope("email");
       signInWithPopup(getAuth(), provider).then((response) => {
         console.log(response)
         const user: socialAuthType = {
-          email: response.user.providerData[0].email,
-          name: response.user.displayName,
-          photo: response.user.photoURL,
+          email: response.user.providerData[0].email!,
+          name: response.user.providerData[0].displayName!,
+          photo: response.user.providerData[0].photoURL!,
           socialId: response.user.uid,
-          provider: response.providerId,
+          provider: response.providerId!,
         }
         socialLogin(user)
             .then((res) => {
               successApiRequest(res);
+              router.push("/")
             })
             .catch((err) => {
               errorApiRequest(err)
@@ -65,17 +60,20 @@
     }
     else if (props.authType === 'Google') {
       const provider = new GoogleAuthProvider();
+      provider.addScope("email");
       signInWithPopup(getAuth(), provider).then((response) => {
+        console.log(response)
         const user: socialAuthType = {
-          email: response.user.email,
-          name: response.user.displayName,
-          photo: response.user.photoURL,
+          email: response.user.providerData[0].email!,
+          name: response.user.providerData[0].displayName!,
+          photo: response.user.providerData[0].photoURL!,
           socialId: response.user.uid,
-          provider: response.providerId,
+          provider: response.providerId!,
         }
         socialLogin(user)
             .then((res) => {
-              successApiRequest(res);
+              successApiRequest(res)
+              router.push("/")
             })
             .catch((err) => {
             errorApiRequest(err)

@@ -80,11 +80,6 @@
       </div>
     </div>
   </section>
-  <Snackbar
-      :show-snackbar="showSnackbar"
-      :success="success"
-      :title="success ? 'success' : 'error' "
-             :message="apiResponse" />
 </template>
 
 <script setup lang="ts">
@@ -98,17 +93,14 @@ import SocialAuthButton from "../components/SocialAuthButton.vue";
 import { signUpFormFields} from "@/types";
 import {emailRegex} from "../schema/ValidationSchema.ts";
 import {loginUser} from "../api/user.ts";
-import Snackbar from "../components/Snackbar.vue";
 import {
   errorApiRequest,
   successApiRequest
 } from "../lib/helperFunctions.ts";
 import {
-  apiResponse,
   innerColor,
   isDesktop,
   outerColor,
-  showSnackbar, success,
   textColor
 } from "../store/resuableState.ts";
 

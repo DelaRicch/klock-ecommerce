@@ -13,7 +13,7 @@ func setupRoutes(app *fiber.App) {
 	app.Post("/login", handlers.Login)
 	app.Post("/social-login", handlers.SocialLogin)
 	app.Delete("/delete-users", handlers.DeleteAllUsers)
-	app.Get("/refresh", handlers.RequestNewToken)
+	app.Get("/refresh-token", handlers.RequestNewToken)
 
 	// Protected Routes
 	ProtectedRoutes := app.Group("/")

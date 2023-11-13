@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/DelaRicch/klock-ecommerce/server/database"
@@ -259,8 +260,7 @@ func SocialLogin(ctx *fiber.Ctx) error {
 
 // Request new token using refresh token
 func RequestNewToken(ctx *fiber.Ctx) error {
-	// var tokenString string
-	refreshToken := ctx.Get("RefreshToken")
+	refreshToken := ctx.Get("Authorization")
 
 	if refreshToken == "" {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -269,11 +269,23 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 		})
 	}
 
+	// Extract the token part from "Bearer <token>"
+	tokenParts := strings.Split(refreshToken, " ")
+	if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"success": false,
+			"message": "Invalid refresh token format",
+		})
+	}
+	refreshToken = tokenParts[1]
+
+	// Parse and validate the refresh token
 	tokenByte, err := jwt.Parse(refreshToken, func(jwtToken *jwt.Token) (interface{}, error) {
 		if _, ok := jwtToken.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %s", jwtToken.Header["alg"])
 		}
 
+		// Use the same secret key for verifying the refresh token
 		return []byte("rf_secret"), nil
 	})
 
@@ -284,24 +296,14 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 		})
 	}
 
+	// Extract claims from the refresh token
 	claims, ok := tokenByte.Claims.(jwt.MapClaims)
 	if !ok || !tokenByte.Valid {
-		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"success": false, "message": "invalid token claim"})
-
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"success": false, "message": "Invalid token claim"})
 	}
 
-	var user models.User
-	database.DB.Where("user_id = ?", claims["userId"]).First(&user)
-
-	if user.UserID == "" {
-		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"success": false,
-			"message": "Invalid refresh token",
-		})
-	}
-
-	// Generate JWt
-	_, token, exp, err := lib.CreateJwtToken(&user)
+	// Call the function to generate a new access token
+	_, newAccessToken, exp, err := lib.CreateJwtToken(&models.User{UserID: claims["userId"].(string)})
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Failed to generate access token",
@@ -309,10 +311,10 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 		})
 	}
 
-	// Set token to the users' cookies for future requests
+	// Set the new access token to the user's cookies for future requests
 	ctx.Cookie(&fiber.Cookie{
 		Name:        "access_token",
-		Value:       token,
+		Value:       newAccessToken,
 		Expires:     time.Now().Add(time.Hour * 1),
 		Secure:      true,
 		SessionOnly: true,
@@ -321,9 +323,8 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 	return ctx.JSON(fiber.Map{
 		"success":       true,
 		"exp":           exp,
-		"access_token":  token,
+		"access_token":  newAccessToken,
 	})
-
 }
 
 func ListUsers(ctx *fiber.Ctx) error {

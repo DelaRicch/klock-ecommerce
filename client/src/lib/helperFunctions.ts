@@ -1,4 +1,4 @@
-import {computed, ref, Ref} from "vue";
+import {computed, ComputedRef, ref, Ref} from "vue";
 import {apiResponse, showSnackbar, showTokenExpiry, success} from "../store/resuableState.ts";
 import {accessTokenType} from "@/types";
 import {useUserStore} from "../store/store.ts";
@@ -10,7 +10,7 @@ export const handleSetSnackbarState = (showSnackbar:  Ref<boolean>, duration: nu
     }, duration);
 };
 
-export const successApiRequest = (res) => {
+export const successApiRequest = (res: any) => {
     const userStore = useUserStore();
 
     handleSetSnackbarState(showSnackbar, 6000);
@@ -25,29 +25,26 @@ export const successApiRequest = (res) => {
     userStore.setAccessToken(accessToken);
     userStore.setRefreshToken(refreshToken);
 
-    console.log(refreshToken)
-
     localStorage.setItem("accessToken", accessToken.value);
     localStorage.setItem("accessTokenExpiry", accessToken.expiry.toString());
     localStorage.setItem("refreshToken", refreshToken);
-
 }
 
-export const errorApiRequest = (err) => {
+export const errorApiRequest = (err: any) => {
     handleSetSnackbarState(showSnackbar, 6000);
     apiResponse.value = err?.message;
     success.value = false;
     console.error(err);
 }
 
-export const tokenExpiryCalculator = (tokenExpiration) => {
-    const remainingTime = ref(getRemainingTime());
+export const tokenExpiryCalculator = (tokenExpiration: ComputedRef<number>) => {
+    let remainingTime = ref(getRemainingTime());
 
     function getRemainingTime() {
         return Math.max(0, tokenExpiration.value - Math.floor(Date.now() / 1000));
     }
 
-    function formatTime(seconds) {
+    function formatTime(seconds: number) {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
@@ -57,18 +54,19 @@ export const tokenExpiryCalculator = (tokenExpiration) => {
         return formatTime(remainingTime.value);
     });
 
-    const countdownInterval = setInterval(() => {
+    let countdownInterval = setInterval(() => {
         remainingTime.value = getRemainingTime();
-        if (remainingTime.value <= 60 && remainingTime.value > 0) {
+        if (remainingTime.value <= 30 && remainingTime.value > 0) {
             showTokenExpiry.value = true;
         }
-        // else if (remainingTime.value < 1) {
-        //   showTokenExpiry.value = false;
-        // }
+        else if (remainingTime.value < 1) {
+          showTokenExpiry.value = false;
+        }
     }, 1000);
 
     return {
         formattedExpiration,
-        countdownInterval
+        countdownInterval,
+        remainingTime
     }
 }

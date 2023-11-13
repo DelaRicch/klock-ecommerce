@@ -49,11 +49,12 @@ import Modal from "../components/Modal.vue";
 import TypingMan from '../assets/typing-man.json';
 import { Vue3Lottie } from "vue3-lottie";
 import { useUserStore } from "../store/store";
-import {computed, onUnmounted, ref, watch} from "vue";
+import {computed, onUnmounted} from "vue";
 import {buttonValue, showTokenExpiry} from "../store/resuableState";
 import {tokenExpiryCalculator} from "../lib/helperFunctions.ts";
+import {requestNewToken} from "../api/user.ts";
 
-const props = defineProps({
+ defineProps({
   showTokenExpiry: {
     type: Boolean,
     required: true
@@ -63,17 +64,30 @@ const props = defineProps({
 const userStore = useUserStore();
 const tokenExpiration = computed(() => userStore.accessToken.expiry);
 
-const {formattedExpiration, countdownInterval} = tokenExpiryCalculator(tokenExpiration);
+const {formattedExpiration, countdownInterval, remainingTime} =
+    tokenExpiryCalculator(tokenExpiration);
 
 
-const handleCloseModal = (newValue) => {
+const handleCloseModal = (newValue: boolean) => {
+  console.log(remainingTime.value)
   buttonValue.value = newValue;
     showTokenExpiry.value = false;
+  clearInterval(countdownInterval);
+  remainingTime.value = 0;
+  console.log(remainingTime.value)
 }
 
-const handleStayOnPage = (newValue) => {
+const handleStayOnPage = (newValue: boolean) => {
   buttonValue.value = newValue;
   showTokenExpiry.value = false;
+  remainingTime.value = 0;
+  clearInterval(countdownInterval)
+
+  requestNewToken().then(res => {
+    console.log(res)
+  }).catch(err => {
+    console.error(err)
+  })
 }
 
 onUnmounted(() => {

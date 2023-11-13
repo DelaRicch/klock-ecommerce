@@ -12,7 +12,7 @@ export const innerColor = ref("black");
 export const outerColor = ref("white");
 
 // Show token expiry notification
-export const showTokenExpiry = ref(true);
+export const showTokenExpiry = ref(false);
 
 // Button value state
 export const buttonValue = ref(false);
