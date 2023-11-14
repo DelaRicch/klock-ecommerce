@@ -26,7 +26,7 @@ export const successApiRequest = (res: any) => {
     userStore.setRefreshToken(refreshToken);
 
     localStorage.setItem("accessToken", accessToken.value);
-    localStorage.setItem("accessTokenExpiry", accessToken.expiry.toString());
+    localStorage.setItem("accessTokenExpiry", JSON.stringify(accessToken.expiry));
     localStorage.setItem("refreshToken", refreshToken);
 }
 

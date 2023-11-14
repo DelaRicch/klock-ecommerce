@@ -1,4 +1,5 @@
 <template>
+  <main>
   <router-view></router-view>
 
   <!--  Display notification when token is about to expire-->
@@ -11,6 +12,7 @@
         :title="success ? 'success' : 'error' "
         :message="apiResponse" />
 
+  </main>
 </template>
 
 <script setup lang="ts">

@@ -1,3 +1,6 @@
 <template>
-  <h2 class="text-3xl font-black text-blue-500">Dela Ricch</h2>
+ <HeaderComponent />
 </template>
+<script setup lang="ts">
+import HeaderComponent from "../components/HeaderComponent.vue";
+</script>

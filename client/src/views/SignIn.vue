@@ -116,7 +116,7 @@ const updateColors = () => {
     isDesktop.value = true;
     // Set desktop colors
     textColor.value = '#1D2939';
-    innerColor.value = 'black';
+    innerColor.value = '#1D2939';
     outerColor.value = 'white';
   }
 };
