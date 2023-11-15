@@ -1,18 +1,18 @@
 <template>
   <button
-      @click="handleClick"
-      :style="{background: backgroundColor, color: color}" :disabled="isDisabled"
-          :class="{'uppercase': uppercase,
+      :class="{'uppercase': uppercase,
           'w-[2.5rem] h-[2.5rem] hover:border-[#D9D9D9]': isIcon,
-          'w-full px-6 font-semibold h-[45px] gap-[0.8rem]': !isIcon,
-          }" :type="type"
-          class=" rounded-lg flex items-center justify-center outline-offset-4 focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC] disabled:cursor-not-allowed disabled:opacity-70 border border-transparent">
+          'w-full px-6 font-semibold h-[45px] gap-[0.8rem]': !isIcon
+          }"
+      :disabled="isDisabled" :style="{background: backgroundColor, color: color}"
+          :type="type" class="rounded-lg flex items-center justify-center outline-offset-4 focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC] disabled:cursor-not-allowed disabled:opacity-70 border border-transparent"
+          @click="handleClick">
     <slot></slot>
     {{label}}
   </button>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {PropType} from "vue";
 
 const emit = defineEmits(["update:modelValue"]);
@@ -46,7 +46,7 @@ const emit = defineEmits(["update:modelValue"]);
     isIcon: {
       type: Boolean,
       default: false,
-    },
+    }
   });
 
 const handleClick = () => {

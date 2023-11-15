@@ -15,3 +15,12 @@ html {
 .mobile {
     @apply px-[5vw]
 }
+
+/*Scrollbar style*/
+* {
+    scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+    width: 0; /* width of the scrollbar */
+}
