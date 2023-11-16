@@ -3,7 +3,7 @@
     <div class="flex items-center gap-[0.54rem]">
       <div
           class="w-[3.6875rem] h-[4.13rem] rounded border border-slate-200 flex items-center justify-center bg-white">
-        <img :src="image" :alt="title" />
+        <img :alt="title" :src="image" />
       </div>
       <div class="flex flex-col gap-2">
         <div class="flex flex-col">
@@ -14,12 +14,12 @@
       </div>
     </div>
     <div class="flex flex-col font-semibold">
-      <span class="text-[#1D2939]">Sales</span>
-      <span class="text-[#667085]">{{ totalSales }}</span>
+      <span class="text-[#1D2939] text-[0.47006rem]">Sales</span>
+      <span class="text-[#667085] text-[0.47006rem]">{{ totalSales }}</span>
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 defineProps({
   title: {
     type: String,

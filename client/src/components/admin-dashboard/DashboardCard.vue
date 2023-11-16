@@ -1,11 +1,11 @@
 <template>
   <div
-      class="border border-slate-400 rounded-lg flex flex-col gap-[1.4rem] p-2 w-full sm:w-[18rem] md:w-[19rem] xl:w-[20rem] 2xl:w-[22.5rem] h-[8.75rem]">
+      class="border border-slate-400 rounded-lg flex flex-col gap-[1.4rem] p-2 w-full sm:w-auto h-[8.75rem]">
     <h4 class="font-semibold text-[0.875rem]">{{ title }}</h4>
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-4">
         <div class="flex items-center justify-center bg-[#4A69E2] p-[0.625rem] rounded-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <svg fill="none" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
             <path d="M2.75 6.12516H2.375V3.17766C2.37875 2.40141 2.5 1.00766 3.82375 0.702664C4.28875 0.595164 4.66875 0.660164 4.98125 0.895164C5.575 1.34016 5.6175 2.17641 5.62 2.21391V4.74891H5.25V2.28391C5.25 2.28391 5.185 1.54391 4.74 1.21266C4.525 1.05141 4.23375 1.01016 3.88875 1.09016C3.3425 1.21641 3.0125 1.57391 2.84375 2.18766C2.71 2.67266 2.7675 3.18766 2.75 3.16891V6.12516Z" fill="#F9FAFB"/>
             <path d="M1.09625 4.83484L6.555 3.37109L7.4025 3.65109L8.39375 3.57484L3.5225 4.96734L1.09625 4.83484Z" fill="#F9FAFB"/>
             <path d="M3.91874 15.1096L2.64999 14.6558C2.57499 14.6296 2.49374 14.6258 2.41749 14.6458L1.46374 14.8958C1.28249 14.9433 1.10374 14.8058 1.10374 14.6183V4.81459L2.97499 4.73085C3.02124 4.72835 3.06749 4.73834 3.10999 4.75959L3.52249 4.96835L3.91874 15.1096Z" fill="#F9FAFB"/>
@@ -27,8 +27,8 @@
         <span class="font-semibold">${{ value }}</span>
       </div>
       <div class="flex items-center gap-4">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M4.375 9.53125L10 3.90625L15.625 9.53125M10 4.6875V16.0938" stroke="#05CD99" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg fill="none" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.375 9.53125L10 3.90625L15.625 9.53125M10 4.6875V16.0938" stroke="#05CD99" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
         </svg>
         <span class="font-semibold text-[#05CD99]">{{ percentage }}%</span>
       </div>
@@ -39,7 +39,7 @@
   </div>
 
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 defineProps({
   title: {
     type: String,

@@ -2,12 +2,12 @@
   <div class="flex w-screen h-screen">
     <aside class="md:w-[25%] 2xl:w-[20%]"></aside>
     <div
-        class="flex flex-col w-full md:w-[75%] 2xl:w-[80%] bg-red-300">
+        class="flex flex-col w-full md:w-[75%] 2xl:w-[80%]">
       <DashboardTopHeader />
       <section
           class="main-dashboard py-[2.25rem] flex flex-col gap-[2.5rem] px-3 sm:px-[2rem]">
 
-        <div class="flex flex-wrap gap-[0.87rem] xl:gap-6 2xl:gap-8">
+        <div class="grid gr-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[0.87rem] xl:gap-6 2xl:gap-8">
         <DashboardCard
             :percentage="34.7"
             :summary="'Compared to Jan 2022'"
@@ -29,6 +29,7 @@
         </div>
         <div class="flex flex-col md:flex-row items-center md:justify-between">
 <DropdownComponent :options="options" @selected-option="handleSelectedOption" />
+
           <div
               class="p-4 rounded-lg border border-slate-400 flex flex-col gap-4 w-full md:w-[22.5rem]">
             <h3 class="text-[1.25rem] font-semibold">Best Sellers</h3>
@@ -54,6 +55,9 @@
 />
           </div>
         </div>
+<!--      <div class="my-4">-->
+<!--      <PaginationComponent :total-pages="20" @update:current-page="handleDisplayCurrentPage" />-->
+<!--      </div>-->
       </section>
     </div>
   </div>
@@ -66,11 +70,14 @@ import SingleItem from "../components/admin-dashboard/SingleItem.vue";
 import Watch from "../assets/watch.png";
 import DropdownComponent from "../components/DropdownComponent.vue";
 
-
 const options = ['Today', 'This week', 'This month', 'Last month', 'This year', 'Last year'];
 
 const handleSelectedOption = (option: string) => {
   console.log(option);
+}
+
+const handleDisplayCurrentPage = (page: number) => {
+  console.log(page);
 }
 
 </script>
