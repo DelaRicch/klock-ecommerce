@@ -43,17 +43,17 @@ if (props.persistence) {
 <style lang="css" scoped>
 @keyframes zoomInOut {
   0% {
-    transform: rotateZ(-2deg) ;
+    transform: scale(1);;
   }
   50% {
-    transform: rotateZ(-1deg);
+    transform: scale(1.03);
   }
   100% {
-    transform: rotateZ(0deg);
+    transform: scale(1);
   }
 }
 
 .animate-wiggle {
-  animation: zoomInOut 10ms linear;
+  animation: zoomInOut .2s linear;
 }
 </style>

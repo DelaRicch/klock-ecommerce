@@ -27,11 +27,10 @@
             :value="120.00"
         />
         </div>
-        <div class="flex flex-col md:flex-row items-center md:justify-between">
-<DropdownComponent :options="options" @selected-option="handleSelectedOption" />
-
+        <div class="flex flex-col lg:flex-row gap-6 md:gap-4 md:justify-between">
+          <SalesGraph />
           <div
-              class="p-4 rounded-lg border border-slate-400 flex flex-col gap-4 w-full md:w-[22.5rem]">
+              class="p-4 rounded-lg border border-slate-400 flex flex-col gap-4 w-full">
             <h3 class="text-[1.25rem] font-semibold">Best Sellers</h3>
 <SingleItem
     :image="Watch"
@@ -40,13 +39,21 @@
     description="DV One automatic 43mm"
     title="Breitling leather"
 />
-            <SingleItem
+<SingleItem
     :image="Watch"
     :price="50"
     :total-sales="5612"
     description="DV One automatic 43mm"
     title="Breitling leather"
-/><SingleItem
+/>
+<SingleItem
+    :image="Watch"
+    :price="50"
+    :total-sales="5612"
+    description="DV One automatic 43mm"
+    title="Breitling leather"
+/>
+<SingleItem
     :image="Watch"
     :price="50"
     :total-sales="5612"
@@ -68,13 +75,8 @@ import DashboardTopHeader from "../components/admin-dashboard/DashboardTopHeader
 import DashboardCard from "../components/admin-dashboard/DashboardCard.vue";
 import SingleItem from "../components/admin-dashboard/SingleItem.vue";
 import Watch from "../assets/watch.png";
-import DropdownComponent from "../components/DropdownComponent.vue";
+import SalesGraph from "../components/admin-dashboard/SalesGraph.vue";
 
-const options = ['Today', 'This week', 'This month', 'Last month', 'This year', 'Last year'];
-
-const handleSelectedOption = (option: string) => {
-  console.log(option);
-}
 
 const handleDisplayCurrentPage = (page: number) => {
   console.log(page);

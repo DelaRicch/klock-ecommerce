@@ -17,10 +17,25 @@ html {
 }
 
 /*Scrollbar style*/
-* {
-    scrollbar-width: none;
+html {
+    scrollbar-color: #1D2939 #f1f1f1;
+    scrollbar-width: thin;
 }
 
+/* WebKit (Chrome, Safari) */
 ::-webkit-scrollbar {
-    width: 0; /* width of the scrollbar */
+    width: 8px;
+    height: 8px;
+border-radius: 10px;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar-thumb {
+border-radius: 10px;
+    background-color: #1D2939;
+}
+
+::-webkit-scrollbar-track {
+border-radius: 10px;
+    background-color: #f1f1f1;
 }

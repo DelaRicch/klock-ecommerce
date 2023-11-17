@@ -3,9 +3,11 @@ import './style.css'
 import App from './App.vue'
 import router from './router'
 import {createPinia, PiniaVuePlugin} from "pinia";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import {initializeApp} from "firebase/app";
+import {getAnalytics} from "firebase/analytics";
 import Vue3Lottie from "vue3-lottie";
+import VueApexCharts from "vue3-apexcharts";
+import VueTailwindDatepicker from 'vue-tailwind-datepicker'
 
 const pinia = createPinia()
 const app = createApp(App)
@@ -15,13 +17,6 @@ router.beforeEach((to, _, next) => {
     next();
 });
 
-// Import the functions you need from the SDKs you need
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_APP_FIREBASE_API_KEY as string,
     authDomain: import.meta.env.VITE_APP_FIREBASE_AUTH_DOMAIN as string,
@@ -40,4 +35,6 @@ const firebaseConfig = {
      .use(pinia)
      .use(Vue3Lottie)
 .use(PiniaVuePlugin)
+     .use(VueApexCharts)
+     .use(VueTailwindDatepicker)
      .mount('#app')

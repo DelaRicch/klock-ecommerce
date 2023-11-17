@@ -1,4 +1,8 @@
 <template>
+<!--  Overlay for hiding dropdown menu when clicked outside-->
+  <div v-if="buttonValue" class="w-screen h-screen absolute left-0 top-0"
+       @click="handleToggleDropdown(false)"></div>
+
   <div class="w-[12rem] h-max flex flex-col gap-2 relative">
     <ButtonComponent
         :label="dropdownOption"
@@ -20,11 +24,11 @@
     </ButtonComponent>
 <Transition>
     <div v-if="buttonValue"
-         class="absolute top-14 left-0 border w-full flex flex-col gap-1.5 rounded-lg overflow-clip max-h-[10rem] overflow-y-auto">
+         class="absolute top-14 left-0 border w-full flex flex-col gap-1.5 rounded-lg overflow-clip max-h-[10rem] overflow-y-auto z-[100] bg-white">
       <button
           v-for="(option, index) in options"
           :key="index"
-          class="py-1.5 bg-slate-200 text-[#1D2939] font-medium hover:bg-slate-50 transition-all duration-200 ease-linear"
+          class="py-2 bg-slate-200 text-[#1D2939] font-medium hover:bg-slate-50 transition-all duration-200 ease-linear"
           @click="handleSelectOption(option)"
       >{{ option }}
       </button>
@@ -57,6 +61,7 @@ const handleSelectOption = (option: string) => {
   dropdownOption.value = option;
   emit("selectedOption", option);
 }
+
 </script>
 
 <style scoped>
@@ -69,5 +74,13 @@ const handleSelectOption = (option: string) => {
 .v-leave-to {
   opacity: 0;
   transform: translateY(-40%);
+}
+
+* {
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  width: 0; /* width of the scrollbar */
 }
 </style>

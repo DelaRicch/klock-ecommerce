@@ -1,7 +1,7 @@
 <template>
   <Transition name="fade">
 <div v-if="showTokenExpiry">
-  <Modal :persistence="true">
+  <Modal persistence>
     <template #header>
       <div class="flex items-center gap-3 mx-auto">
         <span>Token expires in</span>
