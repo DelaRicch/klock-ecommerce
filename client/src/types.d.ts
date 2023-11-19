@@ -16,3 +16,13 @@ export interface socialAuthType {
     socialId: string;
     provider: string;
 }
+
+export interface ProductProps {
+    id: number;
+    product: string;
+    order_id: string;
+    amount: number;
+    status: string;
+    customer_name: string;
+    date: string;
+}

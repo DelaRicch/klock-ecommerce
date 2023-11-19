@@ -4,7 +4,7 @@
 
     <button
         :disabled="currentPage === 1"
-        class="rounded-l-xl outline-[#0408E7] w-[3rem] sm:w-[7.2rem] h-full flex items-center justify-center gap-1 border-r border-[#D0D5DD] disabled:cursor-not-allowed disabled:opacity-50"
+        class="rounded-l-xl outline-[#0408E7] w-[3rem] sm:w-[7.2rem] h-full flex items-center justify-center gap-1 border-r border-[#D0D5DD] disabled:cursor-default disabled:opacity-50"
         @click="previousPage"
     >
       <svg fill="none" height="20" viewBox="0 0 20 20" width="20"
@@ -19,7 +19,7 @@
         :key="page"
         :class="{ 'bg-slate-100': currentPage === page }"
         :disabled="currentPage === page"
-        class="outline-[#0408E7] w-[3rem] h-full text-[#344054] flex items-center justify-center p-[0.625rem] border-x border-[#D0D5DD] disabled:cursor-not-allowed"
+        class="outline-[#0408E7] w-[3rem] h-full text-[#344054] flex items-center justify-center p-[0.625rem] border-x border-[#D0D5DD] disabled:cursor-default"
         @click="goToPage(page)"
     >
       {{page}}
@@ -27,7 +27,7 @@
 
     <button
         :disabled="currentPage === totalPages"
-        class="rounded-r-xl outline-[#0408E7] w-[3rem] sm:w-[7.2rem] h-full flex items-center justify-center gap-1 border-l border-[#D0D5DD] disabled:cursor-not-allowed disabled:opacity-50"
+        class="rounded-r-xl outline-[#0408E7] w-[3rem] sm:w-[7.2rem] h-full flex items-center justify-center gap-1 border-l border-[#D0D5DD] disabled:cursor-default disabled:opacity-50"
         @click="nextPage">
       <span v-if="displayButtonLabels" class="text-[#1D2939] text-[0.875rem]">Next</span>
       <svg fill="none" height="20" viewBox="0 0 20 20" width="20"

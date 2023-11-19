@@ -2,7 +2,7 @@
   <div class="border border-slate-400 rounded-lg p-4 flex flex-col w-full xl:w-[180%]">
     <h3 class="text-[1.25rem] text-[#1D2939] font-semibold">Sales Graph</h3>
     <div
-        class="flex flex-col sm:flex-row gap-4 sm:gap-0 items-center sm:items-start my-4 sm:my-0 justify-between">
+        class="flex flex-col sm:flex-row gap-4 items-center sm:items-start my-4 sm:my-0 justify-between">
       <div class="flex flex-col">
         <span class="text-[#1D2939] text-[2.125rem] font-bold">$37.5K</span>
         <div class="flex items-center gap-2">
@@ -24,18 +24,22 @@
           <span class="ont-bold text-[#05CD99]">On track</span>
         </div>
       </div>
+      <div>
       <date-picker
           v-model="selectedDate"
           separator=" to "
           :formatter="formatter"
           placeholder="Select date"
-          class="text-center w-[9rem]"
+          class="text-center"
           :shortcuts="false"
       />
+      </div>
 
     </div>
-   <div class="-mt-3 w-full md:w-11/12 h-max flex self-end border overflow-y-clip overflow-x-auto">
-     <apexchart :options="chartOptions" :series="series" type="line" width="500"
+   <div
+       class="-mt-3 w-full md:w-11/12 xl:w-9/12 h-max flex self-center overflow-y-clip overflow-x-auto">
+     <apexchart :options="chartOptions" :series="series" type="line"
+                class="w-full"
                 ></apexchart>
    </div>
   </div>
@@ -68,7 +72,7 @@ const chartOptions = {
     },
   },
   xaxis: {
-    categories: [1991, 1992, 1993 ],
+    categories: ["Xorla", "Dela", "Ricch", "Champ", "Emma" ],
   },
   stroke: {
 curve: 'smooth'
@@ -89,20 +93,14 @@ curve: 'smooth'
     show: false,
   },
   fill: {
-    type: 'gradient',
-    gradient: {
-      shadeIntensity: 1,
-      opacityFrom: 0.7,
-      opacityTo: 0.9,
-      stops: [0, 90, 100]
-    }
+    colors: ['#4B4EFC'],
   },
 
 }
 
 const series = [{
   name: 'Sales',
-  data: [30, 40, 45]
+  data: [38, 37, 40, 35, 41]
 }]
 
 const handleSelectedOption = (option: string) => {

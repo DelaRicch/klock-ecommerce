@@ -1,15 +1,20 @@
 <template>
-  <div class="w-[3rem] h-[3rem] md:w-[3.5rem] md:h-[3.5rem] rounded-full bg-blue-600 overflow-clip">
-    <img class=" bg-no-repeat bg-center bg-cover w-full h-full"
+  <div class="w-[3rem] h-[3rem] md:w-[3.5rem] md:h-[3.5rem] rounded-full relative overflow-clip">
+    <img class=" bg-no-repeat bg-center bg-cover w-full h-full "
         :src="src" :alt="alt" />
+    <div
+        class="absolute top-0 left-0 w-full h-full bg-slate-300 border-2 border-slate-400 rounded-full grid place-items-center">
+<UserIcon />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+  import UserIcon from "../assets/UserIcon.vue";
+
   defineProps({
     src: {
       type: String,
-      required: true,
     },
     alt: {
       type: String,

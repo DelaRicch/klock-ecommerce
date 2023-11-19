@@ -7,7 +7,6 @@ import {initializeApp} from "firebase/app";
 import {getAnalytics} from "firebase/analytics";
 import Vue3Lottie from "vue3-lottie";
 import VueApexCharts from "vue3-apexcharts";
-import VueTailwindDatepicker from 'vue-tailwind-datepicker'
 
 const pinia = createPinia()
 const app = createApp(App)
@@ -36,5 +35,4 @@ const firebaseConfig = {
      .use(Vue3Lottie)
 .use(PiniaVuePlugin)
      .use(VueApexCharts)
-     .use(VueTailwindDatepicker)
      .mount('#app')
