@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[3rem] h-[3rem] md:w-[3.5rem] md:h-[3.5rem] rounded-full relative overflow-clip">
+  <div class="w-[3rem] h-[3rem] md:w-[3.4rem] md:h-[3.4rem] rounded-full relative overflow-clip">
     <img class=" bg-no-repeat bg-center bg-cover w-full h-full "
         :src="src" :alt="alt" />
     <div

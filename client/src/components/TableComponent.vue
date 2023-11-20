@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-6 w-full min-h-[37rem] overflow-x-auto">
   <div
       class="min-w-[50rem] rounded-lg border border-[#667085] pt-5 pb-[0.62rem] flex flex-col">
       <h4 class="text-[#1D2939] text-2xl font-bold ml-3">{{title}}</h4>
@@ -39,7 +39,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import {computed, PropType, ref} from "vue";
+import {computed, PropType, ref, watch} from "vue";
 import PaginationComponent from "../components/PaginationComponent.vue";
 import EmptyStateComponent from "../components/EmptyStateComponent.vue";
 import {ProductProps} from "@/types";
@@ -59,7 +59,7 @@ const props = defineProps({
     required: true,
   },
   items: {
-    type: Array,
+    type: Array as PropType<ProductProps[]>,
     required: true,
   },
   columnWidths: {
@@ -73,9 +73,12 @@ const props = defineProps({
 })
 
 const currentPage = ref(1);
-const selectedRows = ref([]);
+const selectedRows = ref<number[]>([]);
 const selectAll = ref(false);
 
+watch(selectedRows, (data) => {
+  console.log(data)
+})
 const getColumnWidths = (header: HeaderProps) => {
   return props.columnWidths[header.key] || "auto";
 };
@@ -100,7 +103,7 @@ const handleDisplayCurrentPage = (page: number) => {
 // Select all rows
 const selectAllRows = () => {
   if (selectAll.value) {
-    selectedRows.value = props.items.map((item: ProductProps) => item.id);
+    selectedRows.value = props.items.map((item: ProductProps) => item?.id);
   } else {
     selectedRows.value = [];
   }
@@ -114,7 +117,7 @@ th {
 }
 
 td {
-  @apply px-3 py-2 text-left text-[0.88rem]  border
+  @apply px-3 py-2 text-left text-[0.88rem]
 }
 
 td:nth-child(2) {

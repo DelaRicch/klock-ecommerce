@@ -62,14 +62,14 @@
 />
           </div>
         </div>
-        <div class="h-[40rem] border w-full">
+<!--        <div class="h-[40rem] border w-full">-->
         <table-component
             :title="'Recent Orders'"
             :headers="tableHeaders"
             :items="tableItems"
             :columnWidths="tableColumnWidths"
         />
-        </div>
+<!--        </div>-->
       </section>
     </div>
   </div>
@@ -81,6 +81,7 @@ import SingleItem from "../components/admin-dashboard/SingleItem.vue";
 import Watch from "../assets/watch.png";
 import SalesGraph from "../components/admin-dashboard/SalesGraph.vue";
 import TableComponent from "../components/TableComponent.vue";
+import {ProductProps} from "@/types";
 
 // Table section
 const tableColumnWidths = {
@@ -101,7 +102,7 @@ const tableHeaders = [
   {key: 'amount', label: 'Amount'},
 ]
 
-const tableItems = [
+const tableItems: ProductProps[] = [
   {
     id: 1,
     product: "Breitling leather",
