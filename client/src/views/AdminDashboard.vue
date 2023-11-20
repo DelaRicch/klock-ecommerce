@@ -62,14 +62,53 @@
 />
           </div>
         </div>
-<!--        <div class="h-[40rem] border w-full">-->
         <table-component
             :title="'Recent Orders'"
             :headers="tableHeaders"
             :items="tableItems"
             :columnWidths="tableColumnWidths"
-        />
-<!--        </div>-->
+        >
+          <template #product="item">
+            <span class="line-clamp-1">{{(item.item as ProductProps)["product"]}}</span>
+          </template>
+          <template #order_id="item">
+            <span>{{(item.item as ProductProps)["order_id"]}}</span>
+          </template>
+          <template #date="item">
+            <span>{{(item.item as ProductProps)["date"]}}</span>
+          </template>
+          <template #custormer_name="item">
+            <span class="line-clamp-1">{{(item.item as ProductProps)["customer_name"]}}</span>
+          </template>
+          <template #status="item">
+            <div
+                :class="{
+                    'bg-[#D3F5F7] text-[#027A48]': (item.item as ProductProps)['status']
+                     === 'Completed',
+                    'bg-[#FFEFD2] text-[#F1A512]': (item.item as ProductProps)['status']
+                     === 'Pending',
+                    'bg-[#F9DADA] text-[#A73636]': (item.item as ProductProps)['status']
+                     === 'Cancelled',
+                  }"
+                class="w-max p-1 flex items-center gap-[0.25rem] rounded-lg ml-2"
+            >
+              <div
+                  :class="{
+                      'bg-[#027A48]': (item.item as ProductProps)['status'] === 'Completed',
+                      'bg-[#F1A512]': (item.item as ProductProps)['status'] ===
+                      'Pending',
+                      'bg-[#A73636]': (item.item as ProductProps)['status'] ===
+                      'Cancelled',
+                    }"
+                  class="w-[0.375rem] h-[0.375rem] rounded-full">
+              </div>
+              {{ item.item["status"] }}
+            </div>
+          </template>
+          <template #amount="item">
+            <span>{{(item.item as ProductProps)["amount"]}}</span>
+          </template>
+        </table-component>
       </section>
     </div>
   </div>
@@ -85,12 +124,12 @@ import {ProductProps} from "@/types";
 
 // Table section
 const tableColumnWidths = {
-  product: "25%",
-  order_id: "17%",
-  date: "12%",
-  customer_name: "25%",
-  status: "10%",
-  amount: "7%",
+  product: "20%",
+  order_id: "18%",
+  date: "15%",
+  customer_name: "20%",
+  status: "15%",
+  amount: "5%",
 };
 
 const tableHeaders = [
@@ -105,11 +144,12 @@ const tableHeaders = [
 const tableItems: ProductProps[] = [
   {
     id: 1,
-    product: "Breitling leather",
+    product:
+        "Breitling leather sdfkjhdhf sdhfjkshf dfjksh kdf dkshfkfjh dsfhksjf dfkshfjs sdfkjshfs",
     order_id: '123RGR231567Y',
     date: '12/08/2023',
     customer_name: 'Ekow Smith',
-    status: 'Completed',
+    status: 'Pending',
     amount: '50'
   },
   {
@@ -127,7 +167,7 @@ const tableItems: ProductProps[] = [
     order_id: '123RGR231567Y',
     date: '12/08/2023',
     customer_name: 'Ekow Smith',
-    status: 'Completed',
+    status: 'Pending',
     amount: '50'
   },
   {
@@ -154,7 +194,7 @@ const tableItems: ProductProps[] = [
     order_id: '123RGR231567Y',
     date: '12/08/2023',
     customer_name: 'Ekow Smith',
-    status: 'Completed',
+    status: 'Cancelled',
     amount: '50'
   },
   {
@@ -172,7 +212,7 @@ const tableItems: ProductProps[] = [
     order_id: '123RGR231567Y',
     date: '12/08/2023',
     customer_name: 'Ekow Smith',
-    status: 'Completed',
+    status: 'Cancelled',
     amount: '50'
   },
   {
@@ -190,7 +230,7 @@ const tableItems: ProductProps[] = [
     order_id: '123RGR231567Y',
     date: '12/08/2023',
     customer_name: 'Ekow Smith',
-    status: 'Completed',
+    status: 'Pending',
     amount: '50'
   },
   {
@@ -208,7 +248,7 @@ const tableItems: ProductProps[] = [
     order_id: '123RGR231567Y',
     date: '12/08/2023',
     customer_name: 'Ekow Smith',
-    status: 'Completed',
+    status: 'Pending',
     amount: '50'
   },
 ]

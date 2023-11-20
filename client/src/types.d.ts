@@ -21,7 +21,7 @@ export interface ProductProps {
     id: number;
     product: string;
     order_id: string;
-    amount: number;
+    amount: string;
     status: string;
     customer_name: string;
     date: string;

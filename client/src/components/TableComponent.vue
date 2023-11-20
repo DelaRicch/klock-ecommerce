@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-6 w-full min-h-[37rem] overflow-x-auto">
+  <div class="flex flex-col gap-6 w-full min-h-[41rem] overflow-x-auto">
   <div
       class="min-w-[50rem] rounded-lg border border-[#667085] pt-5 pb-[0.62rem] flex flex-col">
       <h4 class="text-[#1D2939] text-2xl font-bold ml-3">{{title}}</h4>
@@ -20,12 +20,13 @@
       </thead>
       <tbody v-if="displayedItems.length">
       <tr v-for="item in displayedItems" :key="item .id"
-          class="text-[#474D66] hover:bg-slate-200 transition-all duration-250 ease-linear cursor-default">
+          class="text-[#474D66] hover:bg-slate-200 transition-all duration-250
+          ease-linear cursor-default">
         <td>
           <input class="cursor-pointer" type="checkbox" v-model="selectedRows" :value="item.id">
         </td>
         <td v-for="header in headers" :key="header.key">
-          {{ item[header.key] }}
+          <slot :name="header.key" :item="item">{{ item[header.key] }}</slot>
         </td>
       </tr>
       </tbody>
