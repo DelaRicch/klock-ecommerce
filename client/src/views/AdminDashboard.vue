@@ -90,7 +90,7 @@
                     'bg-[#F9DADA] text-[#A73636]': (item.item as ProductProps)['status']
                      === 'Cancelled',
                   }"
-                class="w-max p-1 flex items-center gap-[0.25rem] rounded-lg ml-2"
+                class="w-max py-1.5 px-3 flex items-center gap-[0.25rem] rounded-3xl"
             >
               <div
                   :class="{

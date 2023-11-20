@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-6 w-full min-h-[41rem] overflow-x-auto">
+  <div class="flex flex-col gap-6 w-full min-h-[43rem] overflow-x-auto">
   <div
       class="min-w-[50rem] rounded-lg border border-[#667085] pt-5 pb-[0.62rem] flex flex-col">
       <h4 class="text-[#1D2939] text-2xl font-bold ml-3">{{title}}</h4>
