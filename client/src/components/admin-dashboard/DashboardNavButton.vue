@@ -1,9 +1,10 @@
 <template>
   <button
       @click="handleSelectPage(name)"
-      :class="currentRoute === name ? 'bg-[#155EEF] text-white' : 'bg-transparent text-[#1D2939]'"
+      :class="(currentRoute === name || parentRoute === name) ? 'bg-[#155EEF] text-white' :
+      'bg-transparent text-[#1D2939]'"
           class="capitalize rounded-lg h-[3.2rem] flex items-center justify-center gap-3.5 outline-offset-4 outline-blue-600">
-    <DashboardIcon :name="name" :color="currentRoute === name ? 'white' : '#1D2939' "/>
+    <DashboardIcon :name="name" :color="(currentRoute === name || parentRoute === name) ? 'white' : '#1D2939' "/>
     {{ label }}
   </button>
 </template>
@@ -33,8 +34,11 @@ defineProps({
     required: true,
   },
   currentRoute: {
-    type: String,
+    // type: String,
     required: true,
+  },
+  parentRoute: {
+    required: false
   }
 })
 

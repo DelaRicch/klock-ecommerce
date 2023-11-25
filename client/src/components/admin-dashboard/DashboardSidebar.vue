@@ -14,6 +14,7 @@
             :label="button.title"
             :route="button.route"
             :current-route="currentRoute"
+            :parent-route="parentRoute"
             />
     </div>
   </aside>
@@ -31,9 +32,10 @@ const navButtons = [
 ]
 
 const route = useRoute()
-const currentRoute = computed(() => route.name || '');
+const currentRoute = computed(() => route.name ?? '');
+const parentRoute = computed(() => route.meta?.parent)
 
-watch(currentRoute, (newRoute) => {
+watch(parentRoute, (newRoute) => {
   console.log(newRoute)
 })
 

@@ -10,6 +10,7 @@ const SignIn = () => import('../views/SignIn.vue')
 const AdminDashboardLayout = () => import('../views/admin/AdminDashboardLayout.vue')
 const AdminDashboard = () => import('../views/admin/AdminDashboard.vue')
 const AdminAllProducts = () => import('../views/admin/AdminAllProducts.vue')
+const AdminAddNewProduct = () => import('../views/admin/AddNewProduct.vue')
 const AdminOrderList = () => import('../views/admin/AdminOrderList.vue')
 
   const routes = [
@@ -27,8 +28,14 @@ const AdminOrderList = () => import('../views/admin/AdminOrderList.vue')
                 {path: 'all-products',
                     name: 'all-products',
                     component: AdminAllProducts,
-                    meta: {title: 'Klock :- Admin All Products'}
+                    meta: {title: 'Klock :- Admin All Products'},
                 },
+              {
+                  path: 'add-new-product',
+                  name: 'add-new-product',
+                  component: AdminAddNewProduct,
+                  meta: {title: 'Klock :- Admin Add New Product', parent: 'all-products'},
+              },
                 {path: 'order-list',
                     name: 'order-list',
                     component: AdminOrderList,
