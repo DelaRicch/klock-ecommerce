@@ -1,9 +1,4 @@
 <template>
-  <div class="flex w-screen h-screen">
-    <aside class="md:w-[25%] 2xl:w-[20%]"></aside>
-    <div
-        class="flex flex-col w-full md:w-[75%] 2xl:w-[80%]">
-      <DashboardTopHeader />
       <section
           class="main-dashboard py-[2.25rem] flex flex-col gap-[2.5rem] px-3 sm:px-[2rem]">
 
@@ -100,26 +95,23 @@
                       'bg-[#A73636]': (item.item as ProductProps)['status'] ===
                       'Cancelled',
                     }"
-                  class="w-[0.375rem] h-[0.375rem] rounded-full">
+                  class="w-[0.5rem] h-[0.5rem] rounded-full">
               </div>
               {{ item.item["status"] }}
             </div>
           </template>
           <template #amount="item">
-            <span>{{(item.item as ProductProps)["amount"]}}</span>
+            <span>$ {{(item.item as ProductProps)["amount"]}}</span>
           </template>
         </table-component>
       </section>
-    </div>
-  </div>
 </template>
 <script lang="ts" setup>
-import DashboardTopHeader from "../components/admin-dashboard/DashboardTopHeader.vue";
-import DashboardCard from "../components/admin-dashboard/DashboardCard.vue";
-import SingleItem from "../components/admin-dashboard/SingleItem.vue";
-import Watch from "../assets/watch.png";
-import SalesGraph from "../components/admin-dashboard/SalesGraph.vue";
-import TableComponent from "../components/TableComponent.vue";
+import DashboardCard from "../../components/admin-dashboard/DashboardCard.vue";
+import SingleItem from "../../components/admin-dashboard/SingleItem.vue";
+import Watch from "../../assets/watch.png";
+import SalesGraph from "../../components/admin-dashboard/SalesGraph.vue";
+import TableComponent from "../../components/TableComponent.vue";
 import {ProductProps} from "@/types";
 
 // Table section
@@ -252,11 +244,4 @@ const tableItems: ProductProps[] = [
     amount: '50'
   },
 ]
-
 </script>
-<style lang="css" scoped>
-.main-dashboard {
-min-height: calc(100vh - 5rem);
-  overflow-y: auto;
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-slate-400 rounded-lg p-4 flex flex-col w-full xl:w-[180%]">
+  <div class="border border-slate-400 rounded-lg p-4 flex flex-col w-full xl:w-[210%]">
     <h3 class="text-[1.25rem] text-[#1D2939] font-semibold">Sales Graph</h3>
     <div
         class="flex flex-col sm:flex-row gap-4 items-center sm:items-start my-4 sm:my-0 justify-between">
@@ -70,6 +70,13 @@ const chartOptions = {
     toolbar: {
       show: false,
     },
+    dropShadow: {
+      enabled: true,
+      top: 20,
+      left: 0,
+      blur: 6,
+      opacity: 0.1,
+    }
   },
   xaxis: {
     categories: ["Xorla", "Dela", "Ricch", "Champ", "Emma" ],

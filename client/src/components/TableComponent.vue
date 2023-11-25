@@ -1,7 +1,8 @@
 <template>
-  <div class="flex flex-col gap-6 w-full min-h-[43rem] overflow-x-auto">
   <div
-      class="min-w-[50rem] rounded-lg border border-[#667085] pt-5 pb-[0.62rem] flex flex-col">
+      class="flex flex-col gap-6 w-full min-h-[48rem] overflow-x-auto">
+  <div
+      class="min-w-[50rem] rounded-lg border border-slate-400 pt-5 pb-[0.62rem] flex flex-col">
       <h4 class="text-[#1D2939] text-2xl font-bold ml-3">{{title}}</h4>
     <table class="mt-2 w-full h-full px-[1rem]" :aria-describedby="title">
       <thead>
@@ -35,8 +36,10 @@
       <EmptyStateComponent />
     </div>
   </div>
+    <div class="my-1 md:my-2">
     <PaginationComponent v-if="totalPages > 1" :total-pages="totalPages"
                          @update:current-page="handleDisplayCurrentPage" />
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -114,7 +117,7 @@ const selectAllRows = () => {
 
 <style scoped>
 th {
-  @apply border-y border-[#98A2B3] px-3 py-2 font-semibold text-[#1D2939] text-left
+  @apply border-y border-slate-400 px-3 py-2 font-semibold text-[#1D2939] text-left
 }
 
 td {
