@@ -23,7 +23,7 @@
 import LabelLogo from "../../assets/LabelLogo.vue";
 import DashboardNavButton from "../../components/admin-dashboard/DashboardNavButton.vue";
 import {useRoute} from "vue-router";
-import {computed, watch} from "vue";
+import {computed} from "vue";
 
 const navButtons = [
   {id: 1, title: 'Dashboard', name: 'dashboard', route: ''},
@@ -33,10 +33,6 @@ const navButtons = [
 
 const route = useRoute()
 const currentRoute = computed(() => route.name ?? '');
-const parentRoute = computed(() => route.meta?.parent)
-
-watch(parentRoute, (newRoute) => {
-  console.log(newRoute)
-})
+const parentRoute = computed(() => route.meta?.parent ?? '')
 
 </script>

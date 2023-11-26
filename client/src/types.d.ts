@@ -26,3 +26,7 @@ export interface ProductProps {
     customer_name: string;
     date: string;
 }
+
+export interface ErrorObject {
+    message: string;
+}

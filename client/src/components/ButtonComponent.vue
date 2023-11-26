@@ -2,10 +2,12 @@
   <button
       :class="{'uppercase': uppercase,
           'w-[2.5rem] h-[2.5rem] hover:border-[#D9D9D9]': isIcon,
-          'w-full px-6 font-semibold h-[45px] gap-[0.8rem]': !isIcon
+          'w-full px-6 font-semibold h-[45px] gap-[0.8rem]': !isIcon,
+          'border-[#667085] ' : border,
+          'border-transparent': !border,
           }"
       :disabled="isDisabled" :style="{background: backgroundColor, color: color}"
-          :type="type" class="rounded-lg flex items-center justify-center outline-offset-4 focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC] disabled:cursor-not-allowed disabled:opacity-70 border border-transparent"
+          :type="type" class="rounded-lg flex items-center justify-center outline-offset-4 focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC] disabled:cursor-not-allowed disabled:opacity-70 border"
           @click="handleClick">
     <slot></slot>
     {{label}}
@@ -46,7 +48,11 @@ const emit = defineEmits(["update:modelValue"]);
     isIcon: {
       type: Boolean,
       default: false,
-    }
+    },
+    border: {
+      type: Boolean,
+      default: false,
+    },
   });
 
 const handleClick = () => {

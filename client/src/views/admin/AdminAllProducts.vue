@@ -35,7 +35,7 @@ import {useRouter} from "vue-router";
 const router = useRouter();
 const isSmallerScreen = ref(false);
 const checkScreenSize = () => {
-  isSmallerScreen.value = window.innerWidth <= 375;
+  isSmallerScreen.value = window.innerWidth <= 430;
 }
 
 const handleAddNewProduct = () => {

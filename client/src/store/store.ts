@@ -17,7 +17,7 @@ export const useUserStore = defineStore("userStore", () => {
 
         if (storedToken && storedExpiry) {
             accessToken.value = storedToken;
-            accessToken.expiry = JSON.parse(storedExpiry);
+            accessToken.expiry = Number(storedExpiry);
         }
     };
 

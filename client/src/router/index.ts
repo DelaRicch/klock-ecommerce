@@ -17,7 +17,9 @@ const AdminOrderList = () => import('../views/admin/AdminOrderList.vue')
       {path: '/', name: 'home', component: Home, meta: {title: 'Klock :- Home'}},
     {path: '/sign-up', name: 'sign-up', component: SignUp, meta: {title: 'Klock :- Sign Up'}},
       {path: '/sign-in', name: 'sign-in', component: SignIn, meta: {title: 'Klock :- Sign In'}},
-      {path: '/dashboard',
+      {
+          path: '/dashboard',
+          meta: {auth: true},
           component: AdminDashboardLayout,
           children: [
               {path: '',

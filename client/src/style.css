@@ -45,3 +45,20 @@ border-radius: 10px;
 border-radius: 10px;
     background-color: #f1f1f1;
 }
+
+/* Remove the arrow for number input in Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* Remove the arrow for number input in Chrome, Safari, and Edge */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Remove the arrow for number input in Edge (chromium-based) */
+input[type="number"] {
+    -ms-inner-appearance: none;
+}

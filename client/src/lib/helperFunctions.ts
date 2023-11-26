@@ -1,6 +1,6 @@
 import {computed, ComputedRef, ref, Ref} from "vue";
 import {apiResponse, showSnackbar, showTokenExpiry, success} from "../store/resuableState.ts";
-import {accessTokenType} from "@/types";
+import {accessTokenType, ErrorObject} from "@/types";
 import {useUserStore} from "../store/store.ts";
 
 export const handleSetSnackbarState = (showSnackbar:  Ref<boolean>, duration: number) => {
@@ -70,3 +70,60 @@ export const tokenExpiryCalculator = (tokenExpiration: ComputedRef<number>) => {
         remainingTime
     }
 }
+
+// Image validation
+
+
+export const isValidImage = (file: File): Promise<File> => {
+    return new Promise((resolve, reject) => {
+        const allowedTypes: string[] = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+
+        if (!allowedTypes.includes(file.type)) {
+            const error: ErrorObject = {
+                message: 'Invalid file type or extension: ' + file.name,
+            };
+            errorApiRequest(error)
+            reject(error);
+            return;
+        }
+
+        if (file.size > 4 * 1024 * 1024) {
+            const error: ErrorObject = {
+                message: 'Image size should be less than 4MB',
+            };
+            errorApiRequest(error)
+            reject(error);
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const img = new Image();
+
+            img.onload = () => {
+                const dimensions = {
+                    width: img.width,
+                    height: img.height,
+                };
+
+                // if (dimensions.width > 900 || dimensions.height > 450) {
+                if (dimensions.width > 2000 || dimensions.height > 1450) {
+                    const error: ErrorObject = {
+                        message: 'Image dimensions should be 2000 x 1450px or less',
+                    };
+                    errorApiRequest(error)
+                    reject(error);
+                } else {
+                    resolve(file);
+                }
+            };
+
+            if (typeof e.target?.result === 'string') {
+                img.src = e.target?.result;
+            }
+        };
+
+        reader.readAsDataURL(file);
+    });
+};
