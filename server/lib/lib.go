@@ -1,17 +1,23 @@
 package lib
 
 import (
+	"context"
 	"fmt"
 	"math/rand"
+	"mime/multipart"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/DelaRicch/klock-ecommerce/server/models"
 	"github.com/alexedwards/argon2id"
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateRandomNumbers(length int) string {
-	const charset = "0123456789"
+func GenerateRandomStrings(length int) string {
+	const charset = "01234ABCDEFGHIJKLM567890NOPQRSTUVWXYZ"
 	result := make([]byte, length)
 	for i := range result {
 		result[i] = charset[rand.Intn(len(charset))]
@@ -19,21 +25,18 @@ func GenerateRandomNumbers(length int) string {
 	return string(result)
 }
 
-func GenerateRandomAlphabets(length int) string {
-	const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	result := make([]byte, length)
-	for i := range result {
-		result[i] = charset[rand.Intn(len(charset))]
-	}
-	return string(result)
-}
 
 // Generate Unique User IDs
 func GenerateUserID() string {
-	randomPart1 := GenerateRandomNumbers(5)
-	randomPart2 := GenerateRandomAlphabets(5)
-	userID := fmt.Sprintf("KLOCK-USER-%s-%s", randomPart1, randomPart2)
+	randomString := GenerateRandomStrings(15)
+	userID := fmt.Sprintf("KLOCK-USER-%s", randomString)
 	return userID
+}
+
+func GenerateProductID() string {
+	randomString := GenerateRandomStrings(15)
+	productID := fmt.Sprintf("KLOCK-PRODUCT-%s", randomString)
+	return productID
 }
 
 // Hash the user's password using Argon2id
@@ -54,6 +57,7 @@ func VerifyPassword(hashedPassword, password string) bool {
 	return match
 }
 
+// Create new JWT access token and refresh token
 func CreateJwtToken(user *models.User) (string, string, int64, error) {
 	exp := time.Now().Add(time.Minute * 2).Unix()
 	rfExp := time.Now().Add(time.Hour * 24 * 30).Unix()
@@ -82,4 +86,54 @@ func CreateJwtToken(user *models.User) (string, string, int64, error) {
 	
 	return refreshTkn, tkn, exp, nil
 	
+}
+
+// Set cloudinary credentials
+func Credentials() (*cloudinary.Cloudinary, error) {
+
+    // cld.Config.URL.Secure = true
+    cldName := os.Getenv("CLOUDINARY_CLOUD_NAME")
+	cldSecret := os.Getenv("CLOUDINARY_API_SECRET")
+    cldKey := os.Getenv("CLOUDINARY_API_KEY")
+
+
+    cld, err := cloudinary.NewFromParams(cldName, cldKey, cldSecret)
+    if err != nil {
+        return nil, err
+    }
+    return cld, nil
+}
+
+func UploadToCloudinary(file *multipart.FileHeader, subFolder, productID string) (string, error) {
+    ctx := context.Background()
+    cld, err := Credentials()
+    if err != nil {
+        return "", err
+    }
+
+    // Open the uploaded file
+    openedFile, err := file.Open()
+    if err != nil {
+        return "", err
+    }
+    defer openedFile.Close()
+
+    // Construct the folder path in Cloudinary
+    folderPath := fmt.Sprintf("klock-ecommerce/%s/%s", subFolder, productID)
+
+	// Remove file extension from file name
+	fileName := filepath.Base(file.Filename)
+	nameWithoutExt := fileName[:len(fileName)-len(filepath.Ext(fileName))]
+
+    uploadParams := uploader.UploadParams{
+        PublicID: folderPath + "/" + nameWithoutExt,
+    }
+
+    result, err := cld.Upload.Upload(ctx, openedFile, uploadParams)
+    if err != nil {
+        return "", err
+    }
+
+    imageUrl := result.SecureURL
+    return imageUrl, nil
 }

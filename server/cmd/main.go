@@ -2,21 +2,25 @@ package main
 
 import (
 	"os"
-	"syscall"
 	"os/signal"
+	"syscall"
 
 	"github.com/DelaRicch/klock-ecommerce/server/database"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+
 )
 
 func main() {
 	database.ConnectDb()
-	app := fiber.New()
 
+	// Increase maximum payload limit
+	app := fiber.New(fiber.Config{
+		BodyLimit: 50 * 1024 * 1024, 
+	})
+	
 	// set CORS
 	app.Use(cors.New())
-
 	// Set up all routes for the entire system
 	setupRoutes(app)
 

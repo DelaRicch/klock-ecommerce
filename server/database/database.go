@@ -31,10 +31,22 @@ func ConnectDb() {
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	if os.Getenv("APP_ENV") == "development" {
-		if err := db.AutoMigrate(&models.User{}); err != nil {
-			log.Fatalf("Failed to migrate database: %v", err)
-		}
-	}
+        // Auto Migrate User model
+        if err := db.AutoMigrate(&models.User{}); err != nil {
+            log.Fatalf("Failed to migrate User model: %v", err)
+        }
+
+        // Auto Migrate Product model
+        if err := db.AutoMigrate(&models.Product{}); err != nil {
+            log.Fatalf("Failed to migrate Product model: %v", err)
+        }
+	
+        // Auto Migrate ProductGalleryImage model
+        if err := db.AutoMigrate(&models.ProductGalleryImage{}); err != nil {
+            log.Fatalf("Failed to migrate ProductGalleryImage model: %v", err)
+        }
+
+    }
 
 	DB = db
 }

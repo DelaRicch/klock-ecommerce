@@ -15,6 +15,11 @@ func setupRoutes(app *fiber.App) {
 	app.Delete("/delete-users", handlers.DeleteAllUsers)
 	app.Get("/refresh-token", handlers.RequestNewToken)
 
+	// Products routes 
+	app.Post("/add-product", handlers.AddNewProduct)
+	app.Get("/products", handlers.ListProducts)
+	app.Delete("/delete-products", handlers.DeleteAllProducts)
+
 	// Protected Routes
 	ProtectedRoutes := app.Group("/")
 	ProtectedRoutes.Use(jwtware.New(jwtware.Config{

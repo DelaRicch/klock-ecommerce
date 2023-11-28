@@ -108,7 +108,7 @@ export const isValidImage = (file: File): Promise<File> => {
                 };
 
                 // if (dimensions.width > 900 || dimensions.height > 450) {
-                if (dimensions.width > 2000 || dimensions.height > 1450) {
+                if (dimensions.width > 5000 || dimensions.height > 4450) {
                     const error: ErrorObject = {
                         message: 'Image dimensions should be 2000 x 1450px or less',
                     };
