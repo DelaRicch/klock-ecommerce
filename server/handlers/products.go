@@ -20,7 +20,7 @@ func AddNewProduct(ctx *fiber.Ctx) error {
 		})
 	}
 	// Generate Product ID
-	newProduct.ProductID = lib.GenerateProductID()
+	newProduct.ProductID = lib.GenerateID("KLOCK-PRODUCT")
 
 	// Upload cover image to Cloudinary
 	coverImage := req.File["productCoverImage"][0]
@@ -102,7 +102,7 @@ func DeleteAllProducts(ctx *fiber.Ctx) error {
 
     tx.Commit()
 
-    return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+    return ctx.Status(fiber.StatusNoContent).JSON(fiber.Map{
         "message": "All products and associated gallery images deleted",
         "success": true,
     })

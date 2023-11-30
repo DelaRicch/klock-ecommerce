@@ -27,16 +27,10 @@ func GenerateRandomStrings(length int) string {
 
 
 // Generate Unique User IDs
-func GenerateUserID() string {
+func GenerateID(value string) string {
 	randomString := GenerateRandomStrings(15)
-	userID := fmt.Sprintf("KLOCK-USER-%s", randomString)
-	return userID
-}
-
-func GenerateProductID() string {
-	randomString := GenerateRandomStrings(15)
-	productID := fmt.Sprintf("KLOCK-PRODUCT-%s", randomString)
-	return productID
+	generatedID := fmt.Sprintf("%s-%s", value,randomString)
+	return generatedID
 }
 
 // Hash the user's password using Argon2id

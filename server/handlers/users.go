@@ -53,7 +53,7 @@ func Register(ctx *fiber.Ctx) error {
 	user.Password = hashedPassword
 
 	// Generate User ID
-	user.UserID = lib.GenerateUserID()
+	user.UserID = lib.GenerateID("KLOCK-USER")
 
 	// Create the User
 	result = database.DB.Create(&user)
@@ -215,7 +215,7 @@ func SocialLogin(ctx *fiber.Ctx) error {
 	}
 
 	// Create a new user if the user doesn't exist
-	user.UserID = lib.GenerateUserID()
+	user.UserID = lib.GenerateID("KLOCK-USER")
 
 	// Set the default role to "USER" if not specified
 	if user.Role == "" {
