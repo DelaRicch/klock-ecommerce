@@ -22,6 +22,8 @@ func AddNewProduct(ctx *fiber.Ctx) error {
 	// Generate Product ID
 	newProduct.ProductID = lib.GenerateID("KLOCK-PRODUCT")
 
+	newProduct.ProductsRemaining = newProduct.ProductQuantity - newProduct.ProductsSold
+
 	// Upload cover image to Cloudinary
 	coverImage := req.File["productCoverImage"][0]
 	coverImageUrl, err := lib.UploadToCloudinary(coverImage, newProduct.ProductID, "cover-image")
@@ -75,10 +77,35 @@ func AddNewProduct(ctx *fiber.Ctx) error {
 	})
 }
 
+func ExcludeFields(product models.Product) models.ProductForFrontend {
+	return models.ProductForFrontend{
+		ProductBrandName:       product.ProductBrandName,
+		ProductCategory:        product.ProductCategory,
+		ProductCoverImage:      product.ProductCoverImage,
+		ProductDescription:     product.ProductDescription,
+		ProductDiscountPercentage: product.ProductDiscountPercentage,
+		ProductGalleryImages:   product.ProductGalleryImages,
+		ProductID:              product.ProductID,
+		ProductName:            product.ProductName,
+		ProductPrice:           product.ProductPrice,
+		ProductQuantity:        product.ProductQuantity,
+		ProductsRemaining:      product.ProductsRemaining,
+		ProductsSold:           product.ProductsSold,
+	}
+}
+
+
 func ListProducts(ctx *fiber.Ctx) error {
 	products := []models.Product{}
 	database.DB.Preload("ProductGalleryImages").Find(&products)
-	return ctx.Status(fiber.StatusOK).JSON(products)
+
+	// Create a new slice with excluded fields for the frontend
+	productsForFrontend := make([]models.ProductForFrontend, len(products))
+	for i, product := range products {
+		productsForFrontend[i] = ExcludeFields(product)
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(productsForFrontend)
 }
 
 func DeleteAllProducts(ctx *fiber.Ctx) error {

@@ -30,3 +30,27 @@ export interface ProductProps {
 export interface ErrorObject {
     message: string;
 }
+
+interface ProductGalleryImagesProps {
+    CreatedAt: string;
+    UpdatedAt: string;
+    DeletedAt: string | null;
+    ID: number;
+    imageUrl: string;
+    productId: string;
+}
+
+export interface AllProductsProps {
+    ProductBrandName: string;
+    ProductName: string;
+    ProductCategory: string;
+    ProductCoverImage: string;
+    ProductDescription: string;
+    ProductGalleryImages: ProductGalleryImagesProps[];
+    ProductID: string;
+    ProductPrice: number;
+    ProductDiscountPercentage: number;
+    ProductQuantity: number;
+    ProductsRemaining: number;
+    ProductsSold: number;
+}

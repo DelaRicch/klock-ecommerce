@@ -16,6 +16,7 @@
                 @update-value="handleSelectOption($event, 'productName')"
             />
             <InputField
+                :max-characters="400"
                 id="product-description"
                         placeholder="Enter product Description"
                         label="Product Description"

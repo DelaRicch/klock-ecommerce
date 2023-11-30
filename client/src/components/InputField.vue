@@ -16,6 +16,7 @@
           @input.prevent="$emit('updateValue', ($event.target as HTMLInputElement).value.trim());"
              :type="inputType"
           :id="id"
+          :step="type === 'number' ? 0.01 : null"
           :hidden="type === 'file'"
           :placeholder="placeholder"
              class="placeholder:text-[#667085] rounded-lg h-full border border-[#667085] w-full px-3 outline-none outline-offset-4 hover:outline-1 hover:outline-[#0408E7] focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC] hover:border-[#0408E7] pr-8"

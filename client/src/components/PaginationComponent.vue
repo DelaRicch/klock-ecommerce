@@ -52,7 +52,9 @@ const displayButtonLabels = ref(false);
 const currentPage = ref(1);
 const buttonsToShow = ref(0);
 const range = ref(2);
-const totalPages = ref(props.totalPages);
+const totalPages = computed(() => {
+  return props.totalPages;
+});
 
 const updateDisplayButtonLabels = () => {
   displayButtonLabels.value = window.innerWidth > 640;

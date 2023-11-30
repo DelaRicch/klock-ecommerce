@@ -13,27 +13,56 @@
       </ButtonComponent>
       </div>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-5 xl:gap-6">
-        <SingleProduct />
-        <SingleProduct />
-        <SingleProduct />
-        <SingleProduct />
-        <SingleProduct />
-        <SingleProduct />
-        <SingleProduct />
-        <SingleProduct />
-        <SingleProduct />
+    <div
+         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-5 xl:gap-6">
+        <SingleProduct
+            v-for="product in displayedItems"
+            :id="product.ProductID"
+            :product-name="product.ProductName"
+            :product-image="product.ProductCoverImage"
+            :product-description="product.ProductDescription"
+            :product-price="product.ProductPrice"
+            :product-quantity="product.ProductQuantity"
+            :products-sold="product.ProductsSold"
+            :products-remaining="product.ProductsRemaining"
+        />
+    </div>
+    <div v-if="totalPages > 1" class="my-1 md:my-2">
+    <pagination-component :total-pages="totalPages" @update:current-page="handleDisplayCurrentPage" />
     </div>
   </section>
 </template>
 <script lang="ts" setup>
 import ButtonComponent from "../../components/ButtonComponent.vue";
 import SingleProduct from "../../components/admin-all-products/SingleProduct.vue";
-import {onBeforeUnmount, onMounted, ref} from "vue";
+import {computed, onBeforeMount, onBeforeUnmount, ref} from "vue";
 import {useRouter} from "vue-router";
+import PaginationComponent from "@/components/PaginationComponent.vue";
+import {getAllProducts} from "@/api/products.ts";
+import {AllProductsProps} from "@/types";
+import {errorApiRequest} from "@/lib/helperFunctions.ts";
 
 const router = useRouter();
 const isSmallerScreen = ref(false);
+const allProducts = ref<AllProductsProps[]>([]);
+const currentPage = ref(1);
+const itemsPerPage = 10;
+
+const totalPages = computed(() =>
+    Math.ceil(allProducts.value.length) / itemsPerPage
+);
+
+// Compute the items to be displayed on the current page
+const displayedItems: any = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  return allProducts.value.slice(startIndex, endIndex);
+});
+
+const handleDisplayCurrentPage = (page: number) => {
+  currentPage.value = page;
+};
+
 const checkScreenSize = () => {
   isSmallerScreen.value = window.innerWidth <= 430;
 }
@@ -41,7 +70,17 @@ const checkScreenSize = () => {
 const handleAddNewProduct = () => {
   router.push('add-new-product')
 }
-onMounted(() => {
+
+const getAllAddedProducts = () => {
+  getAllProducts().then((response) => {
+    allProducts.value = response
+  }).catch((error) => {
+    errorApiRequest(error)
+  })
+}
+
+onBeforeMount(() => {
+  getAllAddedProducts()
   window.addEventListener("resize", checkScreenSize)
 })
 

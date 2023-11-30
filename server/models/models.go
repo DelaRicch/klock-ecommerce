@@ -29,11 +29,28 @@ type Product struct {
 	ProductName               string                `json:"productName" gorm:"text;not null;default:null"`
 	ProductDescription        string                `json:"productDescription" gorm:"text;not null;default:null"`
 	ProductCategory           string                `json:"productCategory" gorm:"text;not null;default:null"`
-	ProductPrice              string                `json:"productPrice" gorm:"uint;not null;default:0"`
-	ProductDiscountPercentage string                `json:"productDiscountPercentage" gorm:"uint;not null;default:0"`
-	ProductQuantity           string                `json:"productQuantity" gorm:"uint;not null;default:0"`
+	ProductPrice              float64               `json:"productPrice" gorm:"float64;not null;default:0"`
+	ProductDiscountPercentage float64               `json:"productDiscountPercentage" gorm:"float64;not null;default:0"`
+	ProductQuantity           uint                  `json:"productQuantity" gorm:"uint;not null;default:0"`
 	ProductBrandName          string                `json:"productBrandName" gorm:"text;not null;default:null"`
 	ProductCoverImage         string                `json:"productCoverImage" gorm:"not null;default:null"`
 	ProductGalleryImages      []ProductGalleryImage `json:"productGalleryImages" gorm:"foreignKey:ProductID"`
 	ProductID                 string                `json:"productId" gorm:"text;not null;default:null"`
+	ProductsRemaining         uint                  `json:"productsRemaining" gorm:"uint;not null;default:0"`
+	ProductsSold              uint                  `json:"productsSold" gorm:"uint;not null;default:0"`
+}
+
+type ProductForFrontend struct {
+	ProductBrandName          string
+	ProductCategory           string
+	ProductCoverImage         string
+	ProductDescription        string
+	ProductDiscountPercentage float64
+	ProductGalleryImages      []ProductGalleryImage
+	ProductID                 string
+	ProductName               string
+	ProductPrice              float64
+	ProductQuantity           uint
+	ProductsRemaining         uint
+	ProductsSold              uint
 }

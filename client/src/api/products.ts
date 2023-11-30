@@ -14,3 +14,12 @@ export const addNewProduct = async (data:Record<string, string>) => {
         return err.response
     }
 }
+
+export const getAllProducts = async () => {
+    try {
+        const res = await productApi.get('/products')
+        return res.data
+    } catch (err: any) {
+        return err.response
+    }
+}

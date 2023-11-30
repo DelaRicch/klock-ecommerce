@@ -8,11 +8,11 @@
 defineProps({
   itemsLeft: {
     type: Number,
-    default: 37,
+    required: true,
   },
   totalQuantity: {
     type: Number,
-    default: 100,
+    required: true,
   },
 })
 </script>
