@@ -54,13 +54,15 @@ const router = createRouter({
  })
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth) {
         const userStore= useUserStore();
+        const accessToken = userStore.accessToken.value
         const isAuthenticated = (() => userStore.accessToken.value)
+        const userRole = userStore.userProfile.Role
+        const requiredRole = to.meta.requiredRole
 
+    // Protect dashboard route
+    if (to.meta.requiresAuth) {
         if (isAuthenticated()) {
-            const userRole = userStore.userProfile.Role
-            const requiredRole = to.meta.requiredRole
             if (userRole === requiredRole) {
             next()
             } else {
@@ -69,6 +71,19 @@ router.beforeEach((to, from, next) => {
         } else {
             next({name: 'sign-in'})
         }
+    }
+
+// Prevent user from going to sign-in route if token exists
+    else if (accessToken) {
+    if ((to.name === 'sign-in' || to.name === 'sign-up') && isAuthenticated()) {
+        if (userRole === 'ADMIN') {
+            next({ name: 'dashboard' });
+        } else {
+            next({name: 'home'})
+        }
+    } else {
+        next();
+    }
     } else {
         next()
     }
