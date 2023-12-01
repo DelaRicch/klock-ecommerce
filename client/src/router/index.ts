@@ -1,5 +1,6 @@
 
 import {createRouter, createWebHistory} from "vue-router";
+import {useUserStore} from "@/store/store.ts";
 
 
     const Home = () => import('../views/Home.vue')
@@ -19,7 +20,7 @@ const AdminOrderList = () => import('../views/admin/AdminOrderList.vue')
       {path: '/sign-in', name: 'sign-in', component: SignIn, meta: {title: 'Klock :- Sign In'}},
       {
           path: '/dashboard',
-          meta: {auth: true},
+          meta: {requiresAuth: true, requiredRole: "ADMIN"},
           component: AdminDashboardLayout,
           children: [
               {path: '',
@@ -51,6 +52,27 @@ const router = createRouter({
     history: createWebHistory(),
     routes
  })
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth) {
+        const userStore= useUserStore();
+        const isAuthenticated = (() => userStore.accessToken.value)
+
+        if (isAuthenticated()) {
+            const userRole = userStore.userProfile.Role
+            const requiredRole = to.meta.requiredRole
+            if (userRole === requiredRole) {
+            next()
+            } else {
+                next({name: 'home'})
+            }
+        } else {
+            next({name: 'sign-in'})
+        }
+    } else {
+        next()
+    }
+});
 
 
 export default router

@@ -92,9 +92,9 @@ import ButtonComponent from "../components/ButtonComponent.vue";
 import SocialAuthButton from "../components/SocialAuthButton.vue";
 import { signUpFormFields} from "@/types";
 import {emailRegex} from "../schema/ValidationSchema.ts";
-import {loginUser} from "../api/user.ts";
+import {getUserProfile, loginUser} from "../api/user.ts";
 import {
-  errorApiRequest,
+  errorApiRequest, handleUserProfile,
   successApiRequest
 } from "../lib/helperFunctions.ts";
 import {
@@ -103,6 +103,8 @@ import {
   outerColor,
   textColor
 } from "../store/resuableState.ts";
+import {useRouter} from "vue-router";
+const router = useRouter();
 
 // Function to update colors based on screen size
 const updateColors = () => {
@@ -145,7 +147,12 @@ const handleSubmit = async () => {
   loginUser(formDataValues)
     .then((res) => {
      successApiRequest(res);
+    }).then(() => {
+    getUserProfile().then((res) => {
+      handleUserProfile(res.user);
+      router.push('/dashboard');
     })
+  })
     .catch((err) => {
     errorApiRequest(err);
     });
@@ -163,7 +170,6 @@ onBeforeUnmount(() => {
 const isValidForm = computed(() => {
   return Object.values(formData).every((field) => (field.value !== '') && !field.error)
 });
-
 
 const handleValidateInput = (value: string, field: string) => {
  if (field === 'email' && !emailRegex.test(value)) {

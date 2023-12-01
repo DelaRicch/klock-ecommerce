@@ -11,7 +11,7 @@ export const addNewProduct = async (data:Record<string, string>) => {
         const res = await productApi.post('/add-product', data)
         return res.data
     } catch (err: any) {
-        return err.response
+        return err.response.data
     }
 }
 
@@ -20,6 +20,6 @@ export const getAllProducts = async () => {
         const res = await productApi.get('/products')
         return res.data
     } catch (err: any) {
-        return err.response
+        return err.response.data
     }
 }

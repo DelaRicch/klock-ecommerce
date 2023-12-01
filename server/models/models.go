@@ -17,6 +17,15 @@ type User struct {
 	Provider   string `json:"provider" gorm:"text;default:null"`
 }
 
+type UserProfile struct {
+	Name string
+	Email string
+	UserID string
+	Role string
+	Photo string
+	Phone string
+}
+
 type ProductGalleryImage struct {
 	gorm.Model
 	ImageURL  string `json:"imageUrl" gorm:"not null;default:null"`

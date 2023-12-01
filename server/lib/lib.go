@@ -53,7 +53,7 @@ func VerifyPassword(hashedPassword, password string) bool {
 
 // Create new JWT access token and refresh token
 func CreateJwtToken(user *models.User) (string, string, int64, error) {
-	exp := time.Now().Add(time.Minute * 2).Unix()
+	exp := time.Now().Add(time.Hour * 1).Unix()
 	rfExp := time.Now().Add(time.Hour * 24 * 30).Unix()
 	claims := jwt.MapClaims{
 		"exp":    exp,

@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {onBeforeMount, reactive, ref} from "vue";
-import {accessTokenType} from "@/types";
+import {accessTokenType, UserProfileProps} from "@/types";
 
 export const useUserStore = defineStore("userStore", () => {
     const accessToken = reactive<accessTokenType>({
@@ -8,7 +8,7 @@ export const useUserStore = defineStore("userStore", () => {
         expiry: 0
     });
     const refreshToken = ref("");
-    const userProfile = ref({});
+    const userProfile = ref<UserProfileProps>({});
 
     // Retrieve token from localStorage if it exists
     const initializeTokenFromLocalStorage = () => {
@@ -21,18 +21,33 @@ export const useUserStore = defineStore("userStore", () => {
         }
     };
 
+    // Retrieve user profile from localStorage if it exists
+    const initializeUserProfileFromLocalStorage = () => {
+        const storedUserProfile = localStorage.getItem("userProfile");
+
+    if (storedUserProfile !== "undefined") {
+            userProfile.value = JSON.parse(storedUserProfile);
+        }
+    };
+
     const setAccessToken = (token: accessTokenType) => {
         accessToken.value = token.value;
         accessToken.expiry = token.expiry;
+    }
+
+    const setUserProfile = (profile: UserProfileProps) => {
+        userProfile.value = profile;
+        console.log(profile);
     }
 
     const setRefreshToken = (token: string) => {
         refreshToken.value = token;
     }
 
-    // Automatically retrieve token from localStorage on store setup
+    // Automatically retrieve token and user profile from localStorage on store setup
     onBeforeMount(() => {
-        initializeTokenFromLocalStorage();
+        initializeTokenFromLocalStorage()
+        initializeUserProfileFromLocalStorage();
     });
 
     return {
@@ -40,6 +55,7 @@ export const useUserStore = defineStore("userStore", () => {
         userProfile,
         refreshToken,
         setAccessToken,
-        setRefreshToken
+        setRefreshToken,
+        setUserProfile
     }
 })

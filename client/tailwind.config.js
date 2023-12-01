@@ -16,7 +16,9 @@ export default {
             colors: {
                 "vtd-primary": colors.indigo, // Light mode Datepicker color
                 "vtd-secondary": colors.white, // Dark mode Datepicker color
-
+            },
+            animation: {
+                'spin-slow': 'spin 2s linear infinite',
             }
         },
     },

@@ -119,9 +119,13 @@
               </InputField>
               </div>
             </div>
-              <ButtonComponent :is-disabled="!isValidForm" label="Submit" type="submit"
+              <ButtonComponent :is-disabled="!isValidForm"
+                               label="Submit"
+                               type="submit"
                                color="#FFFFFF"
-                               background-color="#1D2939" />
+                               background-color="#1D2939"
+                               :is-submitting="isSubmitting"
+              />
           </div>
         </div>
       </form>
@@ -133,12 +137,14 @@ import BreadCrumbs from "@/components/BreadCrumbs.vue";
 import DropdownComponent from "@/components/DropdownComponent.vue";
 import {buttonValue} from "@/store/resuableState.ts";
 import InputField from "@/components/InputField.vue";
-import {computed, reactive } from "vue";
+import {computed, reactive, ref} from "vue";
 import FileUpload from "@/assets/file-upload.svg";
 import AddImage from '@/assets/add-image.svg';
 import ButtonComponent from "@/components/ButtonComponent.vue";
 import {addNewProduct} from "@/api/products.ts";
 import {errorApiRequest, successApiRequest} from "@/lib/helperFunctions.ts";
+
+const isSubmitting = ref(false);
 
 const breadcrumbs = [
   {label: "Home", path: '/dashboard'},
@@ -187,7 +193,6 @@ const isValidForm = computed(() => {
       productData.productCoverImage !== "" &&
       productData.productGalleryImages.every((image: File) => image.image !== null)
 })
-
 const handleSubmit = () => {
  const formData = new FormData()
   for (const field in productData) {
@@ -201,12 +206,15 @@ const handleSubmit = () => {
   }
 
   if (isValidForm.value) {
-    console.log(formData.get('productCoverImage'))
+  isSubmitting.value = true
   addNewProduct(formData)
-      .then((res) => { successApiRequest(res)})
+      .then((res) => {
+        successApiRequest(res)
+        isSubmitting.value = false
+      })
       .catch((err) => {
-        // errorApiRequest(err)
-        console.log(err)
+        errorApiRequest(err)
+        isSubmitting.value = false
       });
   }
 }

@@ -17,6 +17,15 @@ export interface socialAuthType {
     provider: string;
 }
 
+export interface UserProfileProps {
+    Name: string
+    Email: string
+    UserID: string
+    Role: string
+    Photo: string
+    Phone: string
+}
+
 export interface ProductProps {
     id: number;
     product: string;

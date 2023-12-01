@@ -27,35 +27,42 @@
             :products-remaining="product.ProductsRemaining"
         />
     </div>
+    <div v-if="!totalPages" class="my-[20vh] w-full flex items-center justify-center">
+      <loading-component loading-text="fetching products" />
+    </div>
     <div v-if="totalPages > 1" class="my-1 md:my-2">
-    <pagination-component :total-pages="totalPages" @update:current-page="handleDisplayCurrentPage" />
+    <pagination-component
+        :total-pages="totalPages"
+        @update:current-page="handleDisplayCurrentPage"
+    />
     </div>
   </section>
 </template>
 <script lang="ts" setup>
 import ButtonComponent from "../../components/ButtonComponent.vue";
 import SingleProduct from "../../components/admin-all-products/SingleProduct.vue";
-import {computed, onBeforeMount, onBeforeUnmount, ref} from "vue";
+import {computed, onBeforeMount, onBeforeUnmount, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import PaginationComponent from "@/components/PaginationComponent.vue";
 import {getAllProducts} from "@/api/products.ts";
 import {AllProductsProps} from "@/types";
 import {errorApiRequest} from "@/lib/helperFunctions.ts";
+import LoadingComponent from "@/components/LoadingComponent.vue";
 
 const router = useRouter();
 const isSmallerScreen = ref(false);
 const allProducts = ref<AllProductsProps[]>([]);
 const currentPage = ref(1);
-const itemsPerPage = 10;
+const itemsPerPage = ref(10);
 
-const totalPages = computed(() =>
-    Math.ceil(allProducts.value.length) / itemsPerPage
-);
+const totalPages = computed(() => {
+  return Math.ceil(allProducts.value.length / itemsPerPage.value);
+});
 
 // Compute the items to be displayed on the current page
 const displayedItems: any = computed(() => {
-  const startIndex = (currentPage.value - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  const startIndex = (currentPage.value - 1) * itemsPerPage.value;
+  const endIndex = startIndex + itemsPerPage.value;
   return allProducts.value.slice(startIndex, endIndex);
 });
 

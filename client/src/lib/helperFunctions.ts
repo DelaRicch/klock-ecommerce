@@ -1,6 +1,6 @@
 import {computed, ComputedRef, ref, Ref} from "vue";
 import {apiResponse, showSnackbar, showTokenExpiry, success} from "../store/resuableState.ts";
-import {accessTokenType, ErrorObject} from "@/types";
+import {accessTokenType, ErrorObject, UserProfileProps} from "@/types";
 import {useUserStore} from "../store/store.ts";
 
 export const handleSetSnackbarState = (showSnackbar:  Ref<boolean>, duration: number) => {
@@ -9,6 +9,12 @@ export const handleSetSnackbarState = (showSnackbar:  Ref<boolean>, duration: nu
         showSnackbar.value = false;
     }, duration);
 };
+
+export const handleUserProfile = (res: UserProfileProps) => {
+const userStore = useUserStore();
+    userStore.setUserProfile(res);
+    localStorage.setItem("userProfile", JSON.stringify(res));
+}
 
 export const successApiRequest = (res: any) => {
     const userStore = useUserStore();
@@ -72,8 +78,6 @@ export const tokenExpiryCalculator = (tokenExpiration: ComputedRef<number>) => {
 }
 
 // Image validation
-
-
 export const isValidImage = (file: File): Promise<File> => {
     return new Promise((resolve, reject) => {
         const allowedTypes: string[] = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg', 'image/gif'];

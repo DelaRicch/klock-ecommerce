@@ -19,6 +19,16 @@ func AddNewProduct(ctx *fiber.Ctx) error {
 			"success": false,
 		})
 	}
+
+	// Check for existing product in the system
+	var existingProduct models.Product
+	res := database.DB.Where("product_name = ?", newProduct.ProductName).First(&existingProduct)
+	if res.RowsAffected > 0 {
+		return ctx.Status(fiber.StatusConflict).JSON(fiber.Map{
+			"message": fmt.Sprintf("%v already exist", newProduct.ProductName),
+			"Success": false,
+		})
+	}
 	// Generate Product ID
 	newProduct.ProductID = lib.GenerateID("KLOCK-PRODUCT")
 
@@ -72,8 +82,7 @@ func AddNewProduct(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message":          fmt.Sprintf("Successfully added %s", newProduct.ProductName),
 		"success":          true,
-		"coverImageUrl":    coverImageUrl,
-		"galleryImageUrls": galleryImageURLs,
+
 	})
 }
 
