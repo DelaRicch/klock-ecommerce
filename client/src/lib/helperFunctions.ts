@@ -131,3 +131,15 @@ export const isValidImage = (file: File): Promise<File> => {
         reader.readAsDataURL(file);
     });
 };
+
+export const handleLogout = () => {
+    const userStore = useUserStore();
+    userStore.setUserProfile("");
+    userStore.setAccessToken("");
+    userStore.setRefreshToken("");
+    localStorage.removeItem("userProfile");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("accessTokenExpiry");
+    localStorage.removeItem("refreshToken");
+    window.location.reload();
+}

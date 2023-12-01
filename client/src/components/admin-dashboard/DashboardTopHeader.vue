@@ -19,11 +19,16 @@
       </svg>
     </ButtonComponent>
 
-    <Avatar :alt="'Dela Ricch'" :src="''" />
+    <Avatar :alt="userName" :src="profilePic" />
   </div>
 
 </template>
 <script lang="ts" setup>
 import Avatar from "../Avatar.vue";
 import ButtonComponent from "../ButtonComponent.vue";
+import {useUserStore} from "@/store/store.ts";
+
+const userStore = useUserStore();
+const profilePic = userStore.userProfile.Photo
+const userName = userStore.userProfile.Name
 </script>

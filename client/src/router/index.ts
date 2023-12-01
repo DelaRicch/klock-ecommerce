@@ -56,8 +56,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
         const userStore= useUserStore();
         const accessToken = userStore.accessToken.value
-        const isAuthenticated = (() => userStore.accessToken.value)
-        const userRole = userStore.userProfile.Role
+        const isAuthenticated = (() => userStore.accessToken.value !== '')
+        const userRole = userStore.userProfile?.Role
         const requiredRole = to.meta.requiredRole
 
     // Protect dashboard route

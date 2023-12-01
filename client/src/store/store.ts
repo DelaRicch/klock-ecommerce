@@ -35,7 +35,7 @@ export const useUserStore = defineStore("userStore", () => {
         accessToken.expiry = token.expiry;
     }
 
-    const setUserProfile = (profile: UserProfileProps) => {
+    const setUserProfile = (profile: UserProfileProps ) => {
         userProfile.value = profile;
         console.log(profile);
     }
