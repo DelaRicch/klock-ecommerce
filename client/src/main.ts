@@ -28,7 +28,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
  const firebaseApp = initializeApp(firebaseConfig);
- getAnalytics(firebaseApp);
+ // getAnalytics(firebaseApp);
 
  app.use(router)
      .use(pinia)

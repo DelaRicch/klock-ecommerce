@@ -12,6 +12,8 @@
 import DashboardIcon from "../../assets/DashboardIcon.vue";
 import {useRouter} from "vue-router";
 
+const emit = defineEmits(["update:modelValue"]);
+
 defineProps({
   label: {
     type: String,
@@ -46,6 +48,7 @@ const router = useRouter()
 
 
 const handleSelectPage = (name: string) => {
+emit("update:modelValue", name)
   router.push({name})
 }
 

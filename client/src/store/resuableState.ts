@@ -17,4 +17,6 @@ export const showTokenExpiry = ref(false);
 // Button value state
 export const buttonValue = ref(false);
 
-// Pagination current page
+// Display mobile dashboard menu
+export const displayMenu = ref(false);
+
