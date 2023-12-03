@@ -12,9 +12,9 @@
  import {GoogleAuthProvider, FacebookAuthProvider, getAuth, signInWithPopup} from
        "firebase/auth";
   import { socialAuthType} from "@/types";
-  import { socialLogin} from "../api/user.ts";
+  import {getUserProfile, socialLogin} from "../api/user.ts";
   import {
-    errorApiRequest,
+    errorApiRequest, handleUserProfile,
     successApiRequest
   } from "../lib/helperFunctions.ts";
   import {useRouter} from "vue-router";
@@ -48,9 +48,12 @@
         socialLogin(user)
             .then((res) => {
               successApiRequest(res);
-              router.push("/")
-            })
-            .catch((err) => {
+            }).then(() => {
+          getUserProfile().then((res) => {
+            handleUserProfile(res.user);
+            router.push('/dashboard');
+          })
+        }).catch((err) => {
               errorApiRequest(err)
             });
 
@@ -62,7 +65,6 @@
       const provider = new GoogleAuthProvider();
       provider.addScope("email");
       signInWithPopup(getAuth(), provider).then((response) => {
-        console.log(response)
         const user: socialAuthType = {
           email: response.user.providerData[0].email!,
           name: response.user.providerData[0].displayName!,
@@ -73,9 +75,12 @@
         socialLogin(user)
             .then((res) => {
               successApiRequest(res)
-              router.push("/")
-            })
-            .catch((err) => {
+            }).then(() => {
+          getUserProfile().then((res) => {
+            handleUserProfile(res.user);
+            router.push('/dashboard');
+          })
+        }).catch((err) => {
             errorApiRequest(err)
             });
 

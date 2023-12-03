@@ -148,10 +148,10 @@ const handleSubmit = async () => {
     .then((res) => {
      successApiRequest(res);
     }).then(() => {
-    getUserProfile().then((res) => {
-      handleUserProfile(res.user);
-      router.push('/dashboard');
-    })
+      getUserProfile().then((res) => {
+        handleUserProfile(res.user);
+        router.push('/dashboard');
+      })
   })
     .catch((err) => {
     errorApiRequest(err);

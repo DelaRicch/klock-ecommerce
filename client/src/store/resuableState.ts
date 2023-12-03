@@ -20,3 +20,7 @@ export const buttonValue = ref(false);
 // Display mobile dashboard menu
 export const displayMenu = ref(false);
 
+// Display categories on nav bar
+export const displayCategories = ref(false);
+
+
