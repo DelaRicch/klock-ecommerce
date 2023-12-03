@@ -24,8 +24,9 @@
                 />
               </div>
             </div>
-            <div class="hover:bg-slate-200 transition-all duration-300 ease-linear mt-10 sm:mt-4">
-              <ButtonComponent label="Logout" @update:model-value="">
+            <div
+                class="hover:bg-slate-200 transition-all duration-300 ease-linear mt-10 sm:mt-4 mx-1">
+              <ButtonComponent label="Logout" @update:model-value="handleLogout">
             <span><svg xmlns="http://www.w3.org/2000/svg" width="21" height="19" viewBox="0 0 21 19" fill="none">
         <path d="M15.05 4.5L13.64 5.91L16.22 8.5H6.05005V10.5H16.22L13.64 13.08L15.05 14.5L20.05 9.5L15.05 4.5ZM2.05005 2.5H10.05V0.5H2.05005C0.950049 0.5 0.0500488 1.4 0.0500488 2.5V16.5C0.0500488 17.6 0.950049 18.5 2.05005 18.5H10.05V16.5H2.05005V2.5Z" fill="black"/>
       </svg></span>
@@ -42,6 +43,7 @@ import Logo from "@/assets/Logo.vue";
 import DashboardNavButton from "@/components/admin-dashboard/DashboardNavButton.vue";
 import {useRoute} from "vue-router";
 import {computed} from "vue";
+import {handleLogout} from "@/lib/helperFunctions.ts";
 
 const navButtons = [
   {id: 1, title: 'Dashboard', name: 'dashboard', route: ''},
