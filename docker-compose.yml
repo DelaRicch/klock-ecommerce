@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  db:
+    image: 'postgres:alpine'
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+          - postgres-db:/var/lib/postgresql/data
+
+  client:
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile
+      context: './client'
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    ports:
+      - '5173:5173'
+    tty: true
+ 
+  api:
+    build: 
+      dockerfile: Dockerfile
+      context: './server'
+    volumes:
+      - ./server:/app
+    ports:
+      - '8000:8000'
+    command: ["air", "-c", ".air.toml"]
+    tty: true
+
+
+volumes:  
+  postgres-db:

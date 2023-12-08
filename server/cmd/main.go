@@ -5,14 +5,14 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/DelaRicch/klock-ecommerce/server/database"
+	// "github.com/DelaRicch/klock-ecommerce/server/database"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 
 )
 
 func main() {
-	database.ConnectDb()
+	// database.ConnectDb()
 
 	// Increase maximum payload limit
 	app := fiber.New(fiber.Config{
@@ -31,14 +31,14 @@ func main() {
 		<-c
 
 		// Call the CloseDb function before exiting
-		database.CloseDb()
+		// database.CloseDb()
 
 		// Stop the application gracefully
 		os.Exit(0)
 	}()
 
 	// Start the Fiber app
-	err := app.Listen(":3000")
+	err := app.Listen(":8000")
 	if err != nil {
 		panic(err)
 	}

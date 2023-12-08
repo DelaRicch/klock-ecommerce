@@ -65,4 +65,3 @@ npm run dev
 MIT
 
 **Free Software, Hell Yeah!**
-

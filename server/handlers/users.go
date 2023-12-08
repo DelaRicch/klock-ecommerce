@@ -16,7 +16,7 @@ const errorRfTokenMsg string = "Error generating refresh token"
 const invalidEmailOrPass string = "Invalid email or password"
 
 func Home(ctx *fiber.Ctx) error {
-	return ctx.SendString("This is Klock E-commerce web app")
+	return ctx.SendString("Welcome to Klock E-commerce backend API")
 }
 
 func Register(ctx *fiber.Ctx) error {
@@ -171,7 +171,7 @@ func SocialLogin(ctx *fiber.Ctx) error {
 	email := user.Email
 	var existingUser models.User
 	result := database.DB.Where("email = ?", email).First(&existingUser)
-	if result.RowsAffected > 0 {	
+	if result.RowsAffected > 0 {
 		if existingUser.Password != "" {
 			return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 				"message": "Social login not allowed for this account",
@@ -321,9 +321,9 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 	})
 
 	return ctx.JSON(fiber.Map{
-		"success":       true,
-		"exp":           exp,
-		"access_token":  newAccessToken,
+		"success":      true,
+		"exp":          exp,
+		"access_token": newAccessToken,
 	})
 }
 
@@ -357,21 +357,20 @@ func GetUserProfile(ctx *fiber.Ctx) error {
 		return []byte("secret"), nil
 	})
 
-	
 	if err != nil {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"success": false,
 			"message": "Invalid access token",
 		})
 	}
-	
+
 	// Extract claims from the access token
 	claims, ok := tokenByte.Claims.(jwt.MapClaims)
 	if !ok || !tokenByte.Valid {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"success": false, "message": "Invalid token claim"})
 	}
 
-	// Extract user ID from claims 
+	// Extract user ID from claims
 	userID := claims["userId"].(string)
 	var user models.User
 	result := database.DB.Where("user_id = ?", userID).First(&user)

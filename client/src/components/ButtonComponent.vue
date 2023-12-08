@@ -7,7 +7,7 @@
           'border-transparent': !border,
           }"
       :disabled="isDisabled || isSubmitting" :style="{background: backgroundColor, color: color}"
-          :type="type" class="rounded-lg flex items-center justify-center outline-offset-4 focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC] disabled:cursor-not-allowed disabled:opacity-70 border"
+          :type="type" class="rounded-lg flex items-center justify-center  disabled:cursor-not-allowed disabled:opacity-70 border"
           @click="handleClick">
     <slot></slot>
     <span v-if="isSubmitting">

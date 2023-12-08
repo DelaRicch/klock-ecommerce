@@ -62,3 +62,11 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
     -ms-inner-appearance: none;
 }
+
+/*Set focus ring and outline color for interative elements*/
+/*button, a {*/
+/*    @apply outline-offset-4 focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC]*/
+/*}*/
+button, a {
+    @apply outline-offset-4 focus:outline-1 focus:outline-[#0408E7]
+}

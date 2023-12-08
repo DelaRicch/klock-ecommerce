@@ -11,8 +11,7 @@
         :success="success"
         :title="success ? 'success' : 'error' "
         :message="apiResponse" />
-
-  </main>
+      </main>
 </template>
 
 <script setup lang="ts">

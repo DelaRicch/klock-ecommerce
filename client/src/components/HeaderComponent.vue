@@ -6,10 +6,13 @@
     </router-link>
   <nav>
     <ul class="flex items-center gap-6">
-      <li class="text-[#667085] font-semibold text-[0.875rem]" v-for="item
+      <li
+          :class="activeRoute === item.name ? 'after:w-full' : 'after:w-0'"
+          class="text-[#667085] font-semibold text-[0.875rem] capitalize relative after:absolute after:content-[''] after:h-[2px] after:bg-[#1D2939] after:bottom-[-10px] after:left-0 after:transition-all after:duration-300 after:ease-linear hover:after:w-full"
+          v-for="item
       in menuItems" :key="item.id">
         <button @click="handleDisplayCategories" v-if="item.id === 'a0a0a0a0'"
-             class="cursor-pointer flex items-center gap-1">
+             class="cursor-pointer flex items-center gap-1 capitalize">
           <span>{{item.name}}</span>
           <svg :class="{'transform rotate-180 transition-all duration-300 ease-linear':
                         displayCategories,
@@ -61,6 +64,7 @@
 
   </div>
   </header>
+  <CategoriesDropdown />
 </template>
 <script setup lang="ts">
 import LabelLogo from "../assets/LabelLogo.vue";
@@ -68,6 +72,13 @@ import ButtonComponent from "@/components/ButtonComponent.vue";
 import {useUserStore} from "@/store/store.ts";
 import Avatar from "@/components/Avatar.vue";
 import {displayCategories} from "@/store/resuableState.ts";
+import {computed} from "vue";
+import {useRoute} from "vue-router";
+import CategoriesDropdown from "@/components/CategoriesDropdown.vue";
+
+const activeRoute = computed(() => {
+  return useRoute().name
+})
 
 const userStore = useUserStore()
 const userProfile = userStore.userProfile
@@ -78,12 +89,12 @@ const handleDisplayCategories = () => {
 
 const menuItems = [
   {
-    name: 'Home',
+    name: 'home',
     link: '/',
     id: '5ba48fa3'
   },
   {
-    name: 'Categories',
+    name: 'categories',
     id: 'a0a0a0a0'
   },
   {
@@ -92,34 +103,14 @@ const menuItems = [
     id: '4096c3fe'
   },
   {
-    name: 'About',
+    name: 'about',
     link: '/about',
     id: '9c3b2e28'
   },
   {
-    name: 'Contact',
+    name: 'contact',
     link: '/contact',
     id: 'a5a5a5a5'
   }
 ]
 </script>
-
-<style scoped lang="css">
-li {
-  position: relative;
-}
-li::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #1D2939;
-  transition: width 0.3s ease;
-}
-
-li:hover::after {
-  width: 100%;
-}
-</style>
