@@ -1,5 +1,5 @@
 <template>
-  <!-- <HeaderComponent /> -->
+  <HeaderComponent />
   <HeroSection />
 </template>
 <script setup lang="ts">

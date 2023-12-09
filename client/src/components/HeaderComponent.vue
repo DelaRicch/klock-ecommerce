@@ -1,6 +1,6 @@
 <template>
   <header
-    class="sticky top-0 z-50 mx-auto flex h-[5rem] max-w-[66.68338rem] items-center justify-between bg-white"
+    class="sticky top-0 z-50 mx-auto hidden md:flex h-[5rem] max-w-[66.68338rem] items-center justify-between bg-white"
   >
     <router-link to="/" class="cursor-pointer">
       <LabelLogo
