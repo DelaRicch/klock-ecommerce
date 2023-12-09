@@ -1,7 +1,9 @@
 <template>
-  <div class="relative w-[6rem] h-2 bg-slate-200 rounded-2xl">
-    <div :style="{ width: `${(itemsLeft / totalQuantity) * 100}%` }"
-         class="absolute top-0 left-0 h-full bg-[#05CD99] rounded-2xl"></div>
+  <div class="relative h-2 w-[6rem] rounded-2xl bg-slate-200">
+    <div
+      :style="{ width: `${(itemsLeft / totalQuantity) * 100}%` }"
+      class="absolute left-0 top-0 h-full rounded-2xl bg-[#05CD99]"
+    ></div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -14,5 +16,5 @@ defineProps({
     type: Number,
     required: true,
   },
-})
+});
 </script>

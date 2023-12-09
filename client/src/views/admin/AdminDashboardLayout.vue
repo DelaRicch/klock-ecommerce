@@ -1,9 +1,8 @@
 <template>
-  <div class="flex w-screen h-screen relative">
+  <div class="relative flex h-screen w-screen">
     <DashboardSidebar />
     <MobileSidebarMenu />
-    <div
-        class="flex flex-col w-full md:w-[75%] 2xl:w-[80%]">
+    <div class="flex w-full flex-col md:w-[75%] 2xl:w-[80%]">
       <DashboardTopHeader />
       <router-view></router-view>
     </div>

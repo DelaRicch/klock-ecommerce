@@ -1,24 +1,30 @@
 <template>
-  <div class="w-[3rem] h-[3rem] md:w-[3.4rem] md:h-[3.4rem] rounded-full relative overflow-clip">
-    <img class=" bg-no-repeat bg-center bg-cover w-full h-full "
-        :src="src" :alt="alt" />
+  <div
+    class="relative h-[3rem] w-[3rem] overflow-clip rounded-full md:h-[3.4rem] md:w-[3.4rem]"
+  >
+    <img
+      class="h-full w-full bg-cover bg-center bg-no-repeat"
+      :src="src"
+      :alt="alt"
+    />
     <div
-        class="absolute top-0 left-0 w-full h-full bg-slate-300 border-2 border-slate-400 rounded-full grid place-items-center">
-<UserIcon />
+      class="absolute left-0 top-0 grid h-full w-full place-items-center rounded-full border-2 border-slate-400 bg-slate-300"
+    >
+      <UserIcon />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import UserIcon from "../assets/UserIcon.vue";
+import UserIcon from "../assets/UserIcon.vue";
 
-  defineProps({
-    src: {
-      type: String,
-    },
-    alt: {
-      type: String,
-      required: true,
-    },
-  })
+defineProps({
+  src: {
+    type: String,
+  },
+  alt: {
+    type: String,
+    required: true,
+  },
+});
 </script>

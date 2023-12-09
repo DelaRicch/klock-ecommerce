@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/DelaRicch/klock-ecommerce/server/handlers"
-	// jwtware "github.com/gofiber/contrib/jwt"
+	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -22,12 +22,12 @@ func setupRoutes(app *fiber.App) {
 	app.Delete("/delete-products", handlers.DeleteAllProducts)
 
 	// Protected Routes
-	// ProtectedRoutes := app.Group("/")
-	// ProtectedRoutes.Use(jwtware.New(jwtware.Config{
-	// 	SigningKey: jwtware.SigningKey{Key: []byte("secret")},
-	// }))
+	ProtectedRoutes := app.Group("/")
+	ProtectedRoutes.Use(jwtware.New(jwtware.Config{
+		SigningKey: jwtware.SigningKey{Key: []byte("secret")},
+	}))
 
-	// ProtectedRoutes.Get("/", handlers.Home)
+	ProtectedRoutes.Get("/", handlers.Home)
 
 	app.Get("/", handlers.Home)
 }

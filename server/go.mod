@@ -11,6 +11,8 @@ require (
 	gorm.io/gorm v1.25.5
 )
 
+require github.com/joho/godotenv v1.5.1 // indirect
+
 require (
 	github.com/MicahParks/keyfunc/v2 v2.1.0 // indirect
 	github.com/andybalholm/brotli v1.0.6 // indirect

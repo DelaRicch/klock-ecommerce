@@ -3,11 +3,11 @@ services:
   db:
     image: 'postgres:alpine'
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=Klock
+      - POSTGRES_USER=DelaRicch
+      - POSTGRES_PASSWORD=Dh!m012345
     ports:
-      - "5432:5432"
+      - "9432:5432"
     volumes:
           - postgres-db:/var/lib/postgresql/data
 

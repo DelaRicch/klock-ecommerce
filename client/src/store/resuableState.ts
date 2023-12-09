@@ -1,9 +1,9 @@
-import {ref} from "vue";
+import { ref } from "vue";
 
 // Snackbar
 export const success = ref(false);
 export const showSnackbar = ref(false);
-export const apiResponse = ref('');
+export const apiResponse = ref("");
 
 // Set colors based on screen size
 export const isDesktop = ref(false);
@@ -22,5 +22,3 @@ export const displayMenu = ref(false);
 
 // Display categories on nav bar
 export const displayCategories = ref(false);
-
-

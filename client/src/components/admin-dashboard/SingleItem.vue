@@ -2,20 +2,21 @@
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-[0.54rem]">
       <div
-          class="w-[3.6875rem] h-[4.13rem] rounded border border-slate-200 flex items-center justify-center bg-white">
+        class="flex h-[4.13rem] w-[3.6875rem] items-center justify-center rounded border border-slate-200 bg-white"
+      >
         <img :alt="title" :src="image" />
       </div>
       <div class="flex flex-col gap-2">
         <div class="flex flex-col">
-          <span class="text-[0.7.2rem] font-bold">{{title}}</span>
-          <span class="text-[0.7rem] text-[#667085]">{{description}}</span>
+          <span class="font-bold text-[0.7.2rem]">{{ title }}</span>
+          <span class="text-[0.7rem] text-[#667085]">{{ description }}</span>
         </div>
-        <span>${{price}}</span>
+        <span>${{ price }}</span>
       </div>
     </div>
     <div class="flex flex-col font-semibold">
-      <span class="text-[#1D2939] text-[0.7rem]">Sales</span>
-      <span class="text-[#667085] text-[0.7rem]">{{ totalSales }}</span>
+      <span class="text-[0.7rem] text-[#1D2939]">Sales</span>
+      <span class="text-[0.7rem] text-[#667085]">{{ totalSales }}</span>
     </div>
   </div>
 </template>
@@ -29,7 +30,7 @@ defineProps({
     type: String,
     required: true,
   },
-  price:{
+  price: {
     type: Number,
     required: true,
   },
@@ -37,9 +38,9 @@ defineProps({
     type: Number,
     required: true,
   },
-  image:{
+  image: {
     type: String,
     required: true,
-  }
-})
+  },
+});
 </script>

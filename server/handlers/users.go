@@ -16,7 +16,7 @@ const errorRfTokenMsg string = "Error generating refresh token"
 const invalidEmailOrPass string = "Invalid email or password"
 
 func Home(ctx *fiber.Ctx) error {
-	return ctx.SendString("Welcome to Klock E-commerce backend API")
+	return ctx.SendString("Welcome to Klock E-commerce backend ")
 }
 
 func Register(ctx *fiber.Ctx) error {
@@ -404,7 +404,7 @@ func ListUsers(ctx *fiber.Ctx) error {
 
 func DeleteAllUsers(ctx *fiber.Ctx) error {
 	// Perform the deletion
-	if err := database.DB.Exec("DELETE FROM users WHERE role = 'ADMIN'").Error; err != nil {
+	if err := database.DB.Exec("DELETE FROM users WHERE role = 'USER'").Error; err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
 		})

@@ -1,72 +1,65 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html {
-    font-family: 'Inter', sans-serif;
-    scroll-behavior: smooth;
+  font-family: "Inter", sans-serif;
+  scroll-behavior: smooth;
+  scrollbar-color: #1d2939 #f1f1f1;
+  scrollbar-width: thin;
 }
 
 .desktop {
-    @apply px-[4.6rem]
+  @apply px-[4.6rem];
 }
 
 .mobile {
-    @apply px-[5vw]
-}
-
-/*Scrollbar style*/
-html {
-    scrollbar-color: #1D2939 #f1f1f1;
-    scrollbar-width: thin;
+  @apply px-[5vw];
 }
 
 /*General dashboard styles */
 .main-dashboard {
-    min-height: calc(100vh - 5rem);
-    overflow-y: auto;
+  min-height: calc(100vh - 5rem);
+  overflow-y: auto;
 }
 
 /* WebKit (Chrome, Safari) */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-border-radius: 10px;
-    overflow: hidden;
+  width: 8px;
+  height: 8px;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 ::-webkit-scrollbar-thumb {
-border-radius: 10px;
-    background-color: #1D2939;
+  border-radius: 10px;
+  background-color: #1d2939;
 }
 
 ::-webkit-scrollbar-track {
-border-radius: 10px;
-    background-color: #f1f1f1;
+  border-radius: 10px;
+  background-color: #f1f1f1;
 }
 
 /* Remove the arrow for number input in Firefox */
 input[type="number"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
+  -ms-inner-appearance: none;
 }
 
 /* Remove the arrow for number input in Chrome, Safari, and Edge */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-/* Remove the arrow for number input in Edge (chromium-based) */
-input[type="number"] {
-    -ms-inner-appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /*Set focus ring and outline color for interative elements*/
 /*button, a {*/
 /*    @apply outline-offset-4 focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC]*/
 /*}*/
-button, a {
-    @apply outline-offset-4 focus:outline-1 focus:outline-[#0408E7]
+button,
+a {
+  @apply outline-offset-4 focus:outline-1 focus:outline-[#0408E7];
 }

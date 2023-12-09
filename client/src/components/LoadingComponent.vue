@@ -1,11 +1,14 @@
 <template>
-  <div class=" w-[10rem] h-[10rem] p-2 rounded-full flex items-center justify-center relative">
+  <div
+    class="relative flex h-[10rem] w-[10rem] items-center justify-center rounded-full p-2"
+  >
     <div
-        class="border-[3px] border-[#1D2939] border-x-transparent w-full h-full rounded-full motion-safe:animate-spin-slow absolute top-0 left-0">
-    </div>
+      class="absolute left-0 top-0 h-full w-full rounded-full border-[3px] border-[#1D2939] border-x-transparent motion-safe:animate-spin-slow"
+    ></div>
     <span
-        class="whitespace-normal uppercase text-center text-sm font-semibold animate-pulse text-[#1D2939]">{{ loadingText
-      }}</span>
+      class="animate-pulse whitespace-normal text-center text-sm font-semibold uppercase text-[#1D2939]"
+      >{{ loadingText }}</span
+    >
   </div>
 </template>
 
@@ -13,7 +16,7 @@
 defineProps({
   loadingText: {
     type: String,
-    default: 'loading'
-  }
-})
+    default: "loading",
+  },
+});
 </script>

@@ -1,7 +1,7 @@
 package database
 
 import (
-	// "fmt"
+	"fmt"
 	"log"
 	"os"
 
@@ -9,19 +9,27 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+
+	"github.com/joho/godotenv"
 )
 
 var DB *gorm.DB
 
 func ConnectDb() {
-	// dsn := fmt.Sprintf(
-	// 	"host=db user=%s password=%s dbname=%s port=5432 TimeZone=Asia/Shanghai",
-	// 	os.Getenv("DB_USER"),
-	// 	os.Getenv("DB_PASSWORD"),
-	// 	os.Getenv("DB_NAME"),
-	// )
+	// Load environment variables from .env file 
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
 
-	dsn := "host=db user=postgres password=postgres dbname=postgres port=5432 TimeZone=Asia/Shanghai"
+	fmt.Println(os.Getenv("APP_ENV"))
+
+	dsn := fmt.Sprintf(
+		"host=db user=%s password=%s dbname=%s port=5432 TimeZone=Asia/Shanghai",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_NAME"),
+	)
+
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
@@ -33,30 +41,30 @@ func ConnectDb() {
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	if os.Getenv("APP_ENV") == "development" {
-        // Auto Migrate User model
-        if err := db.AutoMigrate(&models.User{}); err != nil {
-            log.Fatalf("Failed to migrate User model: %v", err)
-        }
+		// Auto Migrate User model
+		if err := db.AutoMigrate(&models.User{}); err != nil {
+			log.Fatalf("Failed to migrate User model: %v", err)
+		}
 
-        // Auto Migrate Product model
-        if err := db.AutoMigrate(&models.Product{}); err != nil {
-            log.Fatalf("Failed to migrate Product model: %v", err)
-        }
-	
-        // Auto Migrate ProductGalleryImage model
-        if err := db.AutoMigrate(&models.ProductGalleryImage{}); err != nil {
-            log.Fatalf("Failed to migrate ProductGalleryImage model: %v", err)
-        }
+		// Auto Migrate Product model
+		if err := db.AutoMigrate(&models.Product{}); err != nil {
+			log.Fatalf("Failed to migrate Product model: %v", err)
+		}
 
-    }
+		// Auto Migrate ProductGalleryImage model
+		if err := db.AutoMigrate(&models.ProductGalleryImage{}); err != nil {
+			log.Fatalf("Failed to migrate ProductGalleryImage model: %v", err)
+		}
+
+	}
 
 	DB = db
 }
 
 func CloseDb() {
-    sqlDB, err := DB.DB()
-    if err != nil {
-        log.Fatalf("Failed to get DB instance: %v", err)
-    }
-    sqlDB.Close()
+	sqlDB, err := DB.DB()
+	if err != nil {
+		log.Fatalf("Failed to get DB instance: %v", err)
+	}
+	sqlDB.Close()
 }
