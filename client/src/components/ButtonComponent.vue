@@ -7,11 +7,17 @@
       'border-[#667085] ': border,
       'border-transparent': !border,
     }"
+    :style="{
+      color: color,
+      backgroundColor: backgroundColor,
+    }"
     :disabled="isDisabled || isSubmitting"
-    :style="{ background: backgroundColor, color: color }"
     :type="type"
     class="flex items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-70"
     @click="handleClick"
+    @mouseover="handleMouseOver" 
+    @mouseout="handleMouseOut"
+    
   >
     <slot></slot>
     <span v-if="isSubmitting">
@@ -24,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from "vue";
+import { PropType, ref } from "vue";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -65,7 +71,22 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  allowHover: {
+    type: Boolean,
+  }
 });
+
+const backgroundColor = ref(props.backgroundColor);
+const handleMouseOver = () => {
+  if (props.allowHover) { 
+    backgroundColor.value = '#181CF9';
+  }
+    };
+
+    const handleMouseOut = () => {
+      backgroundColor.value = props.backgroundColor;
+    };
+
 
 const handleClick = () => {
   const updatedState = !props.modelValue;
