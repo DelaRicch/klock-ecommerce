@@ -17,8 +17,8 @@
     <div class="flex justify-between pr-4">
       <div class="flex flex-col">
         <span class="text-xl">Nixon Leather</span>
-        <div class="flex gap-4">
-          * * * *
+        <div class="flex gap-4 items-center">
+          <star-rating-component v-model="rating" :number-of-stars="5" :star-size="18" />
           <span class="text-sm text-[#667085]">(200)</span>
         </div>
       </div>
@@ -37,9 +37,16 @@
 <script setup lang="ts">
 import HeartIcon from "@/assets/HeartIcon.vue";
 import ButtonComponent from "./ButtonComponent.vue";
-import { ref } from "vue";
+import StarRatingComponent from "./StarRatingComponent.vue";
+import { ref, watch } from "vue";
+
 
 const isLiked = ref(false);
+const rating = ref(0);
+
+watch(rating, (val) => {
+  console.log(val);
+});
 
 const handleToggleLike = () => {
   isLiked.value = !isLiked.value;
