@@ -13,7 +13,7 @@
     }"
     :disabled="isDisabled || isSubmitting"
     :type="type"
-    class="flex items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-70"
+    class="flex items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-70 transition-all duration-300 ease-linear"
     @click="handleClick"
     @mouseover="handleMouseOver" 
     @mouseout="handleMouseOut"

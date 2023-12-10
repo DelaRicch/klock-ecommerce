@@ -17,10 +17,16 @@
      <ItemComponent />
      <ItemComponent />
     </div>
+    <div class="flex self-end">
+        <NavigationComponent
+            :total-pages="10"
+        />
+    </div>
   </section>
 </template>
 <script setup lang="ts">
 import ItemComponent from './ItemComponent.vue';
+import NavigationComponent from './NavigationComponent.vue';
 
 
 </script>
