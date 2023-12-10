@@ -42,11 +42,17 @@
       />
     </div>
     <div
-      v-if="!totalPages"
+      v-if="isLoading"
       class="my-[20vh] flex w-full items-center justify-center"
     >
       <loading-component loading-text="fetching products" />
     </div>
+    <div
+    v-if="!displayedItems.length && !isLoading"
+    class="flex h-max w-full justify-center mt-[12vh]"
+  >
+    <EmptyStateComponent />
+  </div>
     <div v-if="totalPages > 1" class="my-1 md:my-2">
       <pagination-component
         :total-pages="totalPages"
@@ -65,12 +71,14 @@ import { getAllProducts } from "@/api/products.ts";
 import { AllProductsProps } from "@/types";
 import { errorApiRequest } from "@/lib/helperFunctions.ts";
 import LoadingComponent from "@/components/LoadingComponent.vue";
+import EmptyStateComponent from "@/components/EmptyStateComponent.vue";
 
 const router = useRouter();
 const isSmallerScreen = ref(false);
 const allProducts = ref<AllProductsProps[]>([]);
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
+const isLoading = ref(false);
 
 const totalPages = computed(() => {
   return Math.ceil(allProducts.value.length / itemsPerPage.value);
@@ -96,14 +104,23 @@ const handleAddNewProduct = () => {
 };
 
 const getAllAddedProducts = () => {
+  isLoading.value = true;
   getAllProducts()
-    .then((response) => {
+  .then((response) => {
+      isLoading.value = false;
       allProducts.value = response;
     })
     .catch((error) => {
+      isLoading.value = false;
       errorApiRequest(error);
     });
 };
+
+watch(isLoading, (data: boolean) => {
+  console.log('====================================');
+  console.log(data);
+  console.log('====================================');
+})
 
 onBeforeMount(() => {
   getAllAddedProducts();

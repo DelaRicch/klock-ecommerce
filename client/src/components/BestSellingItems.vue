@@ -6,7 +6,7 @@
       </div>
       <span class="font-medium text-[#667085]">20 items</span>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-12">
      <ItemComponent />
      <ItemComponent />
      <ItemComponent />
