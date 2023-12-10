@@ -2,8 +2,8 @@
   <button
     :class="{
       uppercase: uppercase,
-      'h-[2.5rem] w-[2.5rem] hover:border-[#D9D9D9]': isIcon,
-      'h-[45px] w-full gap-[0.8rem] px-6 font-semibold': !isIcon,
+      'h-6 w-6 sm:h-[2.5rem] sm:w-[2.5rem] hover:border-[#D9D9D9]': isIcon,
+      'h-8 md:h-[45px] w-full gap-[0.8rem] px-6 font-semibold': !isIcon,
       'border-[#667085] ': border,
       'border-transparent': !border,
     }"
@@ -13,7 +13,7 @@
     }"
     :disabled="isDisabled || isSubmitting"
     :type="type"
-    class="flex items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-70 transition-all duration-300 ease-linear"
+    class="flex items-center justify-center rounded sm:rounded-lg border disabled:cursor-not-allowed disabled:opacity-70 transition-all duration-300 ease-linear"
     @click="handleClick"
     @mouseover="handleMouseOver" 
     @mouseout="handleMouseOut"
@@ -23,7 +23,7 @@
     <span v-if="isSubmitting">
       <i class="fa fa-spinner fa-spin"></i> Submitting
     </span>
-    <span v-if="!isSubmitting">
+    <span v-if="!isSubmitting" class="text-sm sm:text-base">
       {{ label }}
     </span>
   </button>

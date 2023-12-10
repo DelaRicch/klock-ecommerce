@@ -15,16 +15,16 @@
       />
     </div>
     <div class="flex justify-between pr-4">
-      <div class="flex flex-col">
+      <div class="flex flex-col gap-0.5">
         <span class="text-xl">Nixon Leather</span>
         <div class="flex gap-4 items-center">
-          <star-rating-component v-model="rating" :number-of-stars="5" :star-size="18" />
+          <star-rating-component v-model="rating" :number-of-stars="5" :star-size="18" readonly />
           <span class="text-sm text-[#667085]">(200)</span>
         </div>
       </div>
-      <span class="text-sm">$65</span>
+      <span class="text-sm font-medium">$65</span>
     </div>
-    <div class="mx-auto w-[10rem]">
+    <div class="mx-auto w-[10rem] mt-2">
       <ButtonComponent
         label="Add to cart"
         allow-hover
@@ -42,7 +42,7 @@ import { ref, watch } from "vue";
 
 
 const isLiked = ref(false);
-const rating = ref(0);
+const rating = ref(3.5);
 
 watch(rating, (val) => {
   console.log(val);
