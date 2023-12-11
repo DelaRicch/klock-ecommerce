@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-max w-full flex-col gap-1 rounded-t-md pb-4">
+  <div class="flex h-max w-full md:flex-col gap-2 rounded-t-md pb-4">
     <div
       class="relative flex h-auto w-full items-center justify-center rounded-md border p-4 transition-all duration-300 ease-linear hover:shadow-md hover:shadow-black/20"
     >
@@ -11,27 +11,28 @@
       <img
         src="../assets/watch.png"
         alt="watch"
-        class="h-full w-2/3 sm:w-full"
+        class="h-auto w-full"
       />
     </div>
-    <div class="flex justify-between pr-4">
       <div class="flex flex-col gap-0.5">
         <span class="text-xl">Nixon Leather</span>
-        <div class="flex gap-4 items-center">
-          <star-rating-component v-model="rating" :number-of-stars="5" :star-size="18" readonly />
-          <span class="text-sm text-[#667085]">(200)</span>
+        <div class="flex gap-4 flex-col">
+          <div class="flex items-center gap-1">
+            <star-rating-component v-model="rating" :number-of-stars="5" :star-size="18" readonly />
+            <span class="text-sm text-[#667085]">(200)</span>
+          </div>
+          <span class="text-sm font-medium">$65</span>
+          <div class="md:mx-auto max-w-[10rem] mt-2">
+            <ButtonComponent
+              label="Add to cart"
+              allow-hover
+              background-color="#000000"
+              color="#FFFFFF"
+            />
         </div>
       </div>
-      <span class="text-sm font-medium">$65</span>
     </div>
-    <div class="mx-auto w-[10rem] mt-2">
-      <ButtonComponent
-        label="Add to cart"
-        allow-hover
-        background-color="#000000"
-        color="#FFFFFF"
-      />
-    </div>
+  
   </div>
 </template>
 <script setup lang="ts">

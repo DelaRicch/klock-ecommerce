@@ -2,7 +2,7 @@
   <header
     class="sticky top-0 z-50  hidden md:flex h-[5rem] md:px-[5vw] items-center justify-between bg-white"
   >
-    <router-link to="/" class="cursor-pointer">
+    <router-link to="/" class="cursor-pointer -ml-4">
       <LabelLogo
         text-color="#1D2939"
         inner-color="#1D2939"

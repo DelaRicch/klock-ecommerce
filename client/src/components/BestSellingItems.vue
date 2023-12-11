@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-col gap-4 px-[5vw] py-8">
     <div class="flex justify-between">
-      <div class="border-b border-black pb-1 text-xl font-medium capitalize">
+      <div class="border-b border-black pb-1 text-lg sm:text-xl font-medium capitalize">
         best selling watches
       </div>
       <span class="font-medium text-[#667085]">20 items</span>

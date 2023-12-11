@@ -1,14 +1,14 @@
 <template>
   <footer class="flex flex-col gap-8 px-[5vw] pt-[4.2rem] pb-4">
     <div class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-      <router-link to="/" class="cursor-pointer">
+      <router-link to="/" class="cursor-pointer -ml-4">
         <LabelLogo
           text-color="#1D2939"
           inner-color="#1D2939"
           outer-color="#FFFFFF"
         />
       </router-link>
-      <div class="flex items-center gap-4">
+      <div class="hidden sm:flex items-center gap-4">
         <FooterSocials social="facebook" />
         <FooterSocials social="instagram" />
         <FooterSocials social="twitter" />
@@ -64,7 +64,16 @@
         </router-link>
       </div>
     </div>
-<span class="text-[#4F5B75] font-medium">@ {{ year }} Klock Inc.</span>
+    <div class="flex flex-col gap-2">
+        <span class="font-medium text-[#1D2939] text-sm capitalize">follow us</span>
+        <div class="flex sm:hidden items-center gap-8 sm:gap-4">
+            <FooterSocials social="facebook" />
+            <FooterSocials social="instagram" />
+            <FooterSocials social="twitter" />
+            <FooterSocials social="pinterest" />
+          </div>
+    </div>
+<span class="text-[#4F5B75] text-xs sm:text-base font-medium">@ {{ year }} Klock Inc.</span>
   </footer>
 </template>
 <script setup lang="ts">

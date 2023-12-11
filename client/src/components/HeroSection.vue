@@ -19,6 +19,7 @@
       >
         <h3 class="sm:text-3xl xl:text-5xl">black friday</h3>
         <p
+        v-if="isDesktop"
           class="line-clamp-1 text-xs sm:line-clamp-3 sm:text-base lg:line-clamp-none"
         >
           Prepare to be amazed as we slash prices across the store! Enjoy
@@ -50,5 +51,25 @@
   </section>
 </template>
 <script setup lang="ts">
+import { onMounted, ref, onBeforeUnmount } from "vue";
 import ButtonComponent from "./ButtonComponent.vue";
+
+const isDesktop = ref(false);
+
+const updateDeviceWidth = () => {
+  if (window.innerWidth > 425) {
+    isDesktop.value = true;
+  } else {
+    isDesktop.value = false;
+  }
+};
+
+onMounted(() => {
+  updateDeviceWidth();
+  window.addEventListener("resize", updateDeviceWidth);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateDeviceWidth);
+});
 </script>
