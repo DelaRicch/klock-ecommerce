@@ -3,9 +3,9 @@ services:
   db:
     image: 'postgres:alpine'
     environment:
-      - POSTGRES_DB=Klock
-      - POSTGRES_USER=DelaRicch
-      - POSTGRES_PASSWORD=Dh!m012345
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "9432:5432"
     volumes:
