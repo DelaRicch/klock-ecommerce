@@ -91,6 +91,4 @@ import UserDropdown from './UserDropdown.vue';
 
 const userStore = useUserStore();
 const userProfile = computed(() => userStore?.userProfile);
-
-
 </script>

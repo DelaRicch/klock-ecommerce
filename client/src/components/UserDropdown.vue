@@ -3,10 +3,10 @@
     <Transition name="fade">
       <div
         v-if="displayUserDropdownMenu"
-        class="fixed right-0 top-0 z-50 h-screen w-screen bg-black/50 md:hidden"
+        class="fixed right-0 top-0 z-50 h-screen w-screen bg-black/50"
       >
         <div
-          class="absolute right-0 top-0 flex h-[40%] w-4/6 flex-col justify-between bg-white px-8 pb-8 pt-5"
+          class="absolute right-0 top-0 flex h-[40%] w-4/6 sm:w-[20rem] flex-col justify-between bg-white px-8 pb-8 pt-5"
         >
           <div class="flex flex-col">
             <div class="flex self-end">
@@ -34,34 +34,7 @@
                 v-for="item in menuItems"
                 :key="item.id"
               >
-                <button
-                  v-if="item.id === '5ba48fa3'"
-                  class="flex cursor-pointer items-center gap-1 capitalize"
-                >
-                  <span>{{ item.name }}</span>
-                  <svg
-                    :class="{
-                      'rotate-180 transform transition-all duration-300 ease-linear':
-                        displayCategories,
-                      'rotate-0 transition-all duration-300 ease-linear':
-                        !displayCategories,
-                    }"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                  >
-                    <path
-                      d="M6 9L12 15L18 9"
-                      stroke="#667085"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </button>
-                <router-link v-else :to="item.link!">{{
+                <router-link :to="item.link!">{{
                   item.name
                 }}</router-link>
               </li>
@@ -91,6 +64,7 @@ const menuItems = ref<{ name: string; link?: string; id: string }[]>([
   {
     name: "my orders",
     id: "5ba48fa3",
+    link: "my-orders"
   },
   {
     name: "shipping address",

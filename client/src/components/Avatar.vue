@@ -1,22 +1,47 @@
 <template>
   <div
-    class="relative h-[3rem] w-[3rem] overflow-clip rounded-full md:h-[3.4rem] md:w-[3.4rem]"
+    class="relative h-[3rem] w-[3rem] rounded-full md:h-[3.4rem] md:w-[3.4rem]"
   >
     <img
-      class="h-full w-full bg-cover bg-center bg-no-repeat"
-      :src="src"
+      v-if="src || selectedImage"
+      class="h-full w-full rounded-full bg-cover bg-center bg-no-repeat"
+      :src="src || previewImage"
       :alt="alt"
     />
     <div
+      v-else
       class="absolute left-0 top-0 grid h-full w-full place-items-center rounded-full border-2 border-slate-400 bg-slate-300"
     >
       <UserIcon />
     </div>
+    <label v-if="isUpload" for="upload-avatar">
+      <div
+        class="absolute bottom-0 right-0 z-10 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border border-[#667085] bg-white"
+      >
+        <img
+          src="../assets/camera.svg"
+          alt="camera"
+          class="scale-75 transform"
+        />
+        <input
+          type="file"
+          hidden
+          id="upload-avatar"
+          accept=".svg, .png, .jpg, .jpeg, .gif"
+          @change="handlepAvatarUpload"
+        />
+      </div>
+    </label>
   </div>
 </template>
 
 <script setup lang="ts">
+import { errorApiRequest, isValidImage } from "@/lib/helperFunctions";
 import UserIcon from "../assets/UserIcon.vue";
+import { ref, watch } from "vue";
+import { ErrorObject } from "@/types";
+
+const emit = defineEmits(["uploadImage"]);
 
 defineProps({
   src: {
@@ -26,5 +51,36 @@ defineProps({
     type: String,
     required: true,
   },
+  isUpload: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const previewImage = ref("");
+const selectedImage = ref<File | null>(null);
+
+const handlepAvatarUpload = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const files = target.files as FileList;
+  processFiles(files);
+};
+
+const processFiles = (files: FileList) => {
+  const file = files[0];
+
+  isValidImage(file)
+    .then((validatedFile) => {
+      selectedImage.value = validatedFile;
+      previewImage.value = URL.createObjectURL(validatedFile);
+      emit("uploadImage", validatedFile);
+    })
+    .catch((error: ErrorObject) => {
+      errorApiRequest(error);
+    });
+
+  watch(previewImage, (newVal) => {
+    console.log(newVal);
+  });
+};
 </script>

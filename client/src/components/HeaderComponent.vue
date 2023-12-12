@@ -1,8 +1,8 @@
 <template>
   <header
-    class="sticky top-0 z-50  hidden md:flex h-[5rem] md:px-[5vw] items-center justify-between bg-white"
+    class="sticky top-0 z-50 hidden h-[5rem] items-center justify-between bg-white md:flex md:px-[5vw]"
   >
-    <router-link to="/" class="cursor-pointer -ml-4">
+    <router-link to="/" class="-ml-4 cursor-pointer">
       <LabelLogo
         text-color="#1D2939"
         inner-color="#1D2939"
@@ -99,15 +99,17 @@
       </div>
 
       <!--    Display User Avatar if logged in-->
-      <Avatar
+      <div
         v-if="
           userProfile?.Name !== '' &&
           userProfile !== undefined &&
           userProfile !== null
         "
-        :src="userProfile?.Photo"
-        :alt="userProfile?.Name"
-      />
+        class="cursor-pointer"
+        @click="displayUserDropdownMenu = true"
+      >
+        <Avatar :src="userProfile?.Photo" :alt="userProfile?.Name" />
+      </div>
 
       <!--    Display login signup if not logged in -->
       <div v-else class="flex items-center gap-1 text-[#181CF9]">
@@ -125,16 +127,23 @@
     </div>
   </header>
   <CategoriesDropdown />
+<UserDropdown />
+
 </template>
 <script setup lang="ts">
 import LabelLogo from "../assets/LabelLogo.vue";
 import ButtonComponent from "@/components/ButtonComponent.vue";
 import { useUserStore } from "@/store/store.ts";
 import Avatar from "@/components/Avatar.vue";
-import { displayCategories, menuItems } from "@/store/resuableState.ts";
+import {
+  displayCategories,
+  displayUserDropdownMenu,
+  menuItems,
+} from "@/store/resuableState.ts";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import CategoriesDropdown from "@/components/CategoriesDropdown.vue";
+import UserDropdown from "./UserDropdown.vue";
 
 const activeRoute = computed(() => {
   return useRoute().name;
@@ -146,6 +155,4 @@ const userProfile = computed(() => userStore?.userProfile);
 const handleDisplayCategories = () => {
   displayCategories.value = !displayCategories.value;
 };
-
-
 </script>

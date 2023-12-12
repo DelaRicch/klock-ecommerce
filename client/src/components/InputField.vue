@@ -29,7 +29,7 @@
         "
         :type="inputType"
         :id="id"
-        :step="type === 'number' ? 0.01 : null"
+        :step="type === 'number' ? 0.01 : undefined"
         :hidden="type === 'file'"
         :placeholder="placeholder"
         class="h-full w-full rounded-lg border border-[#667085] px-3 pr-8 outline-none outline-offset-4 placeholder:text-[#667085] hover:border-[#0408E7] hover:outline-1 hover:outline-[#0408E7] focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC]"
