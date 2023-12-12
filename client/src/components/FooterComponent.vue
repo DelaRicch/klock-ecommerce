@@ -15,7 +15,7 @@
         <FooterSocials social="pinterest" />
       </div>
     </div>
-    <div class="grid grid-cols-1 gap-8 md:gap-14 sm:grid-cols-2 md:grid-cols-3 lg:gap-32">
+    <div class="grid grid-cols-1  gap-8 md:gap-14 sm:grid-cols-2 md:grid-cols-3 lg:gap-32">
       <div class="flex flex-col gap-4 capitalize">
         <h5
           class="relative text-2xl text-[#1D2939] after:absolute after:-bottom-1 after:left-0 after:h-[1px] after:w-12 after:bg-[#1D2939] after:content-['']"

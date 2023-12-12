@@ -6,6 +6,7 @@ import (
 	"github.com/DelaRicch/klock-ecommerce/server/database"
 	"github.com/DelaRicch/klock-ecommerce/server/lib"
 	"github.com/DelaRicch/klock-ecommerce/server/models"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -19,6 +20,16 @@ func AddNewProduct(ctx *fiber.Ctx) error {
 			"success": false,
 		})
 	}
+
+	// Validate input using the validator library
+	validate := validator.New()
+	if err := validate.Struct(newProduct); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+			"success": false,
+		})
+	}
+
 
 	// Check for existing product in the system
 	var existingProduct models.Product
