@@ -12,11 +12,17 @@ defineProps({
     type: String,
     required: true,
   },
+  className: {
+    type: String,
+    required: false,
+    default: "",
+  },
 });
 </script>
 
 <template>
   <svg
+  :class="className"
     width="158"
     height="66"
     viewBox="0 0 158 66"

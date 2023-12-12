@@ -8,7 +8,7 @@
         <div class="flex gap-8 border-b border-[#667085] px-[3rem] py-2">
           <button
             v-for="item in tabs"
-            :id="item.id"
+            :id="(item.id).toString()"
             class="flex cursor-pointer items-center gap-2 capitalize"
           >
             <span class="font-medium">{{ item.label }}</span>

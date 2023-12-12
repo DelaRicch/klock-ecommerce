@@ -131,7 +131,7 @@ import LabelLogo from "../assets/LabelLogo.vue";
 import ButtonComponent from "@/components/ButtonComponent.vue";
 import { useUserStore } from "@/store/store.ts";
 import Avatar from "@/components/Avatar.vue";
-import { displayCategories } from "@/store/resuableState.ts";
+import { displayCategories, menuItems } from "@/store/resuableState.ts";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import CategoriesDropdown from "@/components/CategoriesDropdown.vue";
@@ -147,30 +147,5 @@ const handleDisplayCategories = () => {
   displayCategories.value = !displayCategories.value;
 };
 
-const menuItems = [
-  {
-    name: "home",
-    link: "/",
-    id: "5ba48fa3",
-  },
-  {
-    name: "categories",
-    id: "a0a0a0a0",
-  },
-  {
-    name: "Blog",
-    link: "/blog",
-    id: "4096c3fe",
-  },
-  {
-    name: "about",
-    link: "/about",
-    id: "9c3b2e28",
-  },
-  {
-    name: "contact",
-    link: "/contact",
-    id: "a5a5a5a5",
-  },
-];
+
 </script>

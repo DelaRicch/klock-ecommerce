@@ -20,5 +20,36 @@ export const buttonValue = ref(false);
 // Display mobile dashboard menu
 export const displayMenu = ref(false);
 
+// Display user dropdown menu 
+export const displayUserDropdownMenu = ref(false);
+
 // Display categories on nav bar
 export const displayCategories = ref(false);
+
+// Menu items for header component and mobile menu component
+export const menuItems = ref<{ name: string; link?: string; id: string }[]>([
+    {
+      name: "home",
+      link: "/",
+      id: "5ba48fa3",
+    },
+    {
+      name: "categories",
+      id: "a0a0a0a0",
+    },
+    {
+      name: "Blog",
+      link: "/blog",
+      id: "4096c3fe",
+    },
+    {
+      name: "about",
+      link: "/about",
+      id: "9c3b2e28",
+    },
+    {
+      name: "contact",
+      link: "/contact",
+      id: "a5a5a5a5",
+    },
+  ]);

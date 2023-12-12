@@ -1,5 +1,5 @@
 <template>
-  <footer class="flex flex-col gap-8 px-[5vw] pt-[4.2rem] pb-4">
+  <footer class="flex flex-col gap-8 px-[5vw] pt-4 sm:pt-8 md:pt-[4.2rem] pb-4">
     <div class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
       <router-link to="/" class="cursor-pointer -ml-4">
         <LabelLogo
