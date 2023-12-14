@@ -2,16 +2,19 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/store/store.ts";
 import AdminDashboardLayout from "@/views/admin/AdminDashboardLayout.vue";
 
-const Home = () => import("../views/Home.vue");
-const SignUp = () => import("../views/SignUp.vue");
-const SignIn = () => import("../views/SignIn.vue");
+const Home = () => import("@/views/Home.vue");
+const SignUp = () => import("@/views/SignUp.vue");
+const SignIn = () => import("@/views/SignIn.vue");
+
+// user routes
+const AccountSettings = () => import("@/views/AccountSettings.vue");
 
 // Admin dashboard routes
-// const AdminDashboardLayout = () => import('../views/admin/AdminDashboardLayout.vue')
-const AdminDashboard = () => import("../views/admin/AdminDashboard.vue");
-const AdminAllProducts = () => import("../views/admin/AdminAllProducts.vue");
-const AdminAddNewProduct = () => import("../views/admin/AddNewProduct.vue");
-const AdminOrderList = () => import("../views/admin/AdminOrderList.vue");
+// const AdminDashboardLayout = () => import('@/views/admin/AdminDashboardLayout.vue')
+const AdminDashboard = () => import("@/views/admin/AdminDashboard.vue");
+const AdminAllProducts = () => import("@/views/admin/AdminAllProducts.vue");
+const AdminAddNewProduct = () => import("@/views/admin/AddNewProduct.vue");
+const AdminOrderList = () => import("@/views/admin/AdminOrderList.vue");
 
 const routes = [
   {
@@ -32,6 +35,16 @@ const routes = [
     component: SignIn,
     meta: { title: "Klock :- Sign In" },
   },
+
+  // User route
+  {
+    path: "/account-settings",
+    name: "account-settings",
+    component: AccountSettings,
+    meta: {title: "Klock :- Account Settings"}
+  },
+
+  // Admin route
   {
     path: "/dashboard",
     meta: { requiresAuth: true, requiredRole: "ADMIN" },
