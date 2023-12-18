@@ -79,7 +79,7 @@ const processFiles = (files: FileList) => {
       errorApiRequest(error);
     });
 
-  watch(previewImage, (newVal) => {
+  watch(previewImage, (newVal: string) => {
     console.log(newVal);
   });
 };

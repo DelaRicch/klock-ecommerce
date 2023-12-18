@@ -61,7 +61,9 @@
                     />
                   </svg>
                 </button>
-                <router-link v-else :to="item.link!">{{
+                <router-link v-else 
+                @click="displayMenu = false" 
+                :to="item.link!">{{
                   item.name
                 }}</router-link>
               </li>

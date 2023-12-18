@@ -1,11 +1,11 @@
-FROM node:18-alpine
+FROM oven/bun:alpine
 
 WORKDIR /app
 
 COPY . .
 
-RUN npm install --silent --upgrade
+RUN bun install
 
 EXPOSE 5173
 
-CMD ["npm", "run", "dev"]
+CMD ["bun", "run", "dev"]

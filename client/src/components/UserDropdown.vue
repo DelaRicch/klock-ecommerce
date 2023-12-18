@@ -34,7 +34,10 @@
                 v-for="item in menuItems"
                 :key="item.id"
               >
-                <router-link :to="item.link!">{{
+                <router-link 
+                :to="item.link!"
+                @click="displayUserDropdownMenu = false"
+                >{{
                   item.name
                 }}</router-link>
               </li>
@@ -89,8 +92,8 @@ const menuItems = ref<{ name: string; link?: string; id: string }[]>([
 ]);
 
 const handleLogoutFunc = () => {
-  handleLogout();
   displayUserDropdownMenu.value = false;
+  handleLogout();
 };
 
 const handleDisplayCategories = () => {
