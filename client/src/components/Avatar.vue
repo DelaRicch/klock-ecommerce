@@ -1,6 +1,7 @@
 <template>
   <div
-    class="relative h-[3rem] w-[3rem] rounded-full md:h-[3.4rem] md:w-[3.4rem]"
+  :class="isUpload ? 'w-[4.5rem] h-[4.5rem] md:w-[6rem] md:h-[6rem]' : ' h-[3rem] w-[3rem] md:h-[3.4rem] md:w-[3.4rem]'"
+    class="relative rounded-full"
   >
     <img
       v-if="src || selectedImage"
@@ -16,12 +17,14 @@
     </div>
     <label v-if="isUpload" for="upload-avatar">
       <div
-        class="absolute bottom-0 right-0 z-10 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border border-[#667085] bg-white"
+      :class="isUpload ? 'h-6.5 w-6.5 md:h-8 md:w-8' : 'h-5 w-5'"
+        class="absolute bottom-2 -right-2 z-10 flex cursor-pointer items-center justify-center rounded-full border border-[#667085] bg-white"
       >
         <img
           src="../assets/camera.svg"
           alt="camera"
-          class="scale-75 transform"
+          :class="isUpload ? 'scale-90' : 'scale-75'"
+          class="transform"
         />
         <input
           type="file"
@@ -38,7 +41,7 @@
 <script setup lang="ts">
 import { errorApiRequest, isValidImage } from "@/lib/helperFunctions";
 import UserIcon from "../assets/UserIcon.vue";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { ErrorObject } from "@/types";
 
 const emit = defineEmits(["uploadImage"]);
@@ -78,9 +81,5 @@ const processFiles = (files: FileList) => {
     .catch((error: ErrorObject) => {
       errorApiRequest(error);
     });
-
-  watch(previewImage, (newVal: string) => {
-    console.log(newVal);
-  });
 };
 </script>

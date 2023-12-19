@@ -126,7 +126,7 @@ import SignUpLoginTitle from "../components/SignUpLoginTitle.vue";
 import CheckboxComp from "../components/CheckboxComp.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import SocialAuthButton from "../components/SocialAuthButton.vue";
-import { signUpFormFields } from "@/types";
+import { formFields } from "@/types";
 import { emailRegex, passwordRegex } from "../schema/ValidationSchema.ts";
 import { getUserProfile, registerUser } from "../api/user.ts";
 
@@ -162,7 +162,7 @@ const updateColors = () => {
   }
 };
 
-const formData: signUpFormFields = reactive({
+const formData: formFields = reactive({
   name: {
     value: "",
     error: "",

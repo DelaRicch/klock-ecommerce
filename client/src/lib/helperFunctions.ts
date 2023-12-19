@@ -145,10 +145,27 @@ export const isValidImage = (file: File): Promise<File> => {
   });
 };
 
+export const getCurrentLocation = () => {
+
+  const success = (position: { coords: { latitude: number; longitude: number; }; }) => {
+      const {latitude, longitude} = position.coords;
+      
+      const geoApiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}}&localityLanguage=en`;
+
+     fetch(geoApiUrl).then(res => res.json()).then(data => console.log(data)).catch(err => console.log(err));
+  }
+
+  const error = () => {
+      return "unable to retrieve your location"
+  }
+
+  navigator.geolocation.getCurrentPosition(success, error)
+}
+
 export const handleLogout = () => {
   const userStore = useUserStore();
-  userStore.setUserProfile("");
-  userStore.setAccessToken("");
+  userStore.setUserProfile({} as UserProfileProps);
+  userStore.setAccessToken({} as accessTokenType);
   userStore.setRefreshToken("");
   localStorage.removeItem("userProfile");
   localStorage.removeItem("accessToken");

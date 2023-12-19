@@ -4,10 +4,11 @@
       uppercase: uppercase,
       'h-6 w-6 sm:h-[2.5rem] sm:w-[2.5rem] hover:border-[#D9D9D9]': isIcon,
       'h-8 md:h-[45px] w-full gap-[0.8rem] px-6 font-semibold': !isIcon,
-      'border-[#667085] ': border,
+      'border-[#667085]': border,
       'border-transparent': !border,
     }"
     :style="{
+      borderColor: borderColor,
       color: color,
       backgroundColor: backgroundColor,
     }"
@@ -73,7 +74,10 @@ const props = defineProps({
   },
   allowHover: {
     type: Boolean,
-  }
+  },
+  borderColor: {
+    type: String,
+  },
 });
 
 const backgroundColor = ref(props.backgroundColor);

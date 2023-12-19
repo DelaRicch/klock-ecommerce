@@ -1,4 +1,4 @@
-export interface signUpFormFields {
+export interface formFields {
   [key: string]: {
     value: string;
     error: string;

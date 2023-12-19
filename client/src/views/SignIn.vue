@@ -53,7 +53,6 @@
           :placeholder="'Enter your password'"
           :label="'Password'"
           type="password"
-          :isPassword="true"
         />
 
         <div class="flex items-center justify-between">
@@ -108,7 +107,7 @@ import SignUpLoginTitle from "../components/SignUpLoginTitle.vue";
 import CheckboxComp from "../components/CheckboxComp.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import SocialAuthButton from "../components/SocialAuthButton.vue";
-import { signUpFormFields } from "@/types";
+import { formFields } from "@/types";
 import { emailRegex } from "../schema/ValidationSchema.ts";
 import { getUserProfile, loginUser } from "../api/user.ts";
 import {
@@ -142,7 +141,7 @@ const updateColors = () => {
   }
 };
 
-const formData: signUpFormFields = reactive({
+const formData: formFields = reactive({
   email: {
     value: "",
     error: "",

@@ -3,10 +3,10 @@
     <Transition name="fade">
       <div
         v-if="displayUserDropdownMenu"
-        class="fixed right-0 top-0 z-50 h-screen w-screen bg-black/50"
+        class="fixed right-0 top-0 z-50 h-screen w-screen bg-black/50 md:bg-transparent"
       >
         <div
-          class="absolute right-0 top-0 flex h-[40%] w-4/6 sm:w-[20rem] flex-col justify-between bg-white px-8 pb-8 pt-5"
+          class="absolute right-0 top-0 flex h-[40%] w-4/6 sm:w-[20rem] flex-col justify-between rounded-bl-lg bg-white md:shadow-md md:shadow-black-/50 px-8 pb-8 pt-5"
         >
           <div class="flex flex-col">
             <div class="flex self-end">

@@ -45,7 +45,7 @@
         </defs>
       </svg>
     </ButtonComponent>
-    <Avatar :alt="userName" :src="profilePic" />
+    <Avatar :alt="userProfile?.Name" :src="userProfile?.Photo" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -59,7 +59,5 @@ const handleToggleDisplayMenu = () => {
   displayMenu.value = !displayMenu.value;
 };
 
-const userStore = useUserStore();
-const profilePic = userStore.userProfile.Photo;
-const userName = userStore.userProfile.Name;
+const {userProfile} = useUserStore();
 </script>

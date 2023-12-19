@@ -149,8 +149,7 @@ const activeRoute = computed(() => {
   return useRoute().name;
 });
 
-const userStore = useUserStore();
-const userProfile = computed(() => userStore?.userProfile);
+const {userProfile} = useUserStore();
 
 const handleDisplayCategories = () => {
   displayCategories.value = !displayCategories.value;
