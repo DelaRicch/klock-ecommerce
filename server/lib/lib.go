@@ -7,12 +7,15 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
+	"github.com/DelaRicch/klock-ecommerce/server/database"
 	"github.com/DelaRicch/klock-ecommerce/server/models"
 	"github.com/alexedwards/argon2id"
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
+	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -130,4 +133,58 @@ func UploadToCloudinary(file *multipart.FileHeader, subFolder, productID string)
 
     imageUrl := result.SecureURL
     return imageUrl, nil
+}
+
+
+// resuable user authentication function
+
+func ValidateAccessToken(ctx *fiber.Ctx) (*models.User, error) {
+	// Get access token from the context
+	accessToken := ctx.Get("Authorization")
+
+	if accessToken == "" {
+		return nil, fmt.Errorf("Unauthorized")
+	}
+
+	// Extract the token part from "Bearer <token>"
+	tokenParts := strings.Split(accessToken, " ")
+	if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
+		return nil, fmt.Errorf("invalid access token format")
+	}
+	accessToken = tokenParts[1]
+
+	// Parse and validate the access token
+	token, err := jwt.Parse(accessToken, func(jwtToken *jwt.Token) (interface{}, error) {
+		if _, ok := jwtToken.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %s", jwtToken.Header["alg"])
+		}
+
+		// Use the same secret key for verifying the access token
+		return []byte("secret"), nil
+	})
+
+	if err != nil {
+		return nil, fmt.Errorf("invalid access token: %v", err)
+	}
+
+	// Extract claims from the access token
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok || !token.Valid {
+		return nil, fmt.Errorf("invalid token claim")
+	}
+
+	// Extract user ID from claims
+	userID, ok := claims["userId"].(string)
+	if !ok {
+		return nil, fmt.Errorf("invalid user ID in token claims")
+	}
+
+	// Retrieve user from the database
+	var user models.User
+	result := database.DB.Where("user_id = ?", userID).First(&user)
+	if result.RowsAffected == 0 {
+		return nil, fmt.Errorf("user not found")
+	}
+
+	return &user, nil
 }

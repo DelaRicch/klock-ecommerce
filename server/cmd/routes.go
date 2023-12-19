@@ -15,6 +15,7 @@ func setupRoutes(app *fiber.App) {
 	app.Post("/login", handlers.Login)
 	app.Post("/social-login", handlers.SocialLogin)
 	app.Delete("/delete-users", handlers.DeleteAllUsers)
+	app.Patch("/update-user", handlers.UpdateUser)
 
 	// Products routes 
 	app.Post("/add-product", handlers.AddNewProduct)
@@ -22,12 +23,12 @@ func setupRoutes(app *fiber.App) {
 	app.Delete("/delete-products", handlers.DeleteAllProducts)
 
 	// Protected Routes
-	ProtectedRoutes := app.Group("/")
+	ProtectedRoutes := app.Group("/protected")
 	ProtectedRoutes.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte("secret")},
 	}))
 
-	ProtectedRoutes.Get("/", handlers.Home)
+	// ProtectedRoutes.Get("/", handlers.Home)
 
 	app.Get("/", handlers.Home)
 }

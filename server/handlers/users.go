@@ -17,7 +17,7 @@ const errorRfTokenMsg string = "Error generating refresh token"
 const invalidEmailOrPass string = "Invalid email or password"
 
 func Home(ctx *fiber.Ctx) error {
-	return ctx.SendString("Welcome to Klock E-commerce backend ")
+	return ctx.SendString("Welcome to Klock E-commerce backend API")
 }
 
 func Register(ctx *fiber.Ctx) error {
@@ -338,55 +338,11 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 }
 
 func GetUserProfile(ctx *fiber.Ctx) error {
-	accessToken := ctx.Get("Authorization")
-
-	if accessToken == "" {
-		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"success": false,
-			"message": "Unauthorized",
-		})
-	}
-
-	// Extract the token part from "Bearer <token>"
-	tokenParts := strings.Split(accessToken, " ")
-	if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
-		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"success": false,
-			"message": "Invalid access token format",
-		})
-	}
-	accessToken = tokenParts[1]
-
-	// Parse and validate the access token
-	tokenByte, err := jwt.Parse(accessToken, func(jwtToken *jwt.Token) (interface{}, error) {
-		if _, ok := jwtToken.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %s", jwtToken.Header["alg"])
-		}
-
-		// Use the same secret key for verifying the access token
-		return []byte("secret"), nil
-	})
-
+	user, err := lib.ValidateAccessToken(ctx)
 	if err != nil {
-		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "Invalid access token",
-		})
-	}
-
-	// Extract claims from the access token
-	claims, ok := tokenByte.Claims.(jwt.MapClaims)
-	if !ok || !tokenByte.Valid {
-		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"success": false, "message": "Invalid token claim"})
-	}
-
-	// Extract user ID from claims
-	userID := claims["userId"].(string)
-	var user models.User
-	result := database.DB.Where("user_id = ?", userID).First(&user)
-	if result.RowsAffected == 0 {
-		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"message": invalidEmailOrPass,
 		})
 	}
 
@@ -404,6 +360,18 @@ func GetUserProfile(ctx *fiber.Ctx) error {
 		"success": true,
 		"user":    userProfile,
 	})
+}
+
+func UpdateUser(ctx *fiber.Ctx) error {
+	user, err := lib.ValidateAccessToken(ctx)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": "Invalid access token",
+		})
+	}
+
+	return ctx.SendString("Update User")
 }
 
 func ListUsers(ctx *fiber.Ctx) error {
