@@ -70,13 +70,11 @@ const {accessToken} = storeToRefs(useUserStore());
 export const updateUser = async (data: Record<string, string>) => {
   try {
     const {accessToken} = storeToRefs(useUserStore());
-    const res = await userApi.patch("/update-user", {
-      data,
+    const res = await userApi.patch("/update-user", data, {
       headers: {
-        Authorization: `Bearer ${accessToken.value.value}`,
-      },
-
-    });
+      Authorization: `Bearer ${accessToken.value.value}`,
+    },
+});
 
     return res?.data;
   } catch (err: any) {

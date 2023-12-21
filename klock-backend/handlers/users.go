@@ -371,10 +371,11 @@ func UpdateUser(ctx *fiber.Ctx) error {
 	}
 
 	res, err := lib.ValidateAccessToken(ctx)
+	fmt.Println(res, err)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": "Invalid access token",
+			"message": err.Error(),
 		})
 	}
 

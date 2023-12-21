@@ -50,8 +50,9 @@ import { emailRegex } from '@/schema/ValidationSchema';
 import type { formFields } from '@/types';
 import { updateUser } from '@/api/user';
 import { errorApiRequest, handleUserProfile, successApiRequest } from '@/lib/helperFunctions';
+import { storeToRefs } from 'pinia';
 
-const {userProfile} = useUserStore();
+const {userProfile} = storeToRefs(useUserStore());
 
 const formData: formFields = reactive({
   name: {

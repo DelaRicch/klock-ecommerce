@@ -39,9 +39,10 @@ import HeaderComponent from "@/components/HeaderComponent.vue";
 import MobileHeaderComponent from "@/components/MobileHeaderComponent.vue";
 import GeneralSettings from "@/components/settings/GeneralSettings.vue";
 import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
 import { ref } from "vue";
 
 const activeTab = ref("general");
 
-const {userProfile} = useUserStore();
+const {userProfile} = storeToRefs(useUserStore());
 </script>
