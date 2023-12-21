@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  db:
+  klock-database:
     image: 'postgres:alpine'
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
@@ -9,26 +9,26 @@ services:
     ports:
       - "9432:5432"
     volumes:
-          - postgres-db:/var/lib/postgresql/data
+          - klock-database:/var/lib/postgresql/data
 
-  client:
+  klock-frontend:
     stdin_open: true
     build:
       dockerfile: Dockerfile
-      context: './client'
+      context: './klock-frontend'
     volumes:
       - /app/node_modules
-      - ./client:/app
+      - ./klock-frontend:/app
     ports:
       - '5173:5173'
     tty: true
  
-  api:
+  klock-backend:
     build: 
       dockerfile: Dockerfile
-      context: './server'
+      context: './klock-backend'
     volumes:
-      - ./server:/app
+      - ./klock-backend:/app
     ports:
       - '8000:8000'
     command: ["air", "-c", ".air.toml"]
@@ -36,4 +36,4 @@ services:
 
 
 volumes:  
-  postgres-db:
+  klock-database:
