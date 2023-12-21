@@ -6,8 +6,7 @@
     <TokenExpirationNotif />
 
     <!--  Snackbar toast notification-->
-    <Snackbar
-      :show-snackbar="showSnackbar"
+    <SnackbarComponent
       :success="success"
       :title="success ? 'success' : 'error'"
       :message="apiResponse"
@@ -16,11 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import Snackbar from '@/components/Snackbar.vue';
+import SnackbarComponent from '@/components/SnackbarComponent.vue';
 import TokenExpirationNotif from '@/components/TokenExpirationNotif.vue';
 import {
   apiResponse,
-  showSnackbar,
   success,
 } from "@/stores/resuableState";
 </script>

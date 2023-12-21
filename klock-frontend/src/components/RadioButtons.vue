@@ -1,23 +1,20 @@
 <template>
-    <div :class="{ 'flex-col': orientation === 'vertical', 'flex-row': orientation === 'horizontal' }" class="flex gap-4">
-        <label v-for="radio in radios" :for="radio.value" class="flex items-center gap-1.5 cursor-pointer text-sm">
-            <input type="radio" name="radio-group" :id="radio.value" class="cursor-pointer text-black p-0 bg-white border-gray-300 outline-none ring-0 ring-transparent rounded-full form-input" :value="radio.value" @change="handleSelectRadio(radio.value)" />
-            <span class="capitalize">{{radio.value}}</span>
+    <div :class="{ 'flex-col gap-4': orientation === 'vertical', 'flex-row gap-8': orientation === 'horizontal' }" class="flex">
+        <label v-for="radio in options" :key="radio" :for="radio" class="flex items-center gap-1.5 cursor-pointer text-sm">
+            <input type="radio" name="radio-group" :id="radio" class="cursor-pointer text-black p-0 bg-white border-gray-300 outline-none ring-0 ring-transparent rounded-full form-input" :value="radio" @change="handleSelectRadio(radio)" />
+            <span class="capitalize">{{radio}}</span>
         </label>
     </div>
 </template>
 <script lang="ts" setup>
-import { PropType } from 'vue';
+import { type PropType } from 'vue';
 
-interface Radio {
-    value: string;
-}
 
 const emit = defineEmits(['update:modelValue']);
 
 defineProps({
-    radios: {
-        type: Array as PropType<Radio[]>,
+    options: {
+        type: Array as PropType<string[]>,
         required: true
     },
     orientation: {

@@ -30,8 +30,10 @@
         placeholder="St. Augustine FL 32003, United States"
         @update-value="handleValidateInput($event, 'location')"
         />
+        <RadioButtons v-model:model-value="formData.gender.value" :options="genderOptions" />
         <div class="flex self-end">
             <ButtonComponent 
+            :is-submitting="isSubmitting"
             type="submit" 
             label="Save Changes" 
             color="#FFFFFF" 
@@ -45,14 +47,16 @@
 import { useUserStore } from '@/stores/user';
 import InputField from '../InputField.vue';
 import ButtonComponent from '../ButtonComponent.vue';
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { emailRegex } from '@/schema/ValidationSchema';
 import type { formFields } from '@/types';
 import { updateUser } from '@/api/user';
 import { errorApiRequest, handleUserProfile, successApiRequest } from '@/lib/helperFunctions';
 import { storeToRefs } from 'pinia';
+import RadioButtons from '../RadioButtons.vue';
 
 const {userProfile} = storeToRefs(useUserStore());
+const isSubmitting = ref(false);
 
 const formData: formFields = reactive({
   name: {
@@ -71,7 +75,20 @@ const formData: formFields = reactive({
     value: "",
     error: "",
   },
+  gender: {
+    value: "",
+    error: "",
+  }
 });
+
+const genderOptions = ref(["male", "female", "other"]);
+
+const resetFormData = () => {
+  for (const field in formData) {
+    formData[field].value = "";
+    formData[field].error = "";
+  }
+};
 
 const isInvalidForm = computed(() => {
   for (const field in formData) {
@@ -93,13 +110,15 @@ const handleValidateInput = (value: string, field: string) => {
 };
 
 const handleSubmit = async () => {
+  isSubmitting.value = true;
   const formDataValues: Record<string, string> = {};
   for (const field in formData) {
     formDataValues[field] = (formData[field] as { value: string }).value;
   }
 
   updateUser(formDataValues).then((res) => {
-    console.log(res);
+    resetFormData();
+   isSubmitting.value = false;
     handleUserProfile(res.user);
 
     let result = {
@@ -108,7 +127,7 @@ const handleSubmit = async () => {
     }
     successApiRequest(result);
   }).catch((err) => {
-    console.log(err);
+    isSubmitting.value = false;
     errorApiRequest(err);
   });
 }

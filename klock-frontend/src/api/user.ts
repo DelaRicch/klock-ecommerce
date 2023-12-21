@@ -68,14 +68,43 @@ const {accessToken} = storeToRefs(useUserStore());
 };
 
 export const updateUser = async (data: Record<string, string>) => {
+  const {accessToken} = storeToRefs(useUserStore());
   try {
-    const {accessToken} = storeToRefs(useUserStore());
     const res = await userApi.patch("/update-user", data, {
       headers: {
       Authorization: `Bearer ${accessToken.value.value}`,
     },
 });
 
+    return res?.data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+}
+
+export const validateCurrentPassword = async (data: string) => {
+  const {userProfile} = storeToRefs(useUserStore());
+  const request = {
+    userId: userProfile.value.UserID,
+    password: data
+    ,
+  }
+  try {
+    const res = await userApi.post("/validate-current-password", request);
+    return res?.data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+}
+
+export const updatePassword = async (data: Record<string, string>) => {
+  const {accessToken} = storeToRefs(useUserStore());
+  try {
+    const res = await userApi.put("/update-password", data, {
+      headers: {
+        Authorization: `Bearer ${accessToken.value.value}`,
+      },
+    });
     return res?.data;
   } catch (err: any) {
     return err?.response?.data;

@@ -13,6 +13,7 @@ type User struct {
 	RememberMe string `json:"remember" gorm:"bool;default:false"`
 	Photo      string `json:"photo" gorm:"text;default:null"`
 	Phone      string `json:"phone" gorm:"text;default:null"`
+	Gender      string `json:"gender" gorm:"text;default:null"`
 	Location      string `json:"location" gorm:"text;default:null"`
 	SocialId   string `json:"socialId" gorm:"text;default:null"`
 	Provider   string `json:"provider" gorm:"text;default:null"`
@@ -26,6 +27,7 @@ type UserProfile struct {
 	Photo string
 	Phone string
 	Location string
+	Gender string
 }
 
 type ProductGalleryImage struct {

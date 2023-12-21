@@ -16,6 +16,8 @@ func setupRoutes(app *fiber.App) {
 	app.Post("/social-login", handlers.SocialLogin)
 	app.Delete("/delete-users", handlers.DeleteAllUsers)
 	app.Patch("/update-user", handlers.UpdateUser)
+	app.Post("validate-current-password", handlers.ValidateCurrentPassword)
+	app.Put("/update-password", handlers.UpdatePassword)
 
 	// Products routes 
 	app.Post("/add-product", handlers.AddNewProduct)

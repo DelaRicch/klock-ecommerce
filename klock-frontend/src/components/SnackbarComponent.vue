@@ -14,11 +14,19 @@
         }}</span>
         <p class="mt-1">{{ message }}</p>
       </div>
+      <div class="absolute top-2 right-2">
+        <ButtonComponent is-icon @click="showSnackbar = false">
+          <CloseIcon />
+        </ButtonComponent>
+      </div>
     </div>
   </Transition>
 </template>
 <script lang="ts" setup>
+import CloseIcon from "@/assets/CloseIcon.vue";
 import Checkmark from "../components/Checkmark.vue";
+import ButtonComponent from "./ButtonComponent.vue";
+import { showSnackbar } from "@/stores/resuableState";
 
 defineProps({
   success: {
@@ -33,10 +41,7 @@ defineProps({
     type: String,
     required: true,
   },
-  showSnackbar: {
-    type: Boolean,
-    required: true,
-  },
+
 });
 </script>
 

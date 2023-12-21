@@ -24,6 +24,7 @@ export interface UserProfileProps {
   Role: string;
   Photo: string;
   Phone: string;
+  Gender: string;
 }
 
 export interface ProductProps {

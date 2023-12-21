@@ -11,7 +11,7 @@
       >
         {{ label }}
       </label>
-      <span v-if="requiredTag" class="font-semibold text-red-600">*</span>
+      <span v-if="requiredTag" class="font-semibold text-[#EF0816]">*</span>
     </div>
     <div
       v-if="type !== 'file'"
@@ -24,7 +24,7 @@
     >
       <input
         v-if="textType == 'input'"
-        @input.prevent="
+        @change.prevent="
           $emit('updateValue', ($event.target as HTMLInputElement).value.trim())
         "
         :type="inputType"
@@ -32,6 +32,7 @@
         :step="type === 'number' ? 0.01 : undefined"
         :hidden="type === 'file'"
         :placeholder="placeholder"
+        :style="{backgroundColor: backgroundColor, borderColor: borderColor}"
         class="h-full w-full rounded-lg border border-[#667085] px-3 pr-8 outline-none outline-offset-4 placeholder:text-[#667085] hover:border-[#0408E7] hover:outline-1 hover:outline-[#0408E7] focus:outline-1 focus:outline-[#0408E7] focus:ring-1 focus:ring-[#4B4EFC]"
       />
 
@@ -116,7 +117,7 @@
         </label>
       </div>
     </div>
-    <span v-if="!!error" class="text-sm text-red-600">{{ error }}</span>
+    <span v-if="!!error" class="text-sm text-[#EF0816]">{{ error }}</span>
   </div>
 </template>
 
@@ -125,8 +126,8 @@ import EyeViewComponent from "./EyeViewComponent.vue";
 import DeleteIcon from "@/assets/delete.svg";
 import EditIcon from "@/assets/edit.svg";
 import { computed, ref, watch } from "vue";
-import { errorApiRequest, isValidImage } from "@/lib/helperFunctions.ts";
-import { ErrorObject } from "@/types";
+import { errorApiRequest, isValidImage } from "@/lib/helperFunctions";
+import { type ErrorObject } from "@/types";
 
 const { label, placeholder, type, id, requiredTag } = defineProps({
   label: {
@@ -168,6 +169,12 @@ const { label, placeholder, type, id, requiredTag } = defineProps({
   fileClassName: {
     type: Boolean,
     required: false,
+  },
+  borderColor: {
+    type: String,
+  },
+  backgroundColor: {
+    type: String,
   },
 });
 

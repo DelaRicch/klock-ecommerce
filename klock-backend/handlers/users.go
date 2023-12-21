@@ -406,9 +406,8 @@ func UpdateUser(ctx *fiber.Ctx) error {
 		Photo:    user.Photo,
 		Phone:    user.Phone,
 		Location: user.Location,
+		Gender:   user.Gender,
 	}
-
-	fmt.Println(userProfile)
 
 	return ctx.JSON(fiber.Map{
 		"success": true,
@@ -433,6 +432,7 @@ func ListUsers(ctx *fiber.Ctx) error {
 			Photo:    user.Photo,
 			Phone:    user.Phone,
 			Location: user.Location,
+			Gender:   user.Gender,
 		}
 		usersResponse = append(usersResponse, userResponse)
 	}
@@ -440,6 +440,82 @@ func ListUsers(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
 		"users":   usersResponse,
+	})
+}
+
+func ValidateCurrentPassword (ctx *fiber.Ctx) error {
+	request := new(models.User);
+	if err := ctx.BodyParser(request); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request",
+			"success":  false,
+	
+		})
+	}
+
+	var user models.User
+	result := database.DB.Where("user_id = ?", request.UserID).First(&user)
+	if result.RowsAffected == 0 {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Unauthorized",
+		"success":  false,
+		})
+	}
+
+	// Verify the password using Argon2id
+	if !lib.VerifyPassword(user.Password, request.Password) {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Invalid password, try again",
+		"success":  false,
+
+		})
+	}
+
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"message": "Password is correct",
+	})
+}
+
+func UpdatePassword(ctx *fiber.Ctx) error {
+	payload := new(models.User)
+	if err := ctx.BodyParser(payload); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+			"success": false,
+		})
+	}
+
+	res, err := lib.ValidateAccessToken(ctx)
+	fmt.Println(res, err)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": err.Error(),
+		})
+	}
+
+	result := database.DB.Model(&models.User{}).Where("user_id = ?", res.UserID).Updates(&payload)
+	if result.Error != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"message": "Error updating user",
+		})
+	}
+
+	// Retrieve user from the database
+	var user models.User
+	userResult := database.DB.Where("user_id = ?", res.UserID).First(&user)
+	if userResult.RowsAffected == 0 {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"message": "User not found",
+		})
+	}
+
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"message": "Password updated successfully",
 	})
 }
 

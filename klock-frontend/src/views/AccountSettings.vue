@@ -27,6 +27,7 @@
       </div>
 
       <GeneralSettings v-if="activeTab === 'general'" />
+      <PasswordSettings v-if="activeTab === 'password'" />
     </div>
   </section>
   <FooterComponent />
@@ -38,6 +39,7 @@ import FooterComponent from "@/components/FooterComponent.vue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import MobileHeaderComponent from "@/components/MobileHeaderComponent.vue";
 import GeneralSettings from "@/components/settings/GeneralSettings.vue";
+import PasswordSettings from "@/components/settings/PasswordSettings.vue"
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
