@@ -42,12 +42,12 @@
     </form>
 </template>
 <script setup lang="ts">
-import { useUserStore } from '@/store/store';
+import { useUserStore } from '@/stores/user';
 import InputField from '../InputField.vue';
 import ButtonComponent from '../ButtonComponent.vue';
 import { computed, reactive } from 'vue';
 import { emailRegex } from '@/schema/ValidationSchema';
-import { formFields } from '@/types';
+import type { formFields } from '@/types';
 import { updateUser } from '@/api/user';
 import { errorApiRequest, handleUserProfile, successApiRequest } from '@/lib/helperFunctions';
 

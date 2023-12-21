@@ -38,7 +38,7 @@ import FooterComponent from "@/components/FooterComponent.vue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import MobileHeaderComponent from "@/components/MobileHeaderComponent.vue";
 import GeneralSettings from "@/components/settings/GeneralSettings.vue";
-import { useUserStore } from "@/store/store";
+import { useUserStore } from "@/stores/user";
 import { ref } from "vue";
 
 const activeTab = ref("general");
