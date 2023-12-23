@@ -21,8 +21,6 @@ func ConnectDb() {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	fmt.Println(os.Getenv("APP_ENV"))
-
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s TimeZone=Asia/Shanghai",
 		os.Getenv("DB_HOST"),

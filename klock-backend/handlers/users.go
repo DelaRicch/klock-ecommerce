@@ -371,7 +371,6 @@ func UpdateUser(ctx *fiber.Ctx) error {
 	}
 
 	res, err := lib.ValidateAccessToken(ctx)
-	fmt.Println(res, err)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
@@ -487,7 +486,6 @@ func UpdatePassword(ctx *fiber.Ctx) error {
 	}
 
 	res, err := lib.ValidateAccessToken(ctx)
-	fmt.Println(res, err)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
@@ -495,11 +493,21 @@ func UpdatePassword(ctx *fiber.Ctx) error {
 		})
 	}
 
-	result := database.DB.Model(&models.User{}).Where("user_id = ?", res.UserID).Updates(&payload)
+	// Hash the password using Argon2
+	hashedPassword, err := lib.HashPassword(payload.Password)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Error hashing the password",
+			"success": false,
+		})
+	}
+	payload.Password = hashedPassword
+
+	result := database.DB.Model(&models.User{}).Where("email = ?", res.Email).Updates(&payload)
 	if result.Error != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"success": false,
-			"message": "Error updating user",
+			"message": "Error updating password",
 		})
 	}
 

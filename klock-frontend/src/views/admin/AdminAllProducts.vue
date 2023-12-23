@@ -31,6 +31,7 @@
     >
       <SingleProduct
         v-for="product in displayedItems"
+        :key="product.ProductID"
         :id="product.ProductID"
         :product-name="product.ProductName"
         :product-image="product.ProductCoverImage"
@@ -51,7 +52,9 @@
     v-if="!displayedItems.length && !isLoading"
     class="flex h-max w-full justify-center mt-[12vh]"
   >
-    <EmptyStateComponent />
+    <EmptyStateComponent
+    emptyMessage="No product available"
+    />
   </div>
     <div v-if="totalPages > 1" class="my-1 md:my-2">
       <pagination-component
@@ -67,9 +70,9 @@ import SingleProduct from "../../components/admin-all-products/SingleProduct.vue
 import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import PaginationComponent from "@/components/PaginationComponent.vue";
-import { getAllProducts } from "@/api/products.ts";
-import { AllProductsProps } from "@/types";
-import { errorApiRequest } from "@/lib/helperFunctions.ts";
+import { getAllProducts } from "@/api/products";
+import type { AllProductsProps } from "@/types";
+import { errorApiRequest } from "@/lib/helperFunctions";
 import LoadingComponent from "@/components/LoadingComponent.vue";
 import EmptyStateComponent from "@/components/EmptyStateComponent.vue";
 

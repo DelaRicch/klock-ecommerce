@@ -141,7 +141,6 @@ func UploadToCloudinary(file *multipart.FileHeader, subFolder, productID string)
 func ValidateAccessToken(ctx *fiber.Ctx) (*models.User, error) {
 	// Get access token from the context
 	accessToken := ctx.Get("Authorization")
-	fmt.Println(accessToken, "access token")
 
 	if accessToken == "" {
 		return nil, fmt.Errorf("Unauthorized")

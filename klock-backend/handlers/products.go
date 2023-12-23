@@ -79,7 +79,6 @@ func AddNewProduct(ctx *fiber.Ctx) error {
 		}
 		newProduct.ProductGalleryImages = append(newProduct.ProductGalleryImages, galleryImage)
 	}
-	fmt.Println(newProduct.ProductGalleryImages)
 
 	// Add new product to database
 	result := database.DB.Create(&newProduct)
