@@ -1,8 +1,11 @@
 <template>
   <Teleport to="body">
     <div
+    @scroll.stop
+    @scroll.prevent
+    @wheel.prevent
       @click.self="handleCloseModal"
-      class="absolute left-0 top-0 z-[100] flex h-screen w-screen items-center justify-center bg-slate-400/40 backdrop-blur-[4px]"
+      class="fixed left-0 top-0 z-[100] flex h-screen w-screen items-center justify-center bg-slate-400/40 backdrop-blur-[4px]"
     >
       <div
         :class="wiggle && 'animate-wiggle'"

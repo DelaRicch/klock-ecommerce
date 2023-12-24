@@ -39,15 +39,11 @@
 import HeartIcon from "@/assets/HeartIcon.vue";
 import ButtonComponent from "./ButtonComponent.vue";
 import StarRatingComponent from "./StarRatingComponent.vue";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
 
 const isLiked = ref(false);
 const rating = ref(3.5);
-
-watch(rating, (val) => {
-  console.log(val);
-});
 
 const handleToggleLike = () => {
   isLiked.value = !isLiked.value;

@@ -148,9 +148,16 @@ const formData: formFields = reactive({
 });
 
 const handleSubmit = async () => {
-  const formDataValues: Record<string, string> = {};
+  const formDataValues: Record<string, string | boolean> = {};
   for (const field in formData) {
-    formDataValues[field] = (formData[field] as { value: string }).value;
+    const fieldValue = (formData[field] as { value: string }).value;
+
+    // convert string to boolean 
+if (fieldValue.toLowerCase() === "true" || fieldValue.toLowerCase() === "false") {
+  formDataValues[field] = fieldValue.toLowerCase() === "true";
+} else {
+  formDataValues[field] = fieldValue;
+}
   }
 
   loginUser(formDataValues)

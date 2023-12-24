@@ -18,6 +18,7 @@ func setupRoutes(app *fiber.App) {
 	app.Patch("/update-user", handlers.UpdateUser)
 	app.Post("validate-current-password", handlers.ValidateCurrentPassword)
 	app.Put("/update-password", handlers.UpdatePassword)
+	app.Put("/update-avatar", handlers.UpdateAvatar)
 
 	// Products routes 
 	app.Post("/add-product", handlers.AddNewProduct)

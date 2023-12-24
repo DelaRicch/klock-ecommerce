@@ -2,6 +2,11 @@ package models
 
 import "gorm.io/gorm"
 
+type Token struct {
+	Value  string `json:"value"`
+	Expiration   int64  `json:"expiration"`
+}
+
 type User struct {
 	gorm.Model
 
@@ -10,7 +15,7 @@ type User struct {
 	Password   string `json:"password" gorm:"text;default:''"`
 	UserID     string `json:"userId" gorm:"text;not null;default:null"`
 	Role       string `json:"role" gorm:"text;not null;default:null"`
-	RememberMe string `json:"remember" gorm:"bool;default:false"`
+	RememberMe bool `json:"remember" gorm:"bool;default:false"`
 	Photo      string `json:"photo" gorm:"text;default:null"`
 	Phone      string `json:"phone" gorm:"text;default:null"`
 	Gender      string `json:"gender" gorm:"text;default:null"`

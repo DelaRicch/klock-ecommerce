@@ -11,6 +11,9 @@
       :title="success ? 'success' : 'error'"
       :message="apiResponse"
     />
+
+    <!-- Token expiry checker  -->
+    <TokenExpiryChecker v-if="refreshToken.value" />
   </main>
 </template>
 
@@ -21,4 +24,10 @@ import {
   apiResponse,
   success,
 } from "@/stores/resuableState";
+import TokenExpiryChecker from './components/TokenExpiryChecker.vue';
+import { useUserStore } from './stores/user';
+import { storeToRefs } from 'pinia';
+
+const {refreshToken} = storeToRefs(useUserStore());
+
 </script>

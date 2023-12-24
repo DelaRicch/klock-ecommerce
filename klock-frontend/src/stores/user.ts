@@ -1,35 +1,35 @@
-import type { UserProfileProps, accessTokenType } from "@/types";
-import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import type { UserProfileProps, TokenType } from '@/types';
+import { defineStore } from 'pinia';
+import { reactive, ref } from 'vue';
 
 export const useUserStore = defineStore(
-  "userStore",
+  'userStore',
   () => {
-    const accessToken = reactive<accessTokenType>({
-      value: "",
-      expiry: 0,
-    });
-    const refreshToken = ref("");
+    const accessToken = reactive<TokenType>({} as TokenType);
+    const refreshToken = reactive<TokenType>({} as TokenType);
     const userProfile = ref<UserProfileProps>({
-      Name: "",
-      Email: "",
-      UserID: "",
-      Role: "",
-      Photo: "",
-      Phone: "",
+      Name: '',
+      Email: '',
+      UserID: '',
+      Role: '',
+      Photo: '',
+      Phone: '',
+      Gender: '',
+      Location: ''
     });
 
-    const setAccessToken = (token: accessTokenType) => {
-      accessToken.value = token.value;
+    const setAccessToken = (token: TokenType) => {
       accessToken.expiry = token.expiry;
+      accessToken.value = token.value;
+    };
+    
+    const setRefreshToken = (token: TokenType) => {
+      refreshToken.expiry = token.expiry;
+      refreshToken.value = token.value;
     };
 
     const setUserProfile = (profile: UserProfileProps) => {
       userProfile.value = profile;
-    };
-
-    const setRefreshToken = (token: string) => {
-      refreshToken.value = token;
     };
 
     return {
@@ -38,8 +38,8 @@ export const useUserStore = defineStore(
       refreshToken,
       setAccessToken,
       setRefreshToken,
-      setUserProfile,
+      setUserProfile
     };
   },
-  { persist: true },
+  { persist: true }
 );

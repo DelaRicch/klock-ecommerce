@@ -94,7 +94,6 @@ router.beforeEach((to, _, next) => {
   const userRole = userProfile?.value?.Role;
   const requiredRole = to.meta.requiredRole;
 
-  console.log(isAuthenticated.value);
   // Protect dashboard route
   if (to.meta.requiresAuth) {
     if (isAuthenticated.value) {

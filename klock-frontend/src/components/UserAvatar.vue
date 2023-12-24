@@ -39,10 +39,11 @@
 </template>
 
 <script setup lang="ts">
-import { errorApiRequest, isValidImage } from "@/lib/helperFunctions";
+import { errorApiRequest, isValidImage, successApiRequest } from "@/lib/helperFunctions";
 import UserIcon from "../assets/UserIcon.vue";
 import { ref } from "vue";
-import { ErrorObject } from "@/types";
+import type { ErrorObject } from "@/types";
+import { updateAvatar } from "@/api/user";
 
 const emit = defineEmits(["uploadImage"]);
 
@@ -76,7 +77,15 @@ const processFiles = (files: FileList) => {
     .then((validatedFile) => {
       selectedImage.value = validatedFile;
       previewImage.value = URL.createObjectURL(validatedFile);
-      emit("uploadImage", validatedFile);
+      updateAvatar(validatedFile)
+      .then((res) => {
+        console.log(res);
+        // successApiRequest(res)
+      })
+      .catch(err => {
+        console.error(err);
+        errorApiRequest(err);
+      })
     })
     .catch((error: ErrorObject) => {
       errorApiRequest(error);

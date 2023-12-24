@@ -29,14 +29,14 @@
             <ButtonComponent
               @update:model-value="handleCloseModal"
               :model-value="buttonValue"
-              :label="'Cancel'"
+              label="Cancel"
               background-color="#FBE6E6"
               color="#D20101"
             />
             <ButtonComponent
               @update:model-value="handleStayOnPage"
               :model-value="buttonValue"
-              :label="'Stay on page'"
+              label="Continue shopping"
               background-color="#1D2939"
               color="white"
             />
@@ -49,31 +49,30 @@
 <script lang="ts" setup>
 import TypingMan from "../assets/typing-man.json";
 import { Vue3Lottie } from "vue3-lottie";
-import { computed, onUnmounted } from "vue";
+import { onUnmounted } from "vue";
 import { requestNewToken } from "@/api/user";
 import { buttonValue, showTokenExpiry } from "@/stores/resuableState";
-import { tokenExpiryCalculator } from "@/lib/helperFunctions";
+import { errorApiRequest, successApiRequest, tokenExpiryCalculator } from "@/lib/helperFunctions";
 import { useUserStore } from "@/stores/user";
 import ModalComponent from "./ModalComponent.vue";
 import ButtonComponent from "./ButtonComponent.vue";
+import { storeToRefs } from "pinia";
 
 
-const userStore = useUserStore();
-const tokenExpiration = computed(() => userStore.accessToken.expiry);
+const {accessToken} = storeToRefs(useUserStore());
 
 const { formattedExpiration, countdownInterval, remainingTime } =
-  tokenExpiryCalculator(tokenExpiration);
+  tokenExpiryCalculator(accessToken.value.expiry);
 
 const handleCloseModal = (newValue: boolean) => {
-  console.log(remainingTime.value);
   buttonValue.value = newValue;
   showTokenExpiry.value = false;
   clearInterval(countdownInterval);
   remainingTime.value = 0;
-  console.log(remainingTime.value);
 };
 
 const handleStayOnPage = (newValue: boolean) => {
+  requestNewToken()
   buttonValue.value = newValue;
   showTokenExpiry.value = false;
   remainingTime.value = 0;
@@ -81,10 +80,10 @@ const handleStayOnPage = (newValue: boolean) => {
 
   requestNewToken()
     .then((res) => {
-      console.log(res);
+      successApiRequest(res);
     })
     .catch((err) => {
-      console.error(err);
+      errorApiRequest(err);
     });
 };
 

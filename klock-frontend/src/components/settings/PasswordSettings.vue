@@ -113,8 +113,6 @@ const handleSubmit = async () => {
   }
 
   // Rest of your code for form submission...
-  console.log(formDataValues, "Form values");
-
   updatePassword(formDataValues).then(res => {
     successApiRequest(res);
   }).catch(err => {

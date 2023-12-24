@@ -108,7 +108,7 @@
         class="cursor-pointer"
         @click="displayUserDropdownMenu = true"
       >
-        <Avatar :src="userProfile?.Photo" :alt="userProfile?.Name" />
+        <UserAvatar :src="userProfile?.Photo" :alt="userProfile?.Name" />
       </div>
 
       <!--    Display login signup if not logged in -->
@@ -134,7 +134,6 @@
 import LabelLogo from "../assets/LabelLogo.vue";
 import ButtonComponent from "@/components/ButtonComponent.vue";
 import { useUserStore } from "@/stores/user";
-import Avatar from "@/components/Avatar.vue";
 import {
   displayCategories,
   displayUserDropdownMenu,
@@ -144,6 +143,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import CategoriesDropdown from "@/components/CategoriesDropdown.vue";
 import UserDropdown from "./UserDropdown.vue";
+import UserAvatar from "./UserAvatar.vue";
 
 const activeRoute = computed(() => {
   return useRoute().name;

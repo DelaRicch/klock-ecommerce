@@ -63,8 +63,7 @@
 
      <!--    Display User Avatar if logged in-->
      <div class="cursor-pointer" @click="displayUserDropdownMenu = true">
-         <Avatar
-         v-if="
+         <UserAvatar              v-if="
        userProfile?.Name !== '' &&
        userProfile !== undefined &&
        userProfile !== null
@@ -81,13 +80,13 @@
 <script setup lang="ts">
 import LabelLogo from '@/assets/LabelLogo.vue';
 import ButtonComponent from './ButtonComponent.vue';
-import Avatar from './Avatar.vue';
 import { computed } from 'vue';
 import HamburgerMenu from '@/assets/HamburgerMenu.vue';
 import MobileMenuComponent from './MobileMenuComponent.vue';
 import UserDropdown from './UserDropdown.vue';
 import { useUserStore } from '@/stores/user';
 import { displayMenu, displayUserDropdownMenu } from '@/stores/resuableState';
+import UserAvatar from './UserAvatar.vue';
 
 const userStore = useUserStore();
 const userProfile = computed(() => userStore?.userProfile);

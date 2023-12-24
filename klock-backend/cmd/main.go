@@ -8,12 +8,10 @@ import (
 	"github.com/DelaRicch/klock-ecommerce/klock-backend/database"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-
 )
 
 func main() {
 	database.ConnectDb()
-
 	// Increase maximum payload limit
 	app := fiber.New(fiber.Config{
 		BodyLimit: 50 * 1024 * 1024, 

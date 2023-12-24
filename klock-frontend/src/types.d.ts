@@ -4,7 +4,7 @@ export interface formFields {
     error: string;
   };
 }
-export interface accessTokenType {
+export interface TokenType {
   value: string;
   expiry: number;
 }
@@ -25,6 +25,7 @@ export interface UserProfileProps {
   Photo: string;
   Phone: string;
   Gender: string;
+  Location: string;
 }
 
 export interface ProductProps {

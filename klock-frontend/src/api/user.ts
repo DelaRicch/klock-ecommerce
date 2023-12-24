@@ -19,7 +19,7 @@ export const registerUser = async (data: Record<string, string>) => {
   }
 };
 
-export const loginUser = async (data: Record<string, string>) => {
+export const loginUser = async (data: Record<string, string | boolean>) => {
   try {
     const res = await userApi.post("/login", data);
     return res?.data;
@@ -42,7 +42,7 @@ export const requestNewToken = async () => {
     const { refreshToken} = storeToRefs(useUserStore());
     const res = await userApi.get("/refresh-token", {
       headers: {
-        Authorization: `Bearer ${refreshToken.value}`,
+        Authorization: `Bearer ${refreshToken.value.value}`,
       },
     });
 
@@ -101,6 +101,23 @@ export const updatePassword = async (data: Record<string, string>) => {
   const {accessToken} = storeToRefs(useUserStore());
   try {
     const res = await userApi.put("/update-password", data, {
+      headers: {
+        Authorization: `Bearer ${accessToken.value.value}`,
+      },
+    });
+    return res?.data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+}
+
+export const updateAvatar = async (data: File) => {
+  const {accessToken} = storeToRefs(useUserStore());
+  const payload = {
+    avatar: data
+  }
+  try {
+    const res = await userApi.put("/update-avatar", payload, {
       headers: {
         Authorization: `Bearer ${accessToken.value.value}`,
       },

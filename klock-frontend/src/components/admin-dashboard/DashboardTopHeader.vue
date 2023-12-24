@@ -45,15 +45,15 @@
         </defs>
       </svg>
     </ButtonComponent>
-    <Avatar :alt="userProfile?.Name" :src="userProfile?.Photo" />
+    <UserAvatar :alt="userProfile?.Name" :src="userProfile?.Photo" />
   </div>
 </template>
 <script lang="ts" setup>
 import { useUserStore } from "@/stores/user";
-import Avatar from "../Avatar.vue";
 import ButtonComponent from "../ButtonComponent.vue";
 import HamburgerMenu from "@/assets/HamburgerMenu.vue";
 import { displayMenu } from "@/stores/resuableState";
+import UserAvatar from "../UserAvatar.vue";
 
 const handleToggleDisplayMenu = () => {
   displayMenu.value = !displayMenu.value;

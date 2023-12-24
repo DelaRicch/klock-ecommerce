@@ -55,7 +55,7 @@ func VerifyPassword(hashedPassword, password string) bool {
 }
 
 // Create new JWT access token and refresh token
-func CreateJwtToken(user *models.User) (string, string, int64, error) {
+func CreateJwtToken(user *models.User) (string, string, int64, int64, error) {
 	exp := time.Now().Add(time.Hour * 1).Unix()
 	rfExp := time.Now().Add(time.Hour * 24 * 30).Unix()
 	claims := jwt.MapClaims{
@@ -72,16 +72,16 @@ func CreateJwtToken(user *models.User) (string, string, int64, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tkn, err := token.SignedString([]byte("secret"))
 	if err != nil {
-		return "", "", 0, err
+		return "", "", 0, 0, err
 	}
 
 	rfToken := jwt.NewWithClaims(jwt.SigningMethodHS256, rfClaims)
 	refreshTkn, rfErr := rfToken.SignedString([]byte("rf_secret"))
 	if rfErr != nil {
-		return "", "", 0, rfErr
+		return "", "", 0, 0, rfErr
 	}
 	
-	return refreshTkn, tkn, exp, nil
+	return refreshTkn, tkn, exp, rfExp, nil
 	
 }
 

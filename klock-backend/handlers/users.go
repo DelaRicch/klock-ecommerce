@@ -76,7 +76,7 @@ func Register(ctx *fiber.Ctx) error {
 	}
 
 	// Generate JWT
-	refreshTkn, token, exp, err := lib.CreateJwtToken(user)
+	refreshTkn, token, exp, rfExp, err := lib.CreateJwtToken(user)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": errorRfTokenMsg,
@@ -94,12 +94,21 @@ func Register(ctx *fiber.Ctx) error {
 		SessionOnly: true,
 	})
 
+	accessToken := models.Token{
+		Value: token,
+		Expiration: exp,
+	}
+
+	refreshToken := models.Token{
+		Value: refreshTkn,
+		Expiration: rfExp,
+	}
+
 	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"success":       true,
-		"exp":           exp,
 		"message":       fmt.Sprintf("Successfully registered %v", user.Name),
-		"access_token":  token,
-		"refresh_token": refreshTkn,
+		"access_token":  accessToken,
+		"refresh_token": refreshToken,
 	})
 }
 
@@ -114,10 +123,10 @@ func Login(ctx *fiber.Ctx) error {
 
 	// extend access token duration if remember me is true
 	var tokenExpiry time.Time
-	if loginRequest.RememberMe == "true" {
-		tokenExpiry = time.Now().Add(time.Hour * 24 * 30)
+	if loginRequest.RememberMe {
+		tokenExpiry = time.Now().Add(time.Hour * 24)
 	} else {
-		tokenExpiry = time.Now().Add(time.Hour * 1)
+		tokenExpiry = time.Now().Add(time.Minute * 1)
 	}
 
 	// Retrieve the user with the given email
@@ -137,7 +146,7 @@ func Login(ctx *fiber.Ctx) error {
 	}
 
 	// Generate JWt
-	refreshTkn, token, _, err := lib.CreateJwtToken(&user)
+	refreshTkn, token, _, rfExp, err := lib.CreateJwtToken(&user)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": errorRfTokenMsg,
@@ -155,12 +164,21 @@ func Login(ctx *fiber.Ctx) error {
 		SessionOnly: true,
 	})
 
+	accessToken := models.Token{
+		Value: token,
+		Expiration: tokenExpiry.Unix(),
+	}
+
+	refreshToken := models.Token{
+		Value: refreshTkn,
+		Expiration: rfExp,
+	}
+
 	return ctx.JSON(fiber.Map{
 		"success":       true,
-		"exp":           tokenExpiry.Unix(),
 		"message":       fmt.Sprintf("Welcome %v", user.Name),
-		"access_token":  token,
-		"refresh_token": refreshTkn,
+		"access_token":  accessToken,
+		"refresh_token": refreshToken,
 	})
 
 }
@@ -195,7 +213,7 @@ func SocialLogin(ctx *fiber.Ctx) error {
 		}
 
 		// Generate JWT
-		refreshTkn, token, exp, err := lib.CreateJwtToken(user)
+		refreshTkn, token, exp, rfExp, err := lib.CreateJwtToken(user)
 		if err != nil {
 			return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"message": errorRfTokenMsg,
@@ -212,12 +230,21 @@ func SocialLogin(ctx *fiber.Ctx) error {
 			SessionOnly: true,
 		})
 
+		accessToken := models.Token{
+			Value: token,
+			Expiration: exp,
+		}
+	
+		refreshToken := models.Token{
+			Value: refreshTkn,
+			Expiration: rfExp,
+		}
+
 		return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
 			"success":       true,
-			"exp":           exp,
 			"message":       fmt.Sprintf("Welcome %v", user.Name),
-			"access_token":  token,
-			"refresh_token": refreshTkn,
+			"access_token":  accessToken,
+			"refresh_token": refreshToken,
 		})
 
 	}
@@ -240,7 +267,7 @@ func SocialLogin(ctx *fiber.Ctx) error {
 	}
 
 	// Generate JWT
-	refreshTkn, token, exp, err := lib.CreateJwtToken(user)
+	refreshTkn, token, exp, rfExp, err := lib.CreateJwtToken(user)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": errorRfTokenMsg,
@@ -257,12 +284,21 @@ func SocialLogin(ctx *fiber.Ctx) error {
 		SessionOnly: true,
 	})
 
+	accessToken := models.Token{
+		Value: token,
+		Expiration: exp,
+	}
+
+	refreshToken := models.Token{
+		Value: refreshTkn,
+		Expiration: rfExp,
+	}
+
 	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"success":       true,
-		"exp":           exp,
-		"message":       fmt.Sprintf("Successfully registered %v", user.Name),
-		"access_token":  token,
-		"refresh_token": refreshTkn,
+		"message":       fmt.Sprintf("Welcome %v", user.Name),
+		"access_token":  accessToken,
+		"refresh_token": refreshToken,
 	})
 }
 
@@ -311,7 +347,7 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 	}
 
 	// Call the function to generate a new access token
-	_, newAccessToken, exp, err := lib.CreateJwtToken(&models.User{UserID: claims["userId"].(string)})
+	_, newAccessToken, exp, _, err := lib.CreateJwtToken(&models.User{UserID: claims["userId"].(string)})
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Failed to generate access token",
@@ -328,11 +364,17 @@ func RequestNewToken(ctx *fiber.Ctx) error {
 		SessionOnly: true,
 	})
 
+	accessTkn := models.Token{
+		Value: newAccessToken,
+		Expiration: exp,
+	}
+
 	return ctx.JSON(fiber.Map{
 		"success":      true,
-		"exp":          exp,
-		"access_token": newAccessToken,
+		"access_token": accessTkn,
+		"message": "Access token refreshed",
 	})
+
 }
 
 func GetUserProfile(ctx *fiber.Ctx) error {
@@ -474,6 +516,39 @@ func ValidateCurrentPassword (ctx *fiber.Ctx) error {
 		"success": true,
 		"message": "Password is correct",
 	})
+}
+
+func UpdateAvatar(ctx *fiber.Ctx) error {
+	payload := new(models.User)
+
+	fmt.Println(payload, "::::: Payload")
+
+	if err := ctx.BodyParser(payload); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+			"success": false,
+		})
+	}
+
+	res, err := lib.ValidateAccessToken(ctx)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": err.Error(),
+		})
+	}
+
+	fmt.Println(res, ":::::Result")
+
+	result := database.DB.Model(&models.User{}).Where("email = ?", res.Email).Updates(&payload)
+	if result.Error != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"message": "Error updating password",
+		})
+	}
+
+	return ctx.SendString("Update Avatar")
 }
 
 func UpdatePassword(ctx *fiber.Ctx) error {

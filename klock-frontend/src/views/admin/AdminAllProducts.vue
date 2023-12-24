@@ -67,7 +67,7 @@
 <script lang="ts" setup>
 import ButtonComponent from "../../components/ButtonComponent.vue";
 import SingleProduct from "../../components/admin-all-products/SingleProduct.vue";
-import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from "vue";
+import { computed, onBeforeMount, onBeforeUnmount, ref } from "vue";
 import { useRouter } from "vue-router";
 import PaginationComponent from "@/components/PaginationComponent.vue";
 import { getAllProducts } from "@/api/products";
@@ -118,12 +118,6 @@ const getAllAddedProducts = () => {
       errorApiRequest(error);
     });
 };
-
-watch(isLoading, (data: boolean) => {
-  console.log('====================================');
-  console.log(data);
-  console.log('====================================');
-})
 
 onBeforeMount(() => {
   getAllAddedProducts();

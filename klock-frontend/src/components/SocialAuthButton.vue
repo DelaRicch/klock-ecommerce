@@ -14,7 +14,7 @@ import {
   getAuth,
   signInWithPopup,
 } from "firebase/auth";
-import { socialAuthType } from "@/types";
+import type { socialAuthType } from "@/types";
 import { useRouter } from "vue-router";
 import SocialIcons from "@/assets/SocialIcons.vue";
 import { getUserProfile, socialLogin } from "@/api/user";
@@ -39,7 +39,6 @@ const signInWithSocialAuth = () => {
     provider.addScope("email");
     signInWithPopup(getAuth(), provider)
       .then((response) => {
-        console.log(response);
         const user: socialAuthType = {
           email: response?.user?.providerData[0]?.email!,
           name: response?.user?.providerData[0]?.displayName!,

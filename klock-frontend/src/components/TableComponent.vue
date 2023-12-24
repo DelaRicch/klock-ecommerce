@@ -63,10 +63,10 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, PropType, ref, watch } from "vue";
+import { computed, type PropType, ref } from "vue";
 import PaginationComponent from "../components/PaginationComponent.vue";
 import EmptyStateComponent from "../components/EmptyStateComponent.vue";
-import { ProductProps } from "@/types";
+import type { ProductProps } from "@/types";
 
 interface HeaderProps {
   key: string;
@@ -100,9 +100,6 @@ const currentPage = ref(1);
 const selectedRows = ref<number[]>([]);
 const selectAll = ref(false);
 
-watch(selectedRows, (data) => {
-  console.log(data);
-});
 const getColumnWidths = (header: HeaderProps) => {
   return props.columnWidths[header.key] || "auto";
 };
